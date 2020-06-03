@@ -8,6 +8,7 @@ Ik denk dat het goed is om hier een korte to-do list te maken zodat we de eerste
 Verder is het op de langere termijn (naar volgende week toe) misschien goed om even te kijken naar snippets code die geschreven zijn om (andere) problemen in de heuristiek te behandelen. Wat is er goed/slecht aan die strategie? Wat willen wij anders doen? Dit is denk ik goed omdat we dan een indruk hebben van wat er van ons verwacht wordt.
 
 to-do: inlezen
+
 to-do: constraints en state-space begrijpen (college's van daan toepassen op case)
 
 Groetjes 
