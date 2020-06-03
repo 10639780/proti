@@ -12,7 +12,7 @@ import numpy as np
 from random import randint
 import sys
 import matplotlib.pyplot as plt 
-
+import csv
 
 def possible_moves(x,y,_type):
     """Determines which moves are possible from a given position. 
@@ -148,25 +148,21 @@ def output(log_x, log_y, protein_string):
         # conversion between matrix indeces and bas terwijn numbers
         if delta_x == 1:
             number = -2
-        
         elif delta_x == -1:
             number = 2
-
         elif delta_y == 1:
             number = 1
-
         elif delta_y == -1:
             number = -1
-
         numbers.append(number)
 
     numbers.append(0)
-
     
     for p, n in zip(protein_string, numbers):
         print(f'{p}, {n}')
+        f.write(f'{p}, {n}\n')
+
     
-  
 # enter protein string
 protein_string = ['H','H','P','H','H','H','P','H']
 length = len(protein_string)
@@ -215,11 +211,13 @@ for protein in protein_string:
     log_y.append(current_position[1])
 
 
-# display the result (comment out the ones you dont need)
+# optional displays of the result (comment out the ones you dont need)
 print(np.array(grid)) # grid in terminal
 print(f'Score: {total_score}') # final score
-output(log_x, log_y, protein_string) # Bas Terwijn output
 display(total_score) # graphical display
 
-
-
+# correct output of results (don't comment out)
+f = open('output.csv', 'w')
+f.write('amino,fold\n')
+output(log_x, log_y, protein_string) 
+f.write(f'score,{-total_score}') 
