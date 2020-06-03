@@ -1,0 +1,4 @@
+constraints bepalen de mate van stabiliteit van het molecuul. Deze worden bepaald aan de hand attributen van het object. Attribuut dat werkt als constraint is H-bonds. 
+
+Allereerst is het van belang om de state-space van het molecuul te bepalen. Hierbij gaan we om te beginnen uit van een 2d toestandsruimte waarin de populatie per knooppunt in het grid bepaalt hoe stabiel het molecuul is. In het menselijk lichaam zal een minder stabiel eiwit vaker voor problemen zorgen. Het optimaliseren van de vouwing is van belang voor de medische wetenschap. Onze tool moet in het bijzonder een getrouwe weergave geven van de stabiliteit. De constraints om dit te bepalen zal in de case vermeldt staan.
+
