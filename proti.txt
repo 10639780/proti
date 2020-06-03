@@ -2,3 +2,22 @@ constraints bepalen de mate van stabiliteit van het molecuul. Deze worden bepaal
 
 Allereerst is het van belang om de state-space van het molecuul te bepalen. Hierbij gaan we om te beginnen uit van een 2d toestandsruimte waarin de populatie per knooppunt in het grid bepaalt hoe stabiel het molecuul is. In het menselijk lichaam zal een minder stabiel eiwit vaker voor problemen zorgen. Het optimaliseren van de vouwing is van belang voor de medische wetenschap. Onze tool moet in het bijzonder een getrouwe weergave geven van de stabiliteit. De constraints om dit te bepalen zal in de case vermeldt staan.
 
+Bij elk atoom (muv de laatste) is er een viertal keuzes die moeten worden overwogen. In het random geval is deze overweging willekeurig. In een volgend stadium wordt er een weging gegeven aan de hand van de H-binding die tot stand gekomen is.  
+
+amino,fold
+H,1
+H,2
+P,-1
+H,-1
+P,2
+P,2
+P,1
+P,-2
+H,0
+score,-2
+
+In de documentatie op de website staat waarschijnlijk een fout wanneer de score wordt vermeld als zijnde 2. De dubbele H-binding zorgt voor een score van -2 die een hoge mate van stabiliteit aantoont. 
+
+Een visuele benadering heeft het voordeel dat we zeer inzichtelijk te werk kunnen gaan en aan de hand van het getekende plaatje kunnen evalueren wat de code precies gedaan heeft en waar die verbeterd moet worden. 
+
+Het nadeel van deze aanpak is op het eerste gezicht alleen dat de stap naar de derde en volgende dimensies moeilijker wordt. Het voordeel is dat het plaatje makkelijk gekoppeld kan worden aan andere criteria zoals de tijd die het kost om de vouwing tot stand te brengen.
