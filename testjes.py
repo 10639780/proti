@@ -18,17 +18,33 @@ def get_proteins():
         lines = file.readlines()
 
         for i in range(len(lines)):
-            proteins[i] = lines[i].strip("\n")
+            protein = lines[i].strip("\n") 
+            length = len(protein)
+            proteins[i] = [protein, length] 
 
     return proteins 
 
-def length_protein(proteins):
-    for key in proteins:
-        print(proteins[key])
-        print(len(proteins[key]))
+def make_grid(proteins):
+    """
+    Creates a grid of specified size.
+    Saves the grid for all proteins in the dictionary.
+    """
 
+    for key in proteins:
+
+        grid = []
+        size = 2*proteins[key][1]+1
+        for i in range(size):
+            row = []
+            for j in range(size):
+                row.append(0)
+            grid.append(row)
+
+        proteins[key].append(grid)
+
+    return proteins
 
         
 if __name__ == "__main__":
     p = get_proteins()
-    length_protein(p)
+    g = make_grid(p)
