@@ -78,11 +78,11 @@ def display(score):
     plt.plot(red_dots_x, red_dots_y, 'or', label='Hydrophobe')
     plt.plot(blue_dots_x,blue_dots_y,'ob', label='Polar')
     plt.plot(yellow_dots_x, yellow_dots_y, 'oy', label='Cysteine')
-    plt.plot(length, length, 'ok', label='First atom')
+    plt.plot(log_x,log_y,'--')
    
-    plt.title('Folded protein string')
+    plt.title(f'Folded protein string, score: {score}')
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    plt.text(1, 1, f'Score: {score}')
+    # plt.text('left', 'bottom', f'Score: {score}')
 
     plt.show()
 
@@ -179,7 +179,7 @@ def lowest_score(moves):
         
     return best_moves
 
-    
+
 # enter protein string
 # protein = ['H','H', 'P','H','H','H','P','H']
 protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
