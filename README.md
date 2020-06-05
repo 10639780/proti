@@ -10,3 +10,4 @@ to-do: inlezen
 to-do: constraints en state-space begrijpen (college's van daan toepassen op case)
 
 
+
