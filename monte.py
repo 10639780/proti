@@ -82,7 +82,7 @@ def main():
         if rotation_counter % 1000 == 0:
             print(f'{rotation_counter / N * 100}%')
 
-    # the best structure is coprotein[i]ed to a csv file and shown in a graph
+    # the best structure is copied to a csv file and shown in a graph
     output(best_x, best_y, lowest_score)
     plot(best_x, best_y, lowest_score, scores)
 
