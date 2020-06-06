@@ -75,10 +75,10 @@ def display(score):
                 yellow_dots_y.append(j)
 
     # make a colorcoded graph
+    plt.plot(log_x,log_y,'--')
+    plt.plot(yellow_dots_x, yellow_dots_y, 'oy', label='Cysteine')
     plt.plot(red_dots_x, red_dots_y, 'or', label='Hydrophobe')
     plt.plot(blue_dots_x,blue_dots_y,'ob', label='Polar')
-    plt.plot(yellow_dots_x, yellow_dots_y, 'oy', label='Cysteine')
-    plt.plot(log_x,log_y,'--')
    
     plt.title(f'Folded protein string, score: {score}')
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
