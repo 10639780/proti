@@ -11,3 +11,4 @@ Als spiegelbeelden met een constraint wegfilteren kunnen we de berekenbaarheid v
 
 Wat betreft de harde constraint dat het molecuul zichzelf niet mag kruisen, kunnen we benaderen hoeveel mogelijkheden hiermee worden weggegooid? 
 
+monteko.py vindt bij lengte 8 met 500 iteraties, in 40 minuten: 194 unieke eiwitten met allemaal een optimale score van -6.
