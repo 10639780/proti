@@ -26,7 +26,7 @@ def main():
     pos_z = [0] * length
 
     # number of iterations, higher N is better result
-    N = 200000
+    N = 500
     rotation_counter = 0
 
     # lists to keep track of the scores of each rotation and remember the one with the best score
@@ -242,7 +242,7 @@ def random_rotation(list_x, list_y, list_z, n):
     rotation_point_y = list_y[n]
     rotation_point_z = list_z[n]
 
-    # left or right rotation are randomly chosen
+    # rotation direction is chosen at random
     p = random.random()
 
     # calculates the new positions for the remainder of the string using the equations from a 3D rotation matrix
