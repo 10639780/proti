@@ -12,9 +12,12 @@ import random
 import math
 import copy
 
+
 # string and length are used by most functions so declare as global variable
-protein = ['H','H','P','H','H','H','P','H']
+# protein = ['H','H','P','H','H','H','P','H']
+protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+
 length = len(protein)
 
 def main():
@@ -24,7 +27,7 @@ def main():
     pos_y = [0] * length
 
     # number of iterations, higher N is better result
-    N = 10000
+    N = 1000000
     rotation_counter = 0
 
     # lists to keep track of the scores of each rotation and remember the one with the best score
