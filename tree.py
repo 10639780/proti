@@ -258,7 +258,7 @@ def create_tree():
             first = False
             continue
         
-        # second atom             # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0
+        # second atom           
         if second:
             node =  Atom(p, [1,0], parent=root)
             node_list.append(node)
