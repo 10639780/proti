@@ -20,7 +20,7 @@ protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
 length = len(protein)
 
 def main():
-    for i in range(500):
+    for i in range(100):
         # create the initial straight string
         pos_x = [i for i in range(length)]
         pos_y = [0] * length
@@ -132,9 +132,9 @@ def output(list_x, list_y, score):
         csv_reader = csv.reader(resultdict_csv)
 
         # Print to terminal, for testing
-        for key, score in csv_reader:
+        for key, inscore in csv_reader:
             # Insert data into dict
-            resultdict[key] = score 
+            resultdict[key] = inscore 
     
     for p, n in zip(protein, numbers):
         resultstr = resultstr + str(p) + str(n)
