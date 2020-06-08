@@ -27,9 +27,10 @@ class Atom(NodeMixin):
 directions = [[1,0],[-1,0],[0,1],[0,-1]]
 
 # strings of different  length, works well with string up to 11 atoms long, after that the program becomes very slow. 
-# protein = ['P', 'H', 'P']
+# protein = ['P', 'H', 'P', 'H']
 protein = ['H','H','P','H','H','H','P','H']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H','H','H','P','H']
+protein = ['H', 'H', 'H', 'C', 'C', 'C', 'H', 'C', 'H']
 
 length = len(protein)
 
@@ -37,9 +38,13 @@ def main():
 
     # create a tree with all possible folds
     root = create_tree()
+    # display_tree(root)
 
     # extract all possible protein configurations from the tree
     route_directions = create_routes(root)
+
+    # for r in route_directions:
+    #     print(r)
     
     print(f'Total possible structures: {len(route_directions)}')
 
@@ -86,6 +91,7 @@ def main():
     
     print(f'Invalid solutions: {invalid_solutions}')
     print(f'Same score solutions: {same_score_counter}')
+    print(f'Lowest score: {lowest_score}')
 
     # print best structure to csv file
     output(best_x, best_y, lowest_score)
@@ -241,30 +247,48 @@ def create_tree():
     parent_counter = 0
     node_list = []
     first = True
+    second = True
 
     for p, i in zip(protein, [i for i in range(length)]):
-        
+
+        # first atom has no parents and is located at 0,0
         if first:
-            # first atom has no parents and is located at 0,0
             root = Atom(p, [0,0])
             node_list.append(root)
             first = False
             continue
         
-        for k in range(4 ** (i - 1)):
+        # second atom             # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0
+        if second:
+            node =  Atom(p, [1,0], parent=root)
+            node_list.append(node)
+            second = False
+            continue
 
-            # fill the three and keep track of the parent child relations
-            for d, j in zip(directions, [j for j in range(len(directions))]):
+        for k in range((len(directions) - 1) ** (i - 2)):
+
+            # make sure the protein doesn't walk back into itself
+            previous_direction = copy.deepcopy(node_list[parent_counter + 1].direction)
+            previous_direction[0] = -previous_direction[0]
+            previous_direction[1] = -previous_direction[1]
+
+            temp_direction = copy.deepcopy(directions)
+
+            if previous_direction in temp_direction: 
+                temp_direction.remove(previous_direction)
+
+            # fill the tree and keep track of the parent child relations
+            for j in range(len(directions) - 1):
             
-                j = Atom(p, d, parent=node_list[parent_counter] )
+                j = Atom(p, temp_direction[j], parent=node_list[parent_counter + 1] )
                 node_list.append(j)
 
                 node_counter += 1
-                if node_counter % len(directions) == 0:
+                if node_counter % (len(directions) - 1) == 0:
                     parent_counter += 1
 
         # print statement for the long calculations
-        print(f'{(i + 1)/length * 100}%')
+        print(f'Loading tree: {(i + 1)/length * 100}%')
 
     return root
 
