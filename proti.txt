@@ -94,3 +94,17 @@ random algoritme met 1000 iteratie te vergelijken met een hillclimber met 10 ite
 
 Verdere vragen over algoritmen stellen in de q&a chat op discord
 
+
+Potentieel nuttige papers:
+
+Biological complexity: ant colony meta-heuristic optimization algorithm for protein folding
+https://link.springer.com/article/10.1007/s00521-016-2252-5
+
+Ant colony is 1 van de population based iteratieve algoritmen die Bas niet heeft behandeld in het college maar wel heeft
+benoemd als optie. 
+Deze paper maakt hier gebruik van.
+Kort uitgelegd in dit filmpje.
+https://www.youtube.com/watch?v=gk18y7zYIfY
+
+Paper is niet heel lang maar vond ik wel lastig te begrijpen :(
+Still worth checking out
