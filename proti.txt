@@ -33,6 +33,22 @@ Ten derde een overslagpunt tussen algorithmes. -Het idee is nog in de eerste fas
 
 Q & A: constructieve en iteratieve algoritmen 
 
+Hoe algoritme kiezen:
 constructieve algoritmen werken het best bij een relatief kleine state space zoals bv protein powder
 iteratieve algoritmen werken zijn handig te gebruiken voor grote state space 
 Lastiger om goed werkend iteratief algoritme te vinden voor protein folding maar het kan wel 
+
+Samenwerking inrichten:
+Protein powder een goed idee on breath first en depth first uit te werken en daarna uitzoeken waar je kan beginnen met prunen
+
+Doel van het vak volgens Wouter: 
+niet het best algoritme vinden die de best oplossing geeft maar leren werken met algoritmen 
+dus het is goed om verschillende algritmen uit te werken en vergelijken
+
+Uitleg over gebruik init.py: 
+https://sp2.mprog.nl/news/packages
+Gebruik van init.py niet belangrijk maar kan handig zijn
+
+
+
+
