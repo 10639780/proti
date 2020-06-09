@@ -108,3 +108,10 @@ https://www.youtube.com/watch?v=gk18y7zYIfY
 
 Paper is niet heel lang maar vond ik wel lastig te begrijpen :(
 Still worth checking out
+
+Note:
+Papers have been pointing to looking into Genetic algorithm for protein folding
+One in particular that seems quite useful but can't be opened unfortunately is:
+https://ieeexplore.ieee.org/abstract/document/1579067
+
+So will have to search for this one elsewhere
