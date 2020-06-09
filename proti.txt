@@ -30,3 +30,9 @@ Ten tweede is er de mogelijkheid om een soortgelijke structuur uit te sluiten al
 
 Ten derde een overslagpunt tussen algorithmes. -Het idee is nog in de eerste fase- Een ingebouwde klok houdt bij hoeveel unieke oplossingen het monte carlo algorithme per tijdseenheid heeft gevonden, als dit 'eureka-getal' tot onder een bepaalde waarde zakt wordt het genetisch zoekalgorithme ingezet. In de groepen die het monte carlo algorithme heeft gevonden gaat een hillclimber kleine aanpassingen doen totdat hij een betere gevonden heeft. Alle hillclimbers hebben een ranking ten opzichte van elkaar en de laagste twee worden verwijderd en opnieuw geplaatst aan de hand van de bovenste laag en de onderste laag climbers (linker en rechter rijtje). Zodoende wordt de state space doorgespit op zoek naar de optimale vouwing. 
  
+
+Q & A: constructieve en iteratieve algoritmen 
+
+constructieve algoritmen werken het best bij een relatief kleine state space zoals bv protein powder
+iteratieve algoritmen werken zijn handig te gebruiken voor grote state space 
+Lastiger om goed werkend iteratief algoritme te vinden voor protein folding maar het kan wel 
