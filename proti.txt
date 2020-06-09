@@ -1,8 +1,16 @@
-constraints bepalen de mate van stabiliteit van het molecuul. Deze worden bepaald aan de hand attributen van het object. Attribuut dat werkt als constraint is H-bonds. 
+constraints bepalen de mate van stabiliteit van het molecuul. Deze worden bepaald aan de hand attributen van het object. 
+Attribuut dat werkt als constraint is H-bonds. 
 
-Allereerst is het van belang om de state-space van het molecuul te bepalen. Hierbij gaan we om te beginnen uit van een 2d toestandsruimte waarin de populatie per knooppunt in het grid bepaalt hoe stabiel het molecuul is. In het menselijk lichaam zal een minder stabiel eiwit vaker voor problemen zorgen. Het optimaliseren van de vouwing is van belang voor de medische wetenschap. Onze tool moet in het bijzonder een getrouwe weergave geven van de stabiliteit. De constraints om dit te bepalen zal in de case vermeldt staan.
+Allereerst is het van belang om de state-space van het molecuul te bepalen. Hierbij gaan we om te beginnen uit van een 2d 
+toestandsruimte waarin de populatie per knooppunt in het grid bepaalt hoe stabiel het molecuul is. In het menselijk 
+lichaam zal een minder stabiel eiwit vaker voor problemen zorgen. Het optimaliseren van de vouwing is van belang voor de 
+medische wetenschap. Onze tool moet in het bijzonder een getrouwe weergave geven van de stabiliteit. De constraints om 
+dit te bepalen zal in de case vermeldt staan.
 
-Bij elk element (muv de laatste) is er bij 2d een viertal keuzes die moeten worden overwogen. In het random geval is deze overweging willekeurig, mits de structuur niet in zichzelf vouwt en we niet een stap in dezelfde richting terugdoen (backtracking). In een volgend stadium wordt er een weging gegeven aan de hand van de binding (H-H -1, C-C -5, C-H -1) die tot stand gekomen is.  
+Bij elk element (muv de laatste) is er bij 2d een viertal keuzes die moeten worden overwogen. In het random geval is deze 
+overweging willekeurig, mits de structuur niet in zichzelf vouwt en we niet een stap in dezelfde richting terugdoen 
+(backtracking). In een volgend stadium wordt er een weging gegeven aan de hand van de binding (H-H -1, C-C -5, C-H -1) die 
+tot stand gekomen is.  
 
 amino,fold
 H,1
@@ -16,19 +24,44 @@ P,-2
 H,0
 score,-2
 
-In de documentatie op de website staat waarschijnlijk een fout wanneer de score wordt vermeld als zijnde 2. De dubbele H-binding zorgt voor een score van -2 die een hoge mate van stabiliteit aantoont. 
+In de documentatie op de website staat waarschijnlijk een fout wanneer de score wordt vermeld als zijnde 2. 
+De dubbele H-binding zorgt voor een score van -2 die een hoge mate van stabiliteit aantoont. 
 
-Een visuele benadering heeft het voordeel dat we zeer inzichtelijk te werk kunnen gaan en aan de hand van het getekende plaatje kunnen evalueren wat de code precies gedaan heeft en waar die verbeterd moet worden. 
+Een visuele benadering heeft het voordeel dat we zeer inzichtelijk te werk kunnen gaan en aan de hand van het 
+getekende plaatje kunnen evalueren wat de code precies gedaan heeft en waar die verbeterd moet worden. 
 
-Het nadeel van deze aanpak is op het eerste gezicht alleen dat de stap naar een willekeurig aantal dimensies moeilijker wordt. Deze is niet meer te visualiseren en lijkt daardoor vanuit het menselijk perspectief moeilijker terwijl het algorithme dit probleem niet heeft. Een betere strategie zou kunnen zijn om de visuele weergave te vervangen door een tijdsafhankelijke weergave. Hierin is het aantalk vouwingen uitgezet tegen de score die deze oplevert. Dit is nuttig met het oog op het kiezen van een 'beste' vouwing. Dat is dan die structuur die in het minste aantal vouwingen de optimale score behaalt. 
+Het nadeel van deze aanpak is op het eerste gezicht alleen dat de stap naar een willekeurig aantal dimensies 
+moeilijker wordt. Deze is niet meer te visualiseren en lijkt daardoor vanuit het menselijk perspectief moeilijker 
+terwijl het algorithme dit probleem niet heeft. Een betere strategie zou kunnen zijn om de visuele weergave te 
+vervangen door een tijdsafhankelijke weergave. Hierin is het aantalk vouwingen uitgezet tegen de score die deze oplevert. 
+Dit is nuttig met het oog op het kiezen van een 'beste' vouwing. Dat is dan die structuur die in het minste aantal 
+vouwingen de optimale score behaalt. 
 
-Het probleem van het lokale minimum treedt op bij complexere en langere structuren. Het montecarlo algorithme kan ons hier niet helpen en een tree structuur is te langzaam. Het montecarlo algorithme blijft door zijn random werkwijze bruikbaar in het begin waarna we op een slimme manier in de random uitkomsten hillclimbers kunnen uitzetten. Zoals bij genetisch geinspireerde algorithmen waarbij er gericht hillclimbers voortkomen uit de structuren die tot dan toe de beste score hebben gehaald. 
+Het probleem van het lokale minimum treedt op bij complexere en langere structuren. Het montecarlo algorithme kan ons 
+hier niet helpen en een tree structuur is te langzaam. Het montecarlo algorithme blijft door zijn random werkwijze 
+bruikbaar in het begin waarna we op een slimme manier in de random uitkomsten hillclimbers kunnen uitzetten. 
+Zoals bij genetisch geinspireerde algorithmen waarbij er gericht hillclimbers voortkomen uit de structuren die tot 
+dan toe de beste score hebben gehaald. 
 
-Pruning kan op een aantal manieren gebeuren. Allereerst is het uitsluiten van spiegelbeeldstructuren een interessante mogelijkheid om te snoeien in de state space. In het geval dat het spiegelbeeld wel gevonden moet worden kunnen we deze in het uiterste geval afleiden van zijn tegenbeeld die het algorithme wel gevonden heeft. Bij meerdimensionale figuren is deze aanpak niet wenselijk. Aangezien wij tot een maximum van 3 dimensies zullen gaan blijft deze mogelijkheid het overwegen waard. 
+Pruning kan op een aantal manieren gebeuren. Allereerst is het uitsluiten van spiegelbeeldstructuren een interessante 
+mogelijkheid om te snoeien in de state space. In het geval dat het spiegelbeeld wel gevonden moet worden kunnen we deze 
+in het uiterste geval afleiden van zijn tegenbeeld die het algorithme wel gevonden heeft. Bij meerdimensionale figuren is 
+deze aanpak niet wenselijk. Aangezien wij tot een maximum van 3 dimensies zullen gaan blijft deze mogelijkheid het 
+overwegen waard. 
 
-Ten tweede is er de mogelijkheid om een soortgelijke structuur uit te sluiten als een eerdere variant onder een bepaalde tussenscore is komen te vallen. Het op papier analyseren van de groepen heeft laten zien dat een hhph groep een score van -1 oplevert en twee van zulke groepen die aan elkaar grenzen een score van -3 het tellen van deze en misschien andere groepen kan ertoe leiden dat we op een slimmme manier kunnen prunen. Deze aanpak oogt op het eerste gezicht niet optimaal maar met een doordacht ontwerp en door het goed te testen kan het bruikbaar blijken te zijn. 
+Ten tweede is er de mogelijkheid om een soortgelijke structuur uit te sluiten als een eerdere variant onder een bepaalde 
+tussenscore is komen te vallen. Het op papier analyseren van de groepen heeft laten zien dat een hhph groep een score 
+van -1 oplevert en twee van zulke groepen die aan elkaar grenzen een score van -3 het tellen van deze en misschien 
+andere groepen kan ertoe leiden dat we op een slimmme manier kunnen prunen. Deze aanpak oogt op het eerste gezicht niet 
+optimaal maar met een doordacht ontwerp en door het goed te testen kan het bruikbaar blijken te zijn. 
 
-Ten derde een overslagpunt tussen algorithmes. -Het idee is nog in de eerste fase- Een ingebouwde klok houdt bij hoeveel unieke oplossingen het monte carlo algorithme per tijdseenheid heeft gevonden, als dit 'eureka-getal' tot onder een bepaalde waarde zakt wordt het genetisch zoekalgorithme ingezet. In de groepen die het monte carlo algorithme heeft gevonden gaat een hillclimber kleine aanpassingen doen totdat hij een betere gevonden heeft. Alle hillclimbers hebben een ranking ten opzichte van elkaar en de laagste twee worden verwijderd en opnieuw geplaatst aan de hand van de bovenste laag en de onderste laag climbers (linker en rechter rijtje). Zodoende wordt de state space doorgespit op zoek naar de optimale vouwing. 
+Ten derde een overslagpunt tussen algorithmes. -Het idee is nog in de eerste fase- Een ingebouwde klok houdt bij hoeveel 
+unieke oplossingen het monte carlo algorithme per tijdseenheid heeft gevonden, als dit 'eureka-getal' tot onder een 
+bepaalde waarde zakt wordt het genetisch zoekalgorithme ingezet. In de groepen die het monte carlo algorithme heeft 
+gevonden gaat een hillclimber kleine aanpassingen doen totdat hij een betere gevonden heeft. Alle hillclimbers hebben een 
+ranking ten opzichte van elkaar en de laagste twee worden verwijderd en opnieuw geplaatst aan de hand van de bovenste 
+laag en de onderste laag climbers (linker en rechter rijtje). Zodoende wordt de state space doorgespit op zoek naar de 
+optimale vouwing. 
  
 
 Q & A: constructieve en iteratieve algoritmen 
@@ -39,7 +72,8 @@ iteratieve algoritmen werken zijn handig te gebruiken voor grote state space
 Lastiger om goed werkend iteratief algoritme te vinden voor protein folding maar het kan wel 
 
 Samenwerking inrichten:
-Protein powder een goed idee on breath first en depth first uit te werken en daarna uitzoeken waar je kan beginnen met prunen
+Protein powder een goed idee on breath first en depth first uit te werken en daarna uitzoeken waar je kan beginnen met 
+prunen
 
 Doel van het vak volgens Wouter: 
 niet het best algoritme vinden die de best oplossing geeft maar leren werken met algoritmen 
@@ -49,6 +83,14 @@ Uitleg over gebruik init.py:
 https://sp2.mprog.nl/news/packages
 Gebruik van init.py niet belangrijk maar kan handig zijn
 
+Moet je alles wat je implementeert beargumenteren met een algoritme:
+Nee niet heel hard. Je kan werken met een gevoel voor het kiezen van een algoritmen en algoritmen vergelijken en uitleggen welke 
+beter lijkt te werken. 
+Als je mathematisch kan beargumenteren welke heuristiek je kiest is dat natuurlijk een plus puntje.
 
+Tip:
+Belangrijk om na te denken over hoe je algoritmen op een juiste manier vergelijk. Bijvoorbeeld is het eerlijk om een 
+random algoritme met 1000 iteratie te vergelijken met een hillclimber met 10 iteraties
 
+Verdere vragen over algoritmen stellen in de q&a chat op discord
 
