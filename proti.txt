@@ -83,7 +83,8 @@ https://sp2.mprog.nl/news/packages
 Gebruik van init.py niet belangrijk maar kan handig zijn
 
 Moet je alles wat je implementeert beargumenteren met een algoritme:
-Nee niet heel hard. Je kan werken met een gevoel voor het kiezen van een algoritmen en algoritmen vergelijken en uitleggen welke 
+Nee niet heel hard. Je kan werken met een gevoel voor het kiezen van een algoritmen en algoritmen vergelijken en uitleggen 
+welke 
 beter lijkt te werken. 
 Als je mathematisch kan beargumenteren welke heuristiek je kiest is dat natuurlijk een plus puntje.
 
