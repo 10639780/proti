@@ -12,21 +12,24 @@ import random
 import math
 import copy
 import csv
+import sys
 
 # string and length are used by most functions so declare as global variable
 # protein = ['H','H','P','H','H','H','P','H']
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
+protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P']
+# protein = ['H','P','H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
 length = len(protein)
 
 def main():
-    for i in range(100):
+    for i in range(20):
         # create the initial straight string
         pos_x = [i for i in range(length)]
         pos_y = [0] * length
 
         # number of iterations, higher N is better result
-        N = 10000
+        N = 500000
         rotation_counter = 0
 
         # lists to keep track of the scores of each rotation and remember the one with the best score
@@ -35,7 +38,7 @@ def main():
         best_y = []
         scores = []
 
-        # probability functions depens on temperature and the boltzmann constant, can be set to their actual values if you want to be physically responsible
+        # probability functions depends on temperature and the boltzmann constant, can be set to their actual values if you want to be physically responsible
         temperature = 1
         boltzmann = 1
     
@@ -72,21 +75,24 @@ def main():
             # probability function to determine whether a fold will be 'accepted' or not, a lower score relative to the previous configuration increases the changes of adoption
             p = math.exp(-(new_score - old_score)/(temperature * boltzmann))
 
-            # the treshhold for acceptance varies and is randomly determined
-            treshhold = random.random()
-            if p < treshhold:
+            # the threshold for acceptance varies and is randomly determined
+            threshold = random.random()
+            if p < threshold:
                 pos_x = log_pos_x
                 pos_y = log_pos_y
 
             rotation_counter += 1
 
             # print statement for time indication in long calculations
-            if rotation_counter % 1000 == 0:
-                print(f'{rotation_counter / N * 100}%')
+            if rotation_counter % 10000 == 0:
+                print(f'|', end='', sep=' ', flush=True)
+                #sys.stdout.write("|")
 
         # the best structure is copied to a csv file and shown in a graph
         output(best_x, best_y, lowest_score)
-        plot(best_x, best_y, lowest_score, scores)
+        
+        # plot(best_x, best_y, lowest_score, scores)
+        
         i += 1
 
 def output(list_x, list_y, score):
@@ -131,15 +137,17 @@ def output(list_x, list_y, score):
     with open('montedict.csv', 'r') as resultdict_csv:
         csv_reader = csv.reader(resultdict_csv)
 
-        # Print to terminal, for testing
+        # Insert data into dict
         for key, inscore in csv_reader:
-            # Insert data into dict
             resultdict[key] = inscore 
+        
     
     for p, n in zip(protein, numbers):
         resultstr = resultstr + str(p) + str(n)
+    
+    print(f' {score}', end=' ')
 
-    if resultstr not in resultdict:
+    if (resultstr not in resultdict) and (score <= int(inscore)):
         resultdict[resultstr] = score 
         print(f'unique') 
         f = open('montedict.csv', 'w')
@@ -149,7 +157,10 @@ def output(list_x, list_y, score):
             f.write(f'{key},{value}\n')
         
         f.close()
-    else:
+    elif score > int(inscore):
+        print(f'not better') 
+        
+    else: 
         print(f'not unique') 
     
         
@@ -241,9 +252,7 @@ def plot(list_x, list_y, score, scores):
     ax2.set_title('Scores of the configurations after each rotation')
     ax2.set(xlabel='Rotation', ylabel='Score')
     
-    # comment close function to show figure 
-    plt.close()
-    #plt.show()
+    plt.show()
 
 
 def random_rotation(list_x, list_y, n):
