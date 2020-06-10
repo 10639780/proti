@@ -1,0 +1,30 @@
+protein = ['H','P','H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
+length = 20
+total score = -9
+
+H2P1H1P-2P-1H-2H1P-2  H-2P-1P2  H-1P2H-1H-2P-1P2H2P1H0
+                     | 3 , -1 |
+H2P1H1P-2P-1H-2H1P-2  H1P-2P-1  H-1P2H-1H-2P-1P2H2P1H0
+                     | 3 , -1 |                            | grouplength , score 
+
+- Alleen de middelste groep van lengte 3 is anders gevouwen 
+
+
+
+H2P-1H-1P-2P1H-2 group:
+
+1
+                  H2P-1H-1P-2P1H-2    H-1P-2H-2P1P2H1P2H1H-2P1P2H2P-1H0
+                 |      
+                 
+2         
+H1P2H2P-1P-2H-1   H2P-1H-1P-2P1H-2    P1H-2H-1P-2P1H1P2H0               
+                 |
+                 
+3              
+                  H2P-1H-1P-2P1H-2    H-1P-2H-1P-2P1H1P2H1H-2P1P2H2P-1H0
+                 |
+
+The group occurs at the end and in the middle of the string.
+
+                  
