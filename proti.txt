@@ -118,3 +118,8 @@ So will have to search for this one elsewhere
 
 Genetic Algorithm simply explained: https://www.youtube.com/watch?v=qiKW1qX97qA
 Step by step guide (not protein folding specific): https://www.youtube.com/watch?v=XP8R0yzAbdo
+
+
+MIT colleges protein folding (van Johan in de discord proti channel):
+lecture 20 protein chains: https://www.youtube.com/watch?v=82t7g2itzm4
+lecture 21 HP models & interlocked chains: https://www.youtube.com/watch?v=8RI9OSOftUE
