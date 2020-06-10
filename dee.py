@@ -33,8 +33,12 @@ def main():
     # direction of atom relative to the previous ones
     directions = ['left', 'right', 'straight']
 
-    
-    """Setting this variable right allows the program to go fast. It makes sure no branches are explored that couldn't possibly get a score lower than this lowest known score."""
+    """Setting this variable right allows the program to run well. 
+    It makes sure no branches are explored that couldn't possibly get a score lower than this lowest known score.
+    Setting it too high means the program is slow as it will start constructing 3^(n-1) branches.
+    Setting it too low results in finding no solutions.
+    You can find the lowest known score by running one of the other faster but less certain programs first.
+    """
     lowest_known_score = -3
     
     # variables to keep track of the optimal configuration
