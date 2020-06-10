@@ -265,6 +265,7 @@ def create_tree():
             continue
         
         # second atom         
+        # second atom           
         if second:
             node =  Atom(p, [1,0], parent=root)
             node_list.append(node)
