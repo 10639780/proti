@@ -107,7 +107,7 @@ Kort uitgelegd in dit filmpje.
 https://www.youtube.com/watch?v=gk18y7zYIfY
 
 Paper is niet heel lang maar vond ik wel lastig te begrijpen :(
-Still worth checking out
+Still worth checking out.
 
 Note:
 Papers have been pointing to looking into Genetic algorithm for protein folding
@@ -123,3 +123,8 @@ Step by step guide (not protein folding specific): https://www.youtube.com/watch
 MIT colleges protein folding (van Johan in de discord proti channel):
 lecture 20 protein chains: https://www.youtube.com/watch?v=82t7g2itzm4
 lecture 21 HP models & interlocked chains: https://www.youtube.com/watch?v=8RI9OSOftUE
+
+
+Hints Okke en Jasper:
+Zie proti chat op discord. 
+Teken de proteins uit en check of er een bepaald patroon is
