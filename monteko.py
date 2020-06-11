@@ -29,7 +29,7 @@ def main():
         pos_y = [0] * length
 
         # number of iterations, higher N is better result
-        N = 500000
+        N = 1000000
         rotation_counter = 0
 
         # lists to keep track of the scores of each rotation and remember the one with the best score
