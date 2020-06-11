@@ -128,3 +128,8 @@ lecture 21 HP models & interlocked chains: https://www.youtube.com/watch?v=8RI9O
 Hints Okke en Jasper:
 Zie proti chat op discord. 
 Teken de proteins uit en check of er een bepaald patroon is
+
+Notes presentatie sessie:
+Deepcopy kost heel veel tijd in deze case 
+beter om een hash op te slaan 
+of een andere manier dit opslaan
