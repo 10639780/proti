@@ -14,16 +14,22 @@ from progress.bar import Bar
 
 # lists with different proteins, some from the website and some created for testing, comment out the ones not needed
 
-# protein = ['H', 'H', 'P', 'H','H', "H", 'H']
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
-# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
+protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
 # protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36, mc -10
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -12
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H'] # official 50
+# protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
+# protein = ['P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke short, mc -4
+# protein = ['H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke long, mc -6
 
 length = len(protein)
 
+# set theoretical lower bound on score
+even = protein[::2]
+odd = protein[1::2]
+min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
 
 def main():
     
@@ -33,119 +39,131 @@ def main():
     # direction of atom relative to the previous ones
     directions = ['left', 'right', 'straight']
 
-    """Setting this variable right allows the program to run well. 
+    """
+    Setting this variable right allows the program to run well. 
     It makes sure no branches are explored that couldn't possibly get a score lower than this lowest known score.
     Setting it too high means the program is slow as it will start constructing 3^(n-1) branches.
     Setting it too low results in finding no solutions.
     You can find the lowest known score by running one of the other faster but less certain programs first.
     """
-    lowest_known_score = -3
+    lowest_known_score = -0
     
     # variables to keep track of the optimal configuration
     node_counter = 1
     rejected_counter = 0
     best_score = 0
-    same_score = 0
     best_x = []
     best_y = []
+    atom_time = []
+    keep_going = True
 
     # loop for constructing the tree
     for i, p in enumerate(protein):
+        atom_start = timeit.default_timer()
+        # stops when the remaining atoms can't add to the score
+        if keep_going:
 
-        # keep track of how many nodes are added per depth level
-        breadth_counter = 0
+            # keep track of how many nodes are added per depth level
+            breadth_counter = 0
 
-        # place the first atom
-        # intermezzo: the loop relies heavily on the globals()[...] function
-        # it creates a transforms a stirng into an actual variable and allows for dynamic naming and referencing of the nodes
-        if i == 0:
-            name = f'{p}{i}{i}'
-            globals()[name] = Node('start')
-            bar.next()
-            continue
-        
-        # second atom is placed in one direction only, others would merely be a rotaion around the axis with no score advantage
-        if i == 1:
-            name = f'{p}{i}{i}'
-            globals()[name] = Node('left', parent=globals()[f'{protein[0]}00'])
-            bar.next()
-            continue
-        
-        # determines how many nodes there are in in the previous tree layer
-        parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'], filter_=lambda node: node.is_leaf)))
-
-        # for each node, create a new one in every direction
-        for j in range(len(directions) * parent_counter):
-        
-            # get the name of the parent node
-            parent = f'{protein[i-1]}{i-1}{j}'
-
-            # see if that parent exists, if not its score was too high and no further node along that branch has to be made
-            try:
-                globals()[parent]
-            except:
+            # place the first atom
+            # intermezzo: the loop relies heavily on the globals()[...] function
+            # it creates a transforms a stirng into an actual variable and allows for dynamic naming and referencing of the nodes
+            if i == 0:
+                name = f'{p}{i}{i}'
+                globals()[name] = Node('start')
+                bar.next()
                 continue
             
-            # if it exist contruct a new node for each direction
-            for d in directions:
+            # second atom is placed in one direction only, others would merely be a rotaion around the axis with no score advantage
+            if i == 1:
+                name = f'{p}{i}{i}'
+                globals()[name] = Node('left', parent=globals()[f'{protein[0]}00'])
+                bar.next()
+                continue
+            
+
+            # determines how many nodes there are in in the previous tree layer
+            parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'], filter_=lambda node: node.is_leaf)))
+
+        
+            # for each node, create a new one in every direction
+            for j in range(len(directions) * parent_counter):
+
                 
-                # name of the node to be
-                name = f'{p}{i}{breadth_counter}'
-                
-                # see which nodes are visited already to get to this point in the tree
-                nodes_visited = [node.name for node in globals()[parent].path]
-                # the atoms still to be placed
-                nodes_to_visit = protein[i:]
+                # get the name of the parent node
+                parent = f'{protein[i-1]}{i-1}{j}'
 
-                # score of the protien so far
-                partial_score = partial_score_func(nodes_visited)
-
-                if partial_score < lowest_known_score:
-                    lowest_known_score = copy.deepcopy(partial_score)
-
-                # lowest score possible given the remaining atoms
-                possible_score = possible_score_func(nodes_to_visit)
-
-                # new node is only made if it is possible to get a score lower than the lowest known score
-                if partial_score + possible_score >= lowest_known_score:
-                    breadth_counter +=1
-                    rejected_counter += 1
+                # see if that parent exists, if not its score was too high and no further node along that branch has to be made
+                try:
+                    globals()[parent]
+                except:
                     continue
-                
-                # create new node
-                globals()[name] = Node(d, parent=globals()[parent])
-                node_counter += 1
+            
 
-                # this part only runs when the last atom is placed
-                if i == length - 1:
-                    # determine the path of the string
-                    nodes_visited = [node.name for node in globals()[name].path]
-                    pos_x, pos_y = direction_to_xy(nodes_visited)
+                # if it exist contruct a new node for each direction
+                for d in directions:
+                    
+                    # name of the node to be
+                    name = f'{p}{i}{breadth_counter}'
+                    
+                    # see which nodes are visited already to get to this point in the tree
+                    nodes_visited = [node.name for node in globals()[parent].path]
+                    # the atoms still to be placed
+                    nodes_to_visit = protein[i:]
+                    # print(nodes_to_visit)
 
-                    # disregard foldings onto itself
-                    if double(pos_x, pos_y):
+                    # score of the protien so far
+                    partial_score = partial_score_func(nodes_visited)
+
+                    # lowest score possible given the remaining atoms
+                    possible_score = possible_score_func(nodes_to_visit, partial_score)
+
+                    if partial_score < lowest_known_score:
+                        lowest_known_score = copy.deepcopy(partial_score)
+            
+                    # new node is only made if it is possible to get a score lower than the lowest known score
+                    if (partial_score + possible_score >= lowest_known_score and possible_score != 0):
+                        breadth_counter += 1
+                        rejected_counter += 1
                         continue
                     
-                    # get the structures score
-                    current_score = score(pos_x, pos_y)
+                    # create new node
+                    globals()[name] = Node(d, parent=globals()[parent])
+                    node_counter += 1
+                    breadth_counter += 1
 
-                    # save if it is an improvemnt
-                    if current_score < best_score:
-                        same_score = 0
-                        best_x = copy.deepcopy(pos_x)
-                        best_y = copy.deepcopy(pos_y)
-                        best_score = copy.deepcopy(current_score)
-                    # keep track of the number of structure with a similar score
-                    if current_score == best_score:
-                        same_score += 1
+                    # this part only runs when the last atom is placed or the remaining atoms can't add to the score
+                    if i == length - 1 or possible_score == 0:
+                    
+                        # determine the path of the string
+                        nodes_visited = [node.name for node in globals()[name].path]
+                        pos_x, pos_y = direction_to_xy(nodes_visited)
 
-                breadth_counter += 1
+                        # disregard foldings onto itself
+                        if double(pos_x, pos_y):
+                            continue
+                        
+                        # get the structures score
+                        current_score = score(pos_x, pos_y)
+
+                        # save if it is an improvemnt
+                        if current_score <= best_score:
+                            same_score = 0
+                            best_x = copy.deepcopy(pos_x)
+                            best_y = copy.deepcopy(pos_y)
+                            best_score = copy.deepcopy(current_score)
+                           
+                        # stop running if the remaining atoms can't add to the score
+                        if possible_score == 0:
+                            keep_going = False
+
+        # log how long each iteration takes
+        atom_stop = timeit.default_timer()
+        atom_time.append(atom_stop - atom_start)
 
         # update the progress bar
         bar.next()
-
-    # # uncomment to display the full tree in the terminal
-    # terminal_display(globals()[f'{protein[0]}00'])
 
     # stop the progres bar and timer
     bar.finish()
@@ -156,7 +174,14 @@ def main():
     print(f'Nodes rejected: {rejected_counter}')
     print(f'Structures with lowest score: {same_score}')
     print('Runtime: %.4f seconds' %(stop - start))
-    plot(best_x, best_y, best_score)
+    if len(nodes_to_visit) > 1:
+        print(f'{nodes_to_visit[1:]} are not placed since they would not add to the score')
+
+    if len(best_x) == 0:
+        print('No stable solution')
+    else:
+        plot(best_x, best_y, best_score, atom_time, stop - start)
+
 
 def terminal_display(root):
     """Prints a graphical representation of the tree to the terminal."""
@@ -164,7 +189,8 @@ def terminal_display(root):
     for pre, fill, node in RenderTree(root):
         print("%s%s" % (pre, node.name))
 
-def plot(list_x, list_y, score):
+
+def plot(list_x, list_y, score, atom_time, total_time):
     """Makes a graph of two lists list_x, list_y."""
     
     # differentiate between types of atom
@@ -188,15 +214,21 @@ def plot(list_x, list_y, score):
             yellow_dots_x.append(x)
             yellow_dots_y.append(y)
 
-    # create graphs with colors
+   # create graphs with colors
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
 
-    plt.plot(list_x, list_y, '--', color='darkgrey')
-    plt.plot(red_dots_x, red_dots_y, 'or')
-    plt.plot(blue_dots_x, blue_dots_y, 'ob')
-    plt.plot(yellow_dots_x, yellow_dots_y, 'oy')
-    plt.title(f'Folded protein of length {length}, score: {score}')
+    ax1.plot(list_x, list_y, '--', color='darkgrey')
+    ax1.plot(red_dots_x, red_dots_y, 'or')
+    ax1.plot(blue_dots_x, blue_dots_y, 'ob')
+    ax1.plot(yellow_dots_x, yellow_dots_y, 'oy')
+    ax1.set_title(f'Folded protein of length {length}, score: {score}')
+
+    ax2.plot(atom_time)
+    ax2.set_title(f'Time per atom, {round(total_time,2)} seconds total')
+    ax2.set(xlabel='Atom', ylabel='Time')
 
     plt.show()
+
 
 def direction_to_xy(nodes_visited):
     """Converts a series of string with directions like ['left', 'right'] to lists with xy positions."""
@@ -242,7 +274,7 @@ def partial_score_func(nodes_visited):
     return partial_score
 
 
-def possible_score_func(nodes_to_visit):
+def possible_score_func(nodes_to_visit, partial_score):
     """Calculates the best score the remaining bit of the protien can acquire."""
 
     possible_score = 0
@@ -262,6 +294,9 @@ def possible_score_func(nodes_to_visit):
         if n == 'C':
             possible_score += -10
 
+    if possible_score + partial_score < min_score:
+        possible_score = min_score - partial_score
+        
     return possible_score
 
 
