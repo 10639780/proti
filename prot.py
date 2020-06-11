@@ -245,9 +245,9 @@ for atom in protein:
 print(f'Score: {total_score}') # final score
 display(total_score) # graphical display
 
-# correct output of results (don't comment out)
-f = open('output.csv', 'w')
-f.write('amino,fold\n')
-output(log_x, log_y, protein) 
-f.write(f'score,{total_score}') 
-f.close()
+# # correct output of results (don't comment out)
+# f = open('output.csv', 'w')
+# f.write('amino,fold\n')
+# output(log_x, log_y, protein) 
+# f.write(f'score,{total_score}') 
+# f.close()
