@@ -182,7 +182,13 @@ def lowest_score(moves):
 
 # enter protein string
 # protein = ['H','H', 'P','H','H','H','P','H']
-protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
+# protein = ['H', 'H', 'H', 'P', 'C', 'C', 'H', 'P', 'C', 'C', 'P', 'H']
+protein = ['H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P']
+protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36
+protein = ['P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P']
+
 length = len(protein)
 size = 2 * length + 1
 
@@ -235,7 +241,7 @@ for atom in protein:
     log_y.append(current_position[1])
 
 # optional displays of the result (comment out the ones you dont need)
-print(np.array(grid)) # grid in terminal
+# print(np.array(grid)) # grid in terminal
 print(f'Score: {total_score}') # final score
 display(total_score) # graphical display
 
