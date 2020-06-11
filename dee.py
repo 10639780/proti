@@ -14,9 +14,9 @@ from progress.bar import Bar
 
 # lists with different proteins, some from the website and some created for testing, comment out the ones not needed
 
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
+protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
-protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
+# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
 # protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36, mc -10
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -12
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H'] # official 50
@@ -49,8 +49,6 @@ def main():
     lowest_known_score = -0
     
     # variables to keep track of the optimal configuration
-    node_counter = 1
-    rejected_counter = 0
     best_score = 0
     best_x = []
     best_y = []
@@ -81,16 +79,13 @@ def main():
                 globals()[name] = Node('left', parent=globals()[f'{protein[0]}00'])
                 bar.next()
                 continue
-            
 
             # determines how many nodes there are in in the previous tree layer
             parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'], filter_=lambda node: node.is_leaf)))
-
         
             # for each node, create a new one in every direction
             for j in range(len(directions) * parent_counter):
 
-                
                 # get the name of the parent node
                 parent = f'{protein[i-1]}{i-1}{j}'
 
@@ -100,7 +95,6 @@ def main():
                 except:
                     continue
             
-
                 # if it exist contruct a new node for each direction
                 for d in directions:
                     
@@ -125,12 +119,10 @@ def main():
                     # new node is only made if it is possible to get a score lower than the lowest known score
                     if (partial_score + possible_score >= lowest_known_score and possible_score != 0):
                         breadth_counter += 1
-                        rejected_counter += 1
                         continue
                     
                     # create new node
                     globals()[name] = Node(d, parent=globals()[parent])
-                    node_counter += 1
                     breadth_counter += 1
 
                     # this part only runs when the last atom is placed or the remaining atoms can't add to the score
@@ -149,7 +141,6 @@ def main():
 
                         # save if it is an improvemnt
                         if current_score <= best_score:
-                            same_score = 0
                             best_x = copy.deepcopy(pos_x)
                             best_y = copy.deepcopy(pos_y)
                             best_score = copy.deepcopy(current_score)
@@ -170,9 +161,7 @@ def main():
     stop = timeit.default_timer()
 
     # print some interesting information and plot best result
-    print(f'Nodes made: {node_counter}')
-    print(f'Nodes rejected: {rejected_counter}')
-    print(f'Structures with lowest score: {same_score}')
+    print(f'Lowest theoretical score: {min_score}')
     print('Runtime: %.4f seconds' %(stop - start))
     if len(nodes_to_visit) > 1:
         print(f'{nodes_to_visit[1:]} are not placed since they would not add to the score')
@@ -295,7 +284,7 @@ def possible_score_func(nodes_to_visit, partial_score):
             possible_score += -10
 
     if possible_score + partial_score < min_score:
-        possible_score = min_score - partial_score
+        possible_score = min_score - partial_score - 1
         
     return possible_score
 
