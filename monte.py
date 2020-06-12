@@ -15,8 +15,10 @@ import copy
 
 # string and length are used by most functions so declare as global variable
 # protein = ['H','H','P','H','H','H','P','H']
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+
+protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
 
 length = len(protein)
 
@@ -27,7 +29,7 @@ def main():
     pos_y = [0] * length
 
     # number of iterations, higher N is better result
-    N = 1000000
+    N = 100000
     rotation_counter = 0
 
     # lists to keep track of the scores of each rotation and remember the one with the best score
@@ -70,7 +72,8 @@ def main():
             best_y = copy.deepcopy(pos_y)
             lowest_score = copy.deepcopy(new_score)
 
-        # probability function to determine whether a fold will be 'accepted' or not, a lower score relative to the previous configuration increases the changes of adoption
+        # probability function to determine whether a fold will be 'accepted' or not, 
+        # a lower score relative to the previous configuration increases the changes of adoption
         p = math.exp(-(new_score - old_score)/(temperature * boltzmann))
 
         # the treshhold for acceptance varies and is randomly determined

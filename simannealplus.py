@@ -18,7 +18,6 @@ ITERATIONS = 100000
 DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
 START_TEMP = 10
 
-
 def protein_configuration():
     x = [i for i in range(LENGTH)]
     y = [0] * LENGTH
@@ -29,6 +28,9 @@ def protein_configuration():
     best_x = []
     best_y = []
     scores = []
+
+    local_optimum = False
+    local_optimum_rotation = 0
 
     while rotations < ITERATIONS:
 
@@ -53,7 +55,17 @@ def protein_configuration():
             best_y = copy.deepcopy(y)
             lowest_score = copy.deepcopy(new_score)
 
-        temperature = START_TEMP * (0.997 ** rotations)
+
+        if rotations % 1000 == 0:
+            if new_score == old_score:                
+                local_optimum = True
+
+        if local_optimum == True:
+            local_optimum_rotation = rotations
+            print("Found local optimum")
+            local_optimum = False
+
+        temperature = START_TEMP * (0.997 ** (rotations - local_optimum_rotation))
         # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
         acceptance_chance = 2 ** ((old_score - new_score)/temperature)
         treshhold = random.random()
