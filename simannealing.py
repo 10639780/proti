@@ -11,11 +11,11 @@ import random
 import math
 import copy
 
-PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
+PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
 LENGTH = len(PROTEIN)
-ITERATIONS = 100000
+ITERATIONS = 10000
 DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-START_TEMP = 10000
+START_TEMP = 100
 BOLTZMANN = 1
 
 def protein_configuration():
@@ -52,7 +52,8 @@ def protein_configuration():
             best_y = copy.deepcopy(y)
             lowest_score = copy.deepcopy(new_score)
 
-        temperature = START_TEMP * (0.997 ** rotations)
+        # temperature = START_TEMP * (0.997 ** rotations)
+        temperature = START_TEMP - ((START_TEMP / ITERATIONS) ** rotations)
         acceptance_chance = math.exp((old_score - new_score)/temperature)
         treshhold = random.random()
 
