@@ -1,6 +1,6 @@
 """
-Run semi random algorithm N times and pick the configuration with the highest score
-From this I think we can modify to a hillclimber
+Progress from semi random algorithm to hill climber method for finding the optimum
+Remove N iterations for now
 """
 
 import matplotlib.pyplot as plt
@@ -9,13 +9,13 @@ from random import randint
 import sys
 import copy
 
-#PROTEIN = 'HHPHHHPH'
+# PROTEIN = 'HHPHHHPH'
 PROTEIN =  'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP'
 LENGTH = len(PROTEIN)
 DIMENSION = 2
 GRID_SIZE = 2 * LENGTH + 1
 DIRECTIONS = [[1, 0], [-1, 0], [0, -1], [0, 1]]
-ITERATIONS = 10000
+ITERATIONS = 10
 
 def init_grid():
     grid = [[0 for i in range(GRID_SIZE)] for i in range(GRID_SIZE)]
@@ -48,9 +48,9 @@ def protein_positions():
 
         step = score_valid_folds(x, y, grid, element)
 
-        if not step:
-            # print("Skipping stuck protein")
-            return False
+        # if not step:
+        #     print("Skipping stuck protein")
+        #     return False
 
         new_x = step[0]
         new_y = step[1]
@@ -79,25 +79,37 @@ def check_valid_folds(x, y, grid):
     possible_folds = all_possible_folds(x, y)
     valid_folds = []
     for fold in possible_folds:
+        
         new_x = fold[0]
         new_y = fold[1]
         value = grid[new_x][new_y]
         if value == 0:
             valid_folds.append(fold)
-            
 
+    if len(valid_folds) < 3 and len(valid_folds) > 0:
+        save_folds = copy.deepcopy(valid_folds)
+        return valid_folds, save_folds
+            
     return valid_folds
+
+def undo_stuck_protein(save_folds, previous_amino_position):
+    print(previous_amino_position)
+    print(save_folds)
+
 
 def score_valid_folds(x, y, grid, amino):
     valid_folds = check_valid_folds(x, y, grid)
-
-    if len(valid_folds) == 0:   
-        # print("Protein got stuck")     
+    print(valid_folds)
+    if len(valid_folds[0]) == 0: 
+        undo_stuck_protein(valid_folds[1], grid[x][y])  
+        print("Protein got stuck")
+        print(amino)     
         return False
 
     fold_neighbours = []
     
     for fold in valid_folds:
+        print(fold)
         score = 0
         new_x = fold[0]
         new_y = fold[1]
@@ -170,7 +182,7 @@ def best_score_configuration():
             current_config = protein_positions()
 
         score = current_config[-1]
-        
+    
         if best_score > score:
             best_score = score
             best_configuration = copy.deepcopy(current_config)
@@ -180,6 +192,7 @@ def best_score_configuration():
 
     grid, x, y, score = best_configuration
     return grid, x, y, score, score_list, iterations
+
 
 
 def plot_protein_config(x_list, y_list, total_score, scores, iterations):
@@ -229,12 +242,10 @@ def plot_protein_config(x_list, y_list, total_score, scores, iterations):
 
     plt.show()
 
-    
-
-
-        
+      
 if __name__ == "__main__":
-    grid, x, y, score, score_list, iterations = best_score_configuration()
-    plot_protein_config(x, y, score, score_list, iterations)
+    # grid, x, y, score, score_list, iterations = best_score_configuration()
+    # plot_protein_config(x, y, score, score_list, iterations)
+    protein_positions()
     
     

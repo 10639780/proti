@@ -115,12 +115,12 @@ def output(list_x, list_y, score):
     numbers.append(0)
 
     # write the list to a file
-    f = open('output.csv', 'w')
-    f.write('amino,fold\n')
-    for p, n in zip(protein, numbers):
-        f.write(f'{p}, {n}\n')
-    f.write(f'score,{score}') 
-    f.close()
+    # f = open('output.csv', 'w')
+    # f.write('amino,fold\n')
+    # for p, n in zip(protein, numbers):
+    #     f.write(f'{p}, {n}\n')
+    # f.write(f'score,{score}') 
+    # f.close()
   
 
 def score(list_x, list_y):
