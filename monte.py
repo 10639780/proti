@@ -17,6 +17,7 @@ from progress.bar import Bar
 
 # string and length are used by most functions so declare as global variable
 # protein = ['H','H','P','H','H','H','P','H']
+<<<<<<< HEAD
 protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H','H','H','P','H']
 # protein = ['P', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H']
@@ -43,6 +44,13 @@ protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P',
 protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 
   'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
   'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
+=======
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
+# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+
+protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
+
+>>>>>>> 9698fda472b99522490cb347b94db3009cf5b660
 length = len(protein)
 
 def main():
@@ -54,7 +62,11 @@ def main():
     pos_y = [0] * length
 
     # number of iterations, higher N is better result
+<<<<<<< HEAD
     N = 50000
+=======
+    N = 100000
+>>>>>>> 9698fda472b99522490cb347b94db3009cf5b660
     rotation_counter = 0
 
     bar = Bar('Progress', max=N/1000)
@@ -99,7 +111,8 @@ def main():
             best_y = copy.deepcopy(pos_y)
             lowest_score = copy.deepcopy(new_score)
 
-        # probability function to determine whether a fold will be 'accepted' or not, a lower score relative to the previous configuration increases the changes of adoption
+        # probability function to determine whether a fold will be 'accepted' or not, 
+        # a lower score relative to the previous configuration increases the changes of adoption
         p = math.exp(-(new_score - old_score)/(temperature * boltzmann))
 
         # the treshhold for acceptance varies and is randomly determined
@@ -150,12 +163,22 @@ def output(list_x, list_y, score):
     numbers.append(0)
 
     # write the list to a file
+<<<<<<< HEAD
     f = open('output.csv', 'w')
     f.write('amino,fold\n')
     for p, n in zip(protein, numbers):
         f.write(f'{p}, {n}\n')
     f.write(f'score,{score}') 
     f.close()
+=======
+    # f = open('output.csv', 'w')
+    # f.write('amino,fold\n')
+    # for p, n in zip(protein, numbers):
+    #     f.write(f'{p}, {n}\n')
+    # f.write(f'score,{score}') 
+    # f.close()
+  
+>>>>>>> 9698fda472b99522490cb347b94db3009cf5b660
 
 def score(list_x, list_y):
     """Given the coordinates of a protein string, calculate the score of the shape."""
@@ -245,7 +268,7 @@ def plot(list_x, list_y, score, scores):
     ax2.plot(scores)
     ax2.set_title('Scores of the configurations after each rotatation')
     ax2.set(xlabel='Rotation', ylabel='Score')
-
+    plt.savefig("monte2D.png")
     plt.show()
 
 

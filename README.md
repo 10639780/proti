@@ -30,10 +30,14 @@ Overzicht:
 - Nieuwe heuristische benaderingen ant colony, iterative deepening, genetische methode.
 
 termen
+
 structuur = molecuul 
+
 element = amino = H/P/C
+
 HP model protein folding veel papers over!
-atoom bestaat niet (we werken op een ander level
+
+atoom bestaat niet (we werken op een ander level)
 
 
 

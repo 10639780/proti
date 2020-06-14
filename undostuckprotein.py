@@ -1,6 +1,6 @@
 """
-Run semi random algorithm N times and pick the configuration with the highest score
-From this I think we can modify to a hillclimber
+Undo fold when protein gets stuck and refold protein gets stuck
+Need to recalculate score 
 """
 
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ from random import randint
 import sys
 import copy
 
-#PROTEIN = 'HHPHHHPH'
+# PROTEIN = 'HHPHHHPH'
 PROTEIN =  'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP'
 LENGTH = len(PROTEIN)
 DIMENSION = 2
@@ -34,6 +34,8 @@ def protein_positions():
     pos_x = [LENGTH]
     pos_y = [LENGTH]
 
+    amino_possible_rotations = {}
+
     total_score = 0
     for amino in range(LENGTH):
         
@@ -45,12 +47,47 @@ def protein_positions():
 
         x = pos_x[amino - 1]
         y = pos_y[amino - 1]
+        # print("going from previous x", x)
+        # print("going from previous y", y)
 
-        step = score_valid_folds(x, y, grid, element)
+        valid_folds = check_valid_folds(x, y, grid)
+        
+        while not valid_folds:
+            # print("Stuck protein")
+            old_x = pos_x[amino - 2]
+            old_y = pos_y[amino - 2]
+            # print("x before that", old_x)
+            # print("y before that", old_y)
 
-        if not step:
-            # print("Skipping stuck protein")
-            return False
+            old_fold = amino_possible_rotations[amino - 1]
+            # print("previous fold choices if current amino can't be placed", old_fold)
+
+            grid, x, y, undone_fold = undo_stuck_fold(x, y, old_fold, grid)
+            amino_possible_rotations[amino - 1] = undone_fold
+            pos_x[amino - 1] = x
+            pos_y[amino - 1] = y
+            valid_folds = check_valid_folds(x, y, grid)
+
+            # grid, undone_x, undone_y, undone_fold = undo_stuck_fold(x, y, old_fold, grid)
+            # amino_possible_rotations[amino - 1] = undone_fold
+            # pos_x[amino - 1] = undone_x
+            # pos_y[amino - 1] = undone_y
+            # valid_folds = check_valid_folds(undone_x, undone_y, grid)
+            # step = score_valid_folds(undone_x, undone_y, grid, valid_folds, element)
+
+            # new_x = step[0]
+            # new_y = step[1]
+            # score = step[2]
+
+            # grid[new_x][new_y] = element
+            # pos_x.append(new_x)
+            # pos_y.append(new_y)
+            # total_score += score
+            # continue
+
+        amino_possible_rotations[amino] = valid_folds
+        # print("dictionary of all possible fold for each protein", amino_possible_rotations)
+        step = score_valid_folds(x, y, grid, valid_folds, element)
 
         new_x = step[0]
         new_y = step[1]
@@ -62,6 +99,21 @@ def protein_positions():
         total_score += score
 
     return grid, pos_x, pos_y, total_score
+
+def undo_stuck_fold(x, y, old_folds, grid):
+    old_folds.remove([x, y])
+    # print("leftover undone folds", old_folds)
+    # random_choice = randint(0, len(old_folds) - 1)
+    new_position = old_folds[0]
+    # print("new position to be", new_position)
+    undone_x = new_position[0]
+    undone_y = new_position[1]
+    # undone_x = old_folds[0]
+    # undone_y = old_folds[1]
+    # grid[undone_x][undone_y] = grid[x][y]
+
+
+    return grid, undone_x, undone_y, old_folds
 
 def all_possible_folds(x, y):
 
@@ -84,16 +136,18 @@ def check_valid_folds(x, y, grid):
         value = grid[new_x][new_y]
         if value == 0:
             valid_folds.append(fold)
-            
+
+    if len(valid_folds) < 2:
+        return False            
 
     return valid_folds
 
-def score_valid_folds(x, y, grid, amino):
-    valid_folds = check_valid_folds(x, y, grid)
+def score_valid_folds(x, y, grid, valid_folds, amino):
+    # valid_folds = check_valid_folds(x, y, grid)
 
-    if len(valid_folds) == 0:   
-        # print("Protein got stuck")     
-        return False
+    # if len(valid_folds) == 0:   
+    #     print("Protein got stuck")     
+    #     return False
 
     fold_neighbours = []
     
@@ -158,31 +212,7 @@ def score_valid_folds(x, y, grid, amino):
         
     return new_x, new_y, local_score
 
-def best_score_configuration():
-    best_score = 0
-    score_list = []
-    iterations = []
-
-    for i in range(ITERATIONS):
-        current_config = protein_positions()
-
-        while not current_config:
-            current_config = protein_positions()
-
-        score = current_config[-1]
-        
-        if best_score > score:
-            best_score = score
-            best_configuration = copy.deepcopy(current_config)
-
-        score_list.append(score)
-        iterations.append(i)
-
-    grid, x, y, score = best_configuration
-    return grid, x, y, score, score_list, iterations
-
-
-def plot_protein_config(x_list, y_list, total_score, scores, iterations):
+def plot_protein_config(x_list, y_list, total_score):
     H_x = []
     H_y = []
     P_x = []
@@ -206,9 +236,9 @@ def plot_protein_config(x_list, y_list, total_score, scores, iterations):
             P_y.append(y)
 
 
-    plt.figure()
+    # plt.figure()
 
-    plt.subplot(211)
+    # plt.subplot(211)
     plt.plot(x_list, y_list, "k--")
     plt.plot(H_x, H_y, "ro", label="hydrofoob")
     plt.plot(P_x, P_y, "bo", label="polair")
@@ -220,21 +250,9 @@ def plot_protein_config(x_list, y_list, total_score, scores, iterations):
     plt.xlabel("Step")
     plt.ylabel("Step")
     plt.legend()
-
-    plt.subplot(212)
-    plt.plot(iterations, scores)
-    plt.title("Statistics")
-    plt.xlabel("Iterations")
-    plt.ylabel("Score")
-
     plt.show()
 
-    
-
-
-        
 if __name__ == "__main__":
-    grid, x, y, score, score_list, iterations = best_score_configuration()
-    plot_protein_config(x, y, score, score_list, iterations)
-    
-    
+    grid, pos_x, pos_y, total_score = protein_positions()
+    plot_protein_config(pos_x, pos_y, total_score)
+    # print(display_grid(config[0]))
