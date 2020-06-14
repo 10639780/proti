@@ -213,7 +213,7 @@ def plot(list_x, list_y, score, scores):
     ax2.plot(scores)
     ax2.set_title('Scores of the configurations after each rotatation')
     ax2.set(xlabel='Rotation', ylabel='Score')
-
+    plt.savefig("monte2D.png")
     plt.show()
 
 

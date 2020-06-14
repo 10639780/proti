@@ -16,7 +16,7 @@ PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
 LENGTH = len(PROTEIN)
 ITERATIONS = 100000
 DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-START_TEMP = 10
+START_TEMP = 100
 
 def protein_configuration():
     x = [i for i in range(LENGTH)]
@@ -190,7 +190,7 @@ def visualization(x, y, score, scores):
     plt.title("Statistics")
     plt.xlabel("iterations")
     plt.ylabel("scores")
-
+    plt.savefig("simannealplus.png")
     plt.show()
 
 
