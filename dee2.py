@@ -11,13 +11,15 @@ import copy
 import matplotlib.pyplot as plt 
 import timeit
 from progress.bar import Bar
+from statistics import mean
+import random
 
 # lists with different proteins, some from the website and some created for testing, comment out the ones not needed
 
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
 # protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36, mc -10
+protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36, opt -14
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -12
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H'] # official 50
 # protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
@@ -25,12 +27,15 @@ protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
 # protein = ['H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke long, mc -6
 # protein = ['H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H'] # opt -9
 # protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # op -8
-protein = ['H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P']
-protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
-
-
+# protein = ['H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P']
+# protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
+# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 
+#   'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # 25, opt -8
+protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
+  'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
+  'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21
 length = len(protein)
-print(length)
+
 # set theoretical lower bound on score
 even = protein[::2]
 odd = protein[1::2]
@@ -53,7 +58,11 @@ def main():
     Setting it too low results in finding no solutions.
     You can find the lowest known score by running one of the other faster but less certain programs first.
     """
-    lowest_known_score = -13
+    lowest_known_score = -0
+    p1 = 1
+    p2 = 1
+
+    full_strings_made = 0
     
     # variables to keep track of the optimal configuration
     best_score = 0
@@ -67,6 +76,10 @@ def main():
         atom_start = timeit.default_timer()
         # stops when the remaining atoms can't add to the score
         if keep_going:
+
+            lowest_score_k = 0
+            average_scores_k = [0]
+            potential_score = 0
 
             # keep track of how many nodes are added per depth level
             breadth_counter = 0
@@ -112,7 +125,9 @@ def main():
                     nodes_visited = [node.name for node in globals()[parent].path]
                     # the atoms still to be placed
                     nodes_to_visit = protein[i:]
-                    # print(nodes_to_visit)
+            
+                    potential_nodes_visited = copy.deepcopy(nodes_visited)
+                    potential_nodes_visited.append(d)
 
                     # score of the protien so far
                     partial_score = partial_score_func(nodes_visited)
@@ -127,14 +142,34 @@ def main():
                     if partial_score + possible_score >= lowest_known_score and possible_score != 0:
                         breadth_counter += 1
                         continue
+
+                    
+                    potential_score = partial_score_func(potential_nodes_visited)
+        
+                    average_score = sum(average_scores_k) / len(average_scores_k)
+                
+                    r = random.random()
+
+                    if potential_score > average_score and r < p1:
+                        continue
+                    elif (average_score >= potential_score and potential_score > lowest_score_k) and r < p2:
+                        continue                    
+
+
                     
                     # create new node
                     globals()[name] = Node(d, parent=globals()[parent])
                     breadth_counter += 1
 
+                    average_scores_k.append(potential_score)
+                    if potential_score < lowest_score_k:
+                        lowest_score_k = copy.deepcopy(potential_score)
+                    
+
+
                     # this part only runs when the last atom is placed or the remaining atoms can't add to the score
                     if i == length - 1 or possible_score == 0:
-                    
+                        full_strings_made += 1
                         # determine the path of the string
                         nodes_visited = [node.name for node in globals()[name].path]
                         pos_x, pos_y = direction_to_xy(nodes_visited)
@@ -166,7 +201,7 @@ def main():
     # stop the progres bar and timer
     bar.finish()
     stop = timeit.default_timer()
-
+    print(f'Strings made: {full_strings_made}')
     # print some interesting information and plot best result
     print(f'Lowest theoretical score: {min_score}')
     print('Runtime: %.4f seconds' %(stop - start))
