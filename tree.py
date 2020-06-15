@@ -1,9 +1,7 @@
 """
 tree.py
-
 Minor Programmeren
 Team Proti
-
 Determines the highest possible score a protein fold can get.
 """
 from anytree import Node, RenderTree, NodeMixin, LevelOrderGroupIter, PreOrderIter
@@ -27,14 +25,10 @@ class Atom(NodeMixin):
 directions = [[1,0],[-1,0],[0,1],[0,-1]]
 
 # strings of different  length, works well with string up to 11 atoms long, after that the program becomes very slow. 
-protein = ['H', 'H', 'P', 'H', 'P']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
-# protein = ['H','H','P','H','H','H','P','H']
-# protein = ['H', 'H', 'H', 'P', 'C', 'C', 'H', 'P', 'C', 'C', 'P', 'H']
-
+# protein = ['P', 'H', 'P', 'H']
+protein = ['H','H','P','H','H','H','P','H']
+# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H','H','H','P','H']
+# protein = ['H', 'H', 'H', 'C', 'C', 'C', 'H', 'C', 'H']
 
 length = len(protein)
 
@@ -43,8 +37,6 @@ def main():
     # create a tree with all possible folds
     root = create_tree()
     # display_tree(root)
-
-
 
     # extract all possible protein configurations from the tree
     route_directions = create_routes(root)
@@ -227,7 +219,7 @@ def double(list_x, list_y):
  
 
 def create_routes(root):
-    """Creates a list that holds all the possible configurations a protein could have."""
+    """Creates a list that hold all the possible configurations a protein could have."""
 
     route_directions = []
     
@@ -256,7 +248,7 @@ def create_tree():
     second = True
 
     for p, i in zip(protein, [i for i in range(length)]):
-    
+
         # first atom has no parents and is located at 0,0
         if first:
             root = Atom(p, [0,0])
@@ -264,8 +256,7 @@ def create_tree():
             first = False
             continue
         
-        # second atom         
-        # second atom           
+        # second atom             # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0
         if second:
             node =  Atom(p, [1,0], parent=root)
             node_list.append(node)

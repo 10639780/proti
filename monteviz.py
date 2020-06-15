@@ -26,7 +26,7 @@ def main():
     # lists that keep track of coordinates.
     # Starting point can be altered so that a config that crosses either x=0 or y=0, is pruned. 
     
-    best_x = [5]
+    best_x = [0]
     best_y = [10]
         
     for char in BT_string:
