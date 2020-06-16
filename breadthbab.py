@@ -13,7 +13,9 @@ import timeit
 import matplotlib.pyplot as plt 
 import random
 import queue
-
+import pandas as pd 
+from scipy.spatial import distance_matrix
+from scipy.spatial.distance import squareform
 # bunch of test strings
 
 # protein = ['H', 'H', 'P', 'H']
@@ -25,30 +27,30 @@ import queue
 #   'H', 'P', 'P', 'H', 'P', 'P', 'H','H'] # 24,  opt -9
 # protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 
 #   'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # 25, opt -8
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#   'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
+protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
+  'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
 # protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 
 #   'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#   'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
+#       'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
 # protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
 #   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-#   'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
+#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
 # protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
 # protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 
-    # 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, mc -35
+#     'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, mc -35
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 
 #     'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 
-#     'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']  # 50 low -28
+#       'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']  # 50 low -28
 # protein = ['H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P',
 #      'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 
 #         'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # 50, low -19
 # protein = ['H', 'C', 'P', 'H', 'P', 'H', 'P', 'H', 'C', 'H', 'H', 'H', 'H', 'P', 'C', 'C', 'P', 'P',
 #      'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'C', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P',
-#      'H', 'H', 'H', 'H', 'C', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50 low -27
-protein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'P',
-     'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 
-     'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 
-     'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'] # 64, opti -42
+#      '    H', 'H', 'H', 'H', 'C', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50 low -27
+# protein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'P',
+#      'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 
+#         'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 
+#             'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'] # 64, opti -42
 # protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'P', 'H', 
 #     'H', 'P', 'H', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H',
 #      'H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
@@ -60,12 +62,33 @@ protein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H',
 #       'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'H', 'H',
 #        'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H',
 #         'H', 'P', 'P', 'H', 'P', 'H'] # 85, opt -53
+# protein = ['P', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'H', 'H',
+#      'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 
+#         'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'H', 'P', 'H', 'P'] # 60, opt -36
+# protein = ['H','H', 'P','H','H','H','P','H']
+# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 
+#   'P', 'H', 'P', 'H'] # 20, opt -9, bench 0.21, -8
+# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
+#   'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
+# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
+#   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
+#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
+
+
 length = len(protein)
 
 # set theoretical lower bound on score
 even = protein[::2]
 odd = protein[1::2]
 min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
+
+
+
+# list of timer to see why program so slow
+possible_list = []
+score_list = []
+direction_list = []
+double_list = []
 
 def main():
 
@@ -74,7 +97,7 @@ def main():
     q = queue.Queue()
     q.put('')
     final_configurations = []
-    
+
     # keep track of scores per substring
     lowest_score_k = {}
     all_scores_k = {}
@@ -99,8 +122,9 @@ def main():
             final_configurations.append(state)
       
         if len(state) < depth:
+            
             for i in ['L', 'R', 'S']:
-
+                timefor_start = timeit.default_timer()
                 # substring
                 child = copy.deepcopy(state) 
 
@@ -118,9 +142,11 @@ def main():
                 if not protein[k] == 'P':
                     
                     # score if placed 
+                    
                     score = score_func(child)
 
                     # min score to get from remaining aminos
+                    
                     possible_score = possible_score_func(protein[k+1:], score)
 
                     if score + possible_score > lowest_score:
@@ -130,6 +156,7 @@ def main():
                     r = random.random()
 
                     # avergage of all strings of the same length
+                    
                     average_score_k = sum(all_scores_k[k]) / len(all_scores_k[k])
 
                     # conditions for pruning
@@ -147,11 +174,11 @@ def main():
                     
                     if score < lowest_score:
                         lowest_score = copy.deepcopy(score)
-                        
+
+
                 else:
                     q.put(child) 
 
-    
     lowest_score = 0
 
     # weed out the best configuration from the remaining strings
@@ -163,14 +190,19 @@ def main():
     # plot the result
     stop = timeit.default_timer()
     # print(f'Strings made: {len(final_configurations)}')
+    total_time = stop - start
     print(f'Length: {length}')
     print(f'Score: {lowest_score}')
-    print(f'Runtime: {stop - start}')
+    print(f'Total runtime: {total_time}')
+    print(f'Possible score function time: {round(sum(possible_list) / total_time * 100,1)}%')
+    print(f'Score function time: {round(sum(score_list) / total_time * 100,1)}%')
+    print(f'Direction function time: {round(sum(direction_list) / total_time * 100,1)}%')
+    print(f'Double function time: {round(sum(double_list) / total_time * 100,1)}%')
     plot(best_config, lowest_score)
 
 def possible_score_func(nodes_to_visit, partial_score):
     """Calculates the best score the remaining bit of the protien can acquire."""
-
+    possible_start = timeit.default_timer()
     possible_score = 0
 
     # an H atom can get at most -2 and a C atom at best -10
@@ -190,7 +222,10 @@ def possible_score_func(nodes_to_visit, partial_score):
 
     if possible_score + partial_score < min_score:
         possible_score = min_score - partial_score
-        
+    
+
+    possible_stop = timeit.default_timer()
+    possible_list.append(possible_stop-possible_start)
     return possible_score
 
 def plot(string, score):
@@ -220,59 +255,68 @@ def plot(string, score):
             yellow_dots_y.append(y)
 
    # create graphs with colors
-    fig, ax1 = plt.subplots(1, 1, figsize=(6, 6))
+    fig, (ax1) = plt.subplots(1, 1, figsize=(6, 6))
 
     ax1.plot(list_x, list_y, '--', color='darkgrey')
     ax1.plot(red_dots_x, red_dots_y, 'or', markersize=17)
     ax1.plot(blue_dots_x, blue_dots_y, 'ob', markersize=17)
     ax1.plot(yellow_dots_x, yellow_dots_y, 'oy', markersize=17)
+    ax1.axis('equal')
     ax1.set_title(f'Folded protein of length {length}, score: {score}')
 
     plt.show()
+    
 
 def score_func(string):
     """Given the coordinates of a protein string, calculate the score of the shape."""
-
+    score_start = timeit.default_timer()
     # list to place the 'already scored' atoms into
     coordinates = []
     directions = [[-1,0],[0,1],[1,0],[0,-1]]
     score = 0
     list_x, list_y = direction_to_xy(string)
+    
     length = len(list_x)
 
-
+    
     for i in range(length):
 
-        # P's dont interact so can skip those cases
-        if not protein[i] == 'P':
+            if not protein[i] == 'P':
+                
+                for direction in directions:
+                    dir_x = direction[0]
+                    dir_y = direction[1]
+                    check_x = list_x[i] + dir_x
+                    check_y = list_y[i] + dir_y
 
-            # for every atom look around in all 4 directions
-            for d in directions:
+                    for j in range(len(coordinates)):
 
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
-                for j in range(len(coordinates)):
+                        if [check_x, check_y] == coordinates[j] and not \
+                            (check_x == list_x[i - 1] and check_y == list_y[i - 1]):
 
-                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not(list_x[i] + d[0] == list_x[i-1] and list_y[i] + d[1] == list_y[i-1]):
-                        
-                        if protein[i] == 'H':
-                            if protein[j] == 'H' or protein[j] == 'C':
-                                score += -1
+                            p = protein[i]
+                            neighbour = protein[j]
 
-                        if protein[i] == 'C':
-                            if protein[j] == 'C':
-                                score += -5
-                            if protein[j] == 'H':
-                                score += -1 
+                            if p == 'H':
+                                if neighbour == 'H' or neighbour == 'C':
+                                    score += -1
 
-        # place in the list with coordinates
-        coordinates.append([list_x[i], list_y[i]])
-    
+                            if p == 'C':
+                                if neighbour == 'C':
+                                    score += -5
+                                if neighbour == 'H':
+                                    score += -1
+
+            coordinates.append([list_x[i], list_y[i]])
+
+    score_stop = timeit.default_timer()
+    score_list.append(score_stop-score_start)
     return score
 
 
 def direction_to_xy(string):
     """Converts a series of string with directions like ['L', 'R'] to lists with xy positions."""
-
+    direction_start = timeit.default_timer()
     pos_x = [0,1]
     pos_y = [0,0]
 
@@ -296,14 +340,14 @@ def direction_to_xy(string):
             pos_x.append(pos_x[-1] + delta_y )
             pos_y.append(pos_y[-1] - delta_x)
            
-
-   
+    direction_stop = timeit.default_timer()
+    direction_list.append(direction_stop-direction_start)
     return pos_x, pos_y
 
 
 def double(string):
     """Checks whether two atoms occupy the same point."""
-
+    double_start = timeit.default_timer()
     list_x, list_y = direction_to_xy(string)
 
     coordinates = []
@@ -312,9 +356,14 @@ def double(string):
     # see if a coordinate is already in the list, then add that coordinate to the list
     for x, y in zip(list_x, list_y):
         if [x,y] in coordinates:
+            double_stop = timeit.default_timer()
+            double_list.append(double_stop-double_start)
             return True
+
         coordinates.append([x,y])
-    
+
+    double_stop = timeit.default_timer()
+    double_list.append(double_stop-double_start)
     return False
 
 
