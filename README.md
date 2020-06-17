@@ -22,12 +22,8 @@ Okke heeft een functie uitlegt die op een exacte manier (door een grote overscha
 
 Er zijn nu dus twee richtingen die we gaan volgen. Ten eerste hebben we het exacte algorithme dat voorlopig prioriteit heeft. Het is op dit moment belangrijk om zoveel mogelijk mogelijkheden wat betreft pruning te vinden. Tegelijkertijd moeten we voor de volgende presentatie helder kunnen vertellen wat (annealing) monte carlo en andere heuristische algorithmen doen met de state space: waar zijn ze goed in? Waar zijn ze minder goed in? Op een gegeven moment zullen we van het exacte pad af moeten stappen en het is belangrijk dat we weten wat de mogelijkheden zijn als we eenmaal zover zijn. 
 
-Het visualiseren van de voortgang zal tot en met de eindpresentatie van belang zijn. Kunnen we al data gaan verzamelen? Een presentatie is een verhaal van begin tot eind, wat kunnen we tot nu toe vertellen over het begin?
- 
-Overzicht: 
-- Exact: pruning met de oppervlaktemethode
-- Algemene tool voor visualisering, voor alle programma's hetzelfde -> uitcommenten wat je niet nodig hebt.
-- Nieuwe heuristische benaderingen ant colony, iterative deepening, genetische methode.
+Het visualiseren van de voortgang zal tot en met de eindpresentatie van belang zijn. Kunnen we al data gaan verzamelen? Hoe presteerde het simulated annealing algoritme eerst en hoe presteert het nu? Een voor/na vergelijking is misschien leuk, dan kunnen we laten zien hoeveel het uitmaakt om de temperatuur op een juiste manier te bepalen. Verder, hoe is het gelukt om de scorefunctie sneller te maken? Wat kunnen we vertellen over de problemen die we tot nu toe opgelost hebben? 
+
 
 termen
 
