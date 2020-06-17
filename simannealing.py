@@ -55,9 +55,6 @@ def protein_configuration():
             x = backup_x
             y = backup_y
 
-        # if acceptance_chance < treshhold:
-        #     x = backup_x
-        #     y = backup_y
 
         scores.append(old_score)
 
@@ -65,15 +62,6 @@ def protein_configuration():
             best_x = copy.deepcopy(x)
             best_y = copy.deepcopy(y)
             lowest_score = copy.deepcopy(old_score)
-
-        # temperature = START_TEMP * (0.997 ** rotations)
-        # # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
-        # acceptance_chance = 2 ** ((old_score - new_score)/temperature)
-        # treshhold = random.random()
-
-        # if acceptance_chance < treshhold:
-        #     x = backup_x
-        #     y = backup_y
 
         rotations += 1
 

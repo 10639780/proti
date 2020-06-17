@@ -48,14 +48,6 @@ def protein_configuration():
         old_score = score(backup_x, backup_y)
         new_score = score(x, y)
 
-        scores.append(old_score)
-
-        if new_score < lowest_score:
-            best_x = copy.deepcopy(x)
-            best_y = copy.deepcopy(y)
-            lowest_score = copy.deepcopy(new_score)
-
-
         if rotations % 1000 == 0:
             if new_score == old_score:                
                 local_optimum = True
@@ -70,9 +62,35 @@ def protein_configuration():
         acceptance_chance = 2 ** ((old_score - new_score)/temperature)
         treshhold = random.random()
 
-        if acceptance_chance < treshhold:
+        if new_score > old_score and acceptance_chance < treshhold:
             x = backup_x
             y = backup_y
+
+        scores.append(old_score)
+
+        if old_score < lowest_score:
+            best_x = copy.deepcopy(x)
+            best_y = copy.deepcopy(y)
+            lowest_score = copy.deepcopy(old_score)
+
+
+        # if rotations % 1000 == 0:
+        #     if new_score == old_score:                
+        #         local_optimum = True
+
+        # if local_optimum == True:
+        #     local_optimum_rotation = rotations
+        #     print("Found local optimum")
+        #     local_optimum = False
+
+        # temperature = START_TEMP * (0.997 ** (rotations - local_optimum_rotation))
+        # # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
+        # acceptance_chance = 2 ** ((old_score - new_score)/temperature)
+        # treshhold = random.random()
+
+        # if acceptance_chance < treshhold:
+        #     x = backup_x
+        #     y = backup_y
 
         rotations += 1
 
