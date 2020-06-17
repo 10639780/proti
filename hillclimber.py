@@ -1,8 +1,5 @@
 """
-Renamed and reorganized some parts of monte.py for convenience
-Simmulated annealing seems to work
-Tweaking start temperature and iterations to figure out what combo works best
-Best till now seems to be -28
+Hiilclimber to compare simulated annealing
 """
 
 import numpy as np 
@@ -14,9 +11,8 @@ import copy
 # PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
 PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
 LENGTH = len(PROTEIN)
-ITERATIONS = 10000
+ITERATIONS = 1000
 DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-START_TEMP = 100
 
 
 def protein_configuration():
@@ -44,20 +40,11 @@ def protein_configuration():
             continue
 
         old_score = score(backup_x, backup_y)
-        new_score = score(x, y)        
+        new_score = score(x, y)
 
-        temperature = START_TEMP * (0.997 ** rotations)
-        # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
-        acceptance_chance = 2 ** ((old_score - new_score)/temperature)
-        treshhold = random.random()
-
-        if new_score > old_score and acceptance_chance < treshhold:
+        if new_score > old_score:
             x = backup_x
             y = backup_y
-
-        # if acceptance_chance < treshhold:
-        #     x = backup_x
-        #     y = backup_y
 
         scores.append(old_score)
 
@@ -66,14 +53,6 @@ def protein_configuration():
             best_y = copy.deepcopy(y)
             lowest_score = copy.deepcopy(old_score)
 
-        # temperature = START_TEMP * (0.997 ** rotations)
-        # # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
-        # acceptance_chance = 2 ** ((old_score - new_score)/temperature)
-        # treshhold = random.random()
-
-        # if acceptance_chance < treshhold:
-        #     x = backup_x
-        #     y = backup_y
 
         rotations += 1
 
@@ -191,7 +170,7 @@ def visualization(x, y, score, scores):
     plt.title("Statistics")
     plt.xlabel("iterations")
     plt.ylabel("scores")
-    plt.savefig("simannealing.png")
+    plt.savefig("hillclimber.png")
     plt.show()
 
 
