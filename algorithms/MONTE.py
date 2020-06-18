@@ -1,5 +1,5 @@
 """
-monte.py
+MONTE.py
 
 Minor Programmeren
 Team Proti

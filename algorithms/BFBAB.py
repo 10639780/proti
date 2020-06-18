@@ -1,12 +1,12 @@
 """ 
-bab.py
+BFBA.py
 
 Minor Programmeren
 Team Proti
 
 Attempt to implement a branch and bound protein folding algorithm as described by Mao Chen and Wen-Qi Huang 
 in 'Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model'.
-Basis for depth first structure from Bas Terwijn's lecture.
+Basis for breadth first structure from Bas Terwijn's lecture.
 """
 import copy
 import timeit

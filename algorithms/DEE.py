@@ -1,5 +1,5 @@
 """
-dee.py
+DEE.py
 
 Minor Programmeren
 Team Proti

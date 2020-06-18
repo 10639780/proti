@@ -18,13 +18,14 @@ import sys
 
 def main():
     # Input for protein variable
-    print(f'algorithms available: BFBAB')
+    algos = 'BFBAB'
+    print(f'algorithms available: {algos}')
     usage = input("please input algorithm name followed by an underscore and a single protein string")
     usage = re.split('_+', usage)
     algo = usage[0]
     protein = list(usage[1])
     length = len(protein)
-    algos = ['BFBAB','','','','','','','','']
+
     allow_chars = ['P','C','H']
     for i in protein:
         if i not in allow_chars:

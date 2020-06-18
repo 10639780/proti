@@ -1,8 +1,8 @@
 """
+SIMANN.py
 Renamed and reorganized some parts of monte.py for convenience
-Simmulated annealing seems to work
-Tweaking start temperature and iterations to figure out what combo works best
-Best till now seems to be -28
+Simulated annealing seems to work
+Tweaking start temperature and iterations to figure out which configuration works best
 """
 
 import numpy as np 
@@ -19,7 +19,7 @@ DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
 START_TEMP = 100
 
 
-def protein_configuration():
+def main():
     x = [i for i in range(LENGTH)]
     y = [0] * LENGTH
     
@@ -65,7 +65,7 @@ def protein_configuration():
 
         rotations += 1
 
-    return best_x, best_y, lowest_score, scores
+    visualization(best_x, best_y, lowest_score, scores)
 
 
 def double(x, y):
@@ -184,6 +184,4 @@ def visualization(x, y, score, scores):
 
 
 if __name__ == "__main__":
-
-    best_x, best_y, lowest_score, scores = protein_configuration()
-    visualization(best_x, best_y, lowest_score, scores)
+    main()
