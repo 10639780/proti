@@ -25,6 +25,8 @@ tree.py / TREE.py
 
 
 
+
+
 Als we spiegelbeelden met een constraint wegfilteren kunnen we de berekenbaarheid van het probleem verbeteren zonder een mogelijk optimale uitkomst weg te gooien. Werken i  
 
 Wat betreft de harde constraint dat het molecuul zichzelf niet mag kruisen, kunnen we benaderen hoeveel mogelijkheden hiermee worden weggegooid? 
