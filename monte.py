@@ -91,12 +91,13 @@ def main():
     
     # loop that keeps folding the protein
     while rotation_counter < N:
+
         _max = 10
         scale = N/20
         center = 9 * N / 40
         temperature = _max / (1 + math.exp((rotation_counter - center )/ scale)) + 0.5
-        # temperature = (N/8) / (1 + math.exp((rotation_counter - (N/4)) / (N/16)))
-        # temperature = 0.1
+
+
         # a copy is made in case the fold is invalid or unfavourable
         log_pos_x = copy.deepcopy(pos_x)
         log_pos_y = copy.deepcopy(pos_y)
