@@ -15,10 +15,10 @@ import csv
 import sys
 
 # string and length are used by most functions so declare as global variable
-# protein = ['H','H','P','H','H','H','P','H']
+protein = ['H','H','P','H','H','H','P','H']
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P']
+# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P']
 # protein = ['H','P','H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
 length = len(protein)
 
@@ -29,7 +29,7 @@ def main():
         pos_y = [0] * length
 
         # number of iterations, higher N is better result
-        N = 1000000
+        N = 500000
         rotation_counter = 0
 
         # lists to keep track of the scores of each rotation and remember the one with the best score
@@ -39,7 +39,7 @@ def main():
         scores = []
 
         # probability functions depends on temperature and the boltzmann constant, can be set to their actual values if you want to be physically responsible
-        temperature = 1
+        temperature = 300
         boltzmann = 1
     
         # loop that keeps folding the protein
@@ -86,14 +86,15 @@ def main():
             # print statement for time indication in long calculations
             if rotation_counter % 10000 == 0:
                 print(f'|', end='', sep=' ', flush=True)
-                #sys.stdout.write("|")
+                
+            temperature -= 10  
 
         # the best structure is copied to a csv file and shown in a graph
         output(best_x, best_y, lowest_score)
         
-        # plot(best_x, best_y, lowest_score, scores)
-        
+        plot(best_x, best_y, lowest_score, scores, temperature)
         i += 1
+        
 
 def output(list_x, list_y, score):
     """Prints the folded string to a csv file in the Bas Terwijn style."""
@@ -215,7 +216,7 @@ def double(list_x, list_y):
     return False
 
 
-def plot(list_x, list_y, score, scores):
+def plot(list_x, list_y, score, scores, temperature):
     """Makes a graph of two lists list_x, list_y."""
     
     # differentiate between types of atom
@@ -246,12 +247,12 @@ def plot(list_x, list_y, score, scores):
     ax1.plot(red_dots_x, red_dots_y, 'or')
     ax1.plot(blue_dots_x, blue_dots_y, 'ob')
     ax1.plot(yellow_dots_x, yellow_dots_y, 'oy')
-    ax1.set_title(f'Folded protein, score: {score}')
+    ax1.set_title(f'Folded protein, score: {score}, temp: {}')
 
     ax2.plot(scores)
     ax2.set_title('Scores of the configurations after each rotation')
     ax2.set(xlabel='Rotation', ylabel='Score')
-    
+    fig.savefig('images/' + '{}.png'.format(BT_string) , bbox_inches='tight')
     plt.show()
 
 

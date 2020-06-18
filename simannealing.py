@@ -14,7 +14,7 @@ import copy
 # PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
 PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
 LENGTH = len(PROTEIN)
-ITERATIONS = 50000
+ITERATIONS = 10000
 DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
 START_TEMP = 100
 
@@ -44,23 +44,24 @@ def protein_configuration():
             continue
 
         old_score = score(backup_x, backup_y)
-        new_score = score(x, y)
-
-        scores.append(old_score)
-
-        if new_score < lowest_score:
-            best_x = copy.deepcopy(x)
-            best_y = copy.deepcopy(y)
-            lowest_score = copy.deepcopy(new_score)
+        new_score = score(x, y)        
 
         temperature = START_TEMP * (0.997 ** rotations)
         # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
         acceptance_chance = 2 ** ((old_score - new_score)/temperature)
         treshhold = random.random()
 
-        if acceptance_chance < treshhold:
+        if new_score > old_score and acceptance_chance < treshhold:
             x = backup_x
             y = backup_y
+
+
+        scores.append(old_score)
+
+        if old_score < lowest_score:
+            best_x = copy.deepcopy(x)
+            best_y = copy.deepcopy(y)
+            lowest_score = copy.deepcopy(old_score)
 
         rotations += 1
 
