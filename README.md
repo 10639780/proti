@@ -35,6 +35,21 @@ HP model protein folding veel papers over!
 
 atoom bestaat niet (we werken op een ander level)
 
+definitieve namen van de algo's (voor/na):
+
+breadthbab.py / BFBAB.py
+breadthbab3d.py / BFBAB3D.py
+dee2.py / DEE.py
+firefly.py / FF.py
+hillclimber.py / HC.py
+monte.py / MONTE.py
+monte3d.py / MONTE3D.py
+simannealing.py / SIMANN.py
+simannealplus.py / SIMANN+.py
+tree.py / TREE.py
+
+
+
 
 
 
