@@ -3,6 +3,8 @@ From this main landing, multiple routes can be chosen. One at a time.
 """
 
 from algorithms import BFBAB as BF
+from algorithms import BFBAB3D as BF3D
+from classes.protein import Protein
 import re
 import sys
 
@@ -14,6 +16,7 @@ if __name__ == "__main__":
     usage = re.split('_+', usage)
     algo = usage[0]
     protein_list = list(usage[1])
+    length = len(protein_list)
     allow_chars = ['P','C','H']
 
     for i in protein_list:
@@ -23,7 +26,11 @@ if __name__ == "__main__":
     if algo not in algos:
         sys.exit("Algorithm not found. Please try again")
 
+    proti = Protein(protein_list, length)
+
     if algo == 'BFBAB':
-        choice = BF.run(protein_list)
+        choice = BF.run(proti)
+
+
 
 

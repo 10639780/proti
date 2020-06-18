@@ -15,36 +15,22 @@ import random
 import queue
 from progress.bar import Bar
 
-def run(protein_list):
+def run(proti):
     start = timeit.default_timer()
-    protein = protein_list
-    length = len(protein)
-
 
     # set theoretical lower bound on score
-    even = protein[::2]
-    odd = protein[1::2]
+    even = proti.listed[::2]
+    odd = proti.listed[1::2]
 
-
-    H_count = protein.count('H')
-    C_count = protein.count('C')
     min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
 
-
-    # list of timer to see why program so slow
-    possible_list = []
-    score_list = []
-    direction_list = []
-    double_list = []
-
-
-    bar = Bar('Progress', max=length)
+    bar = Bar('Progress', max=proti.length)
     bar.next()
     bar.next()
     k = 0
 
-    # specifications for depth first tree building
-    depth = length - 2
+    # specifications for breadth first tree building
+    depth = proti.length - 2
     q = queue.Queue()
     q.put(('',0))
     final_configurations = []
@@ -59,7 +45,7 @@ def run(protein_list):
     p2 = 0.9
 
     # set inital values
-    for i in range(length + 1):
+    for i in range(proti.length + 1):
         lowest_score_k[i] = 0
         all_scores_k[i] = [0]
 
@@ -91,10 +77,10 @@ def run(protein_list):
                 k = len(child[0]) + 1
 
                 # P's are always placed, rest have some conditions
-                if not protein[k] == 'P':
-                    score = child[1] + score_func(child[0], protein)
+                if not proti.listed[k] == 'P':
+                    score = child[1] + score_func(child[0], proti)
                     
-                    possible_score = possible_score_func(protein[k+1:], score, min_score)
+                    possible_score = possible_score_func(proti.listed[k+1:], score, min_score)
 
                     if score + possible_score > lowest_score:
                         continue
@@ -146,13 +132,9 @@ def run(protein_list):
     # print(f'Strings made: {len(final_configurations)}')
     total_time = stop - start
     bar.finish()
-    print(f'Length: {length}')
+    print(f'Length: {proti.length}')
     print(f'Score: {lowest_score}')
     print(f'Total runtime: {total_time}')
-    print(f'Possible score function time: {round(sum(possible_list) / total_time * 100,1)}%')
-    print(f'Score function time: {round(sum(score_list) / total_time * 100,1)}%')
-    print(f'Direction function time: {round(sum(direction_list) / total_time * 100,1)}%')
-    print(f'Double function time: {round(sum(double_list) / total_time * 100,1)}%')
-    print(f'Conformation: {best_config}')
-    plot(best_config, lowest_score, total_time, possible_list, score_list, direction_list, double_list, protein)
+    print(f'Configuration: {best_config}')
+    plot(best_config, lowest_score, total_time, proti)
 
