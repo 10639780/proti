@@ -18,7 +18,6 @@ from progress.bar import Bar
 def run(proti):
     start = timeit.default_timer()
 
-
     bar = Bar('Progress', max=proti.length)
     bar.next()
     bar.next()

@@ -1,14 +1,12 @@
 """
 DEE.py
-
 Minor Programmeren
 Team Proti
-
-Uses a Dead End Elimination like algorithm described by Okke to create a tree of all routes that are possibly lower than a preset score. 
+Uses a Dead End Elimination like algorithm described by Okke to create a tree of all routes that are possibly lower than a preset score.
 """
 from anytree import Node, RenderTree, Walker, PreOrderIter
 import copy
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import timeit
 from progress.bar import Bar
 from statistics import mean
@@ -19,7 +17,8 @@ import random
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
 # protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20, mc -9
-protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36, opt -14
+protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P',
+           'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P']  # official 36, opt -14
 # protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -12
 # protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H'] # official 50
 # protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
@@ -29,11 +28,11 @@ protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P',
 # protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # op -8
 # protein = ['H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P']
 # protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 
+# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P',
 #   'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # 25, opt -8
-protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
-  'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-  'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21
+protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P',
+           'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P',
+           'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21
 length = len(protein)
 
 # set theoretical lower bound on score
@@ -42,9 +41,7 @@ odd = protein[1::2]
 min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
 
 
-
 def main():
-    
     # initiate a progress bar
     bar = Bar('Progress', max=length)
 
@@ -63,7 +60,7 @@ def main():
     p2 = 1
 
     full_strings_made = 0
-    
+
     # variables to keep track of the optimal configuration
     best_score = 0
     best_x = []
@@ -92,7 +89,7 @@ def main():
                 globals()[name] = Node('start')
                 bar.next()
                 continue
-            
+
             # second atom is placed in one direction only, others would merely be a rotaion around the axis with no score advantage
             if i == 1:
                 name = f'{p}{i}{i}'
@@ -102,30 +99,30 @@ def main():
 
             # determines how many nodes there are in in the previous tree layer
             parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'], filter_=lambda node: node.is_leaf)))
-        
+
             # for each node, create a new one in every direction
             for j in range(len(directions) * parent_counter):
 
                 # get the name of the parent node
-                parent = f'{protein[i-1]}{i-1}{j}'
+                parent = f'{protein[i - 1]}{i - 1}{j}'
 
                 # see if that parent exists, if not its score was too high and no further node along that branch has to be made
                 try:
                     globals()[parent]
                 except:
                     continue
-            
+
                 # if it exist contruct a new node for each direction
                 for d in directions:
-                    
+
                     # name of the node to be
                     name = f'{p}{i}{breadth_counter}'
-                    
+
                     # see which nodes are visited already to get to this point in the tree
                     nodes_visited = [node.name for node in globals()[parent].path]
                     # the atoms still to be placed
                     nodes_to_visit = protein[i:]
-            
+
                     potential_nodes_visited = copy.deepcopy(nodes_visited)
                     potential_nodes_visited.append(d)
 
@@ -137,35 +134,30 @@ def main():
 
                     if partial_score < lowest_known_score:
                         lowest_known_score = copy.deepcopy(partial_score)
-            
+
                     # new node is only made if it is possible to get a score lower than the lowest known score
                     if partial_score + possible_score >= lowest_known_score and possible_score != 0:
                         breadth_counter += 1
                         continue
 
-                    
                     potential_score = partial_score_func(potential_nodes_visited)
-        
+
                     average_score = sum(average_scores_k) / len(average_scores_k)
-                
+
                     r = random.random()
 
                     if potential_score > average_score and r < p1:
                         continue
                     elif (average_score >= potential_score and potential_score > lowest_score_k) and r < p2:
-                        continue                    
+                        continue
 
-
-                    
-                    # create new node
+                        # create new node
                     globals()[name] = Node(d, parent=globals()[parent])
                     breadth_counter += 1
 
                     average_scores_k.append(potential_score)
                     if potential_score < lowest_score_k:
                         lowest_score_k = copy.deepcopy(potential_score)
-                    
-
 
                     # this part only runs when the last atom is placed or the remaining atoms can't add to the score
                     if i == length - 1 or possible_score == 0:
@@ -177,7 +169,7 @@ def main():
                         # disregard foldings onto itself
                         if double(pos_x, pos_y):
                             continue
-                        
+
                         # get the structures score
                         current_score = score(pos_x, pos_y)
 
@@ -186,7 +178,7 @@ def main():
                             best_x = copy.deepcopy(pos_x)
                             best_y = copy.deepcopy(pos_y)
                             best_score = copy.deepcopy(current_score)
-                           
+
                         # stop running if the remaining atoms can't add to the score
                         if possible_score == 0:
                             keep_going = False
@@ -204,7 +196,7 @@ def main():
     print(f'Strings made: {full_strings_made}')
     # print some interesting information and plot best result
     print(f'Lowest theoretical score: {min_score}')
-    print('Runtime: %.4f seconds' %(stop - start))
+    print('Runtime: %.4f seconds' % (stop - start))
     if len(nodes_to_visit) > 1:
         print(f'{nodes_to_visit[1:]} are not placed since they would not add to the score')
 
@@ -223,7 +215,7 @@ def terminal_display(root):
 
 def plot(list_x, list_y, score, atom_time, total_time):
     """Makes a graph of two lists list_x, list_y."""
-    
+
     # differentiate between types of atom
     red_dots_x = []
     red_dots_y = []
@@ -240,12 +232,12 @@ def plot(list_x, list_y, score, atom_time, total_time):
             red_dots_y.append(y)
         if p == 'P':
             blue_dots_x.append(x)
-            blue_dots_y.append(y)       
+            blue_dots_y.append(y)
         if p == 'C':
             yellow_dots_x.append(x)
             yellow_dots_y.append(y)
 
-   # create graphs with colors
+    # create graphs with colors
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
 
     ax1.plot(list_x, list_y, '--', color='darkgrey')
@@ -255,7 +247,7 @@ def plot(list_x, list_y, score, atom_time, total_time):
     ax1.set_title(f'Folded protein of length {length}, score: {score}')
 
     ax2.plot(atom_time)
-    ax2.set_title(f'Time per atom, {round(total_time,2)} seconds total')
+    ax2.set_title(f'Time per atom, {round(total_time, 2)} seconds total')
     ax2.set(xlabel='Atom', ylabel='Time')
 
     plt.show()
@@ -264,16 +256,16 @@ def plot(list_x, list_y, score, atom_time, total_time):
 def direction_to_xy(nodes_visited):
     """Converts a series of string with directions like ['left', 'right'] to lists with xy positions."""
 
-    pos_x = [0,1]
-    pos_y = [0,0]
+    pos_x = [0, 1]
+    pos_y = [0, 0]
 
     # go over every node
     for i, n in enumerate(nodes_visited):
-        
+
         # first two nodes are already placed to confine solutions to one quadrant
         if i == 0 or i == 1:
             continue
-        
+
         # previous direction is determined
         delta_x = pos_x[-1] - pos_x[-2]
         delta_y = pos_y[-1] - pos_y[-2]
@@ -286,10 +278,11 @@ def direction_to_xy(nodes_visited):
             pos_x.append(pos_x[-1] - delta_y)
             pos_y.append(pos_y[-1] + delta_x)
         elif n == 'right':
-            pos_x.append(pos_x[-1] + delta_y )
+            pos_x.append(pos_x[-1] + delta_y)
             pos_y.append(pos_y[-1] - delta_x)
 
     return pos_x, pos_y
+
 
 def partial_score_func(nodes_visited):
     """Calculates the socre obtained by the nodes visit so far."""
@@ -321,7 +314,7 @@ def possible_score_func(nodes_to_visit, partial_score, lowest_known_score):
             continue
 
         if n == 'H':
-             possible_score += -2
+            possible_score += -2
         if n == 'C':
             possible_score += -10
 
@@ -329,7 +322,7 @@ def possible_score_func(nodes_to_visit, partial_score, lowest_known_score):
         possible_score = min_score - partial_score
         if lowest_known_score == min_score:
             possible_score += -1
-        
+
     return possible_score
 
 
@@ -338,7 +331,7 @@ def score(list_x, list_y):
 
     # list to place the 'already scored' atoms into
     coordinates = []
-    directions = [[-1,0],[0,1],[1,0],[0,-1]]
+    directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     length = len(list_x)
     score = 0
 
@@ -353,8 +346,9 @@ def score(list_x, list_y):
                 # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
                 for j in range(len(coordinates)):
 
-                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not(list_x[i] + d[0] == list_x[i-1] and list_y[i] + d[1] == list_y[i-1]):
-                        
+                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not (
+                            list_x[i] + d[0] == list_x[i - 1] and list_y[i] + d[1] == list_y[i - 1]):
+
                         if protein[i] == 'H':
                             if protein[j] == 'H' or protein[j] == 'C':
                                 score += -1
@@ -363,11 +357,11 @@ def score(list_x, list_y):
                             if protein[j] == 'C':
                                 score += -5
                             if protein[j] == 'H':
-                                score += -1 
+                                score += -1
 
-        # place in the list with coordinates
+                                # place in the list with coordinates
         coordinates.append([list_x[i], list_y[i]])
-    
+
     return score
 
 
@@ -378,11 +372,12 @@ def double(list_x, list_y):
 
     # see if a coordinate is already in the list, then add that coordinate to the list
     for x, y in zip(list_x, list_y):
-        if [x,y] in coordinates:
+        if [x, y] in coordinates:
             return True
-        coordinates.append([x,y])
-    
+        coordinates.append([x, y])
+
     return False
+
 
 if __name__ == "__main__":
     start = timeit.default_timer()

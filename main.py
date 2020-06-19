@@ -34,7 +34,7 @@ if __name__ == "__main__":
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
-    algo = 'MONTE'
+    algo = 'MONTE3D'
 
     for i in protein_list:
         if i not in allow_chars:
