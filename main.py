@@ -18,14 +18,23 @@ import sys
 
 if __name__ == "__main__":
     # Input for protein variable
+
     algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN+', 'TREE'
+    """
     print(f'algorithms available: {algos}')
     usage = input("please input algorithm name followed by an underscore and a single protein string\n")
     usage = re.split('_+', usage)
     algo = usage[0]
     protein_list = list(usage[1])
     length = len(protein_list)
+    """
     allow_chars = ['P','C','H']
+
+    protein_list = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
+    length = len(protein_list)
+    proti = Protein(protein_list, length)
+
+    algo = 'MONTE'
 
     for i in protein_list:
         if i not in allow_chars:
@@ -34,7 +43,7 @@ if __name__ == "__main__":
     if algo not in algos:
         sys.exit("Algorithm not found. Please try again")
 
-    proti = Protein(protein_list, length)
+
 
     if algo == 'BFBAB':
         BF.run(proti)
