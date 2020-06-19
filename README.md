@@ -3,7 +3,9 @@ Proteine folding tool
 
 HEADSUP!
 
-proti is de instantie van het object protein -> proti.length / proti.listed zijn de enige twee karakteristieken. verder geef je dus de instantie proti mee aan een functie waarin je proti.length of proti.listed kan aanroepen. Zie BFBAB / BFBAB3D voor een voorbeeld
+we hebben een hele rits functies die alleen van elkaar verschillen in de zin dat ze ofwel met een string richtingen ofwel met een list coordinaten werken. Mijn voorkeur gaat uit voor het gebruiken van alleen de string richtingen aangezien dit minder ruimte en dus tijd kost. Op deze manier gaan we de wildgroei van functies tegen.
+
+proti is de instantie van het object protein -> proti.length / proti.listed / proti.min_score zijn de karakteristieken. verder geef je dus de instantie proti mee aan een functie waarin je proti.length of proti.listed kan aanroepen. Zie BFBAB / BFBAB3D voor een voorbeeld
 
 issues: BFBAB3D gebruikt mplot3d in helpers, daar is de import grijs. Alles werkt naar behoren (hij produceert een 3d figuur). Wat is hier aan de hand?
 
