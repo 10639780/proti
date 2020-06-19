@@ -3,7 +3,7 @@ Proteine folding tool
 
 HEADSUP!
 
-proti is de instantie van het object protein -> proti.length / proti.listed zijn de enige twee karakteristieken. verder geef je dus de instantie proti mee aan een functie waarin je proti.length kan aanroepen. Zie BFBAB / BFBAB3D voor een voorbeeld
+proti is de instantie van het object protein -> proti.length / proti.listed zijn de enige twee karakteristieken. verder geef je dus de instantie proti mee aan een functie waarin je proti.length of proti.listed kan aanroepen. Zie BFBAB / BFBAB3D voor een voorbeeld
 
 
 
