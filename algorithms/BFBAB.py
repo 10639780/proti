@@ -18,11 +18,6 @@ from progress.bar import Bar
 def run(proti):
     start = timeit.default_timer()
 
-    # set theoretical lower bound on score
-    even = proti.listed[::2]
-    odd = proti.listed[1::2]
-
-    min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
 
     bar = Bar('Progress', max=proti.length)
     bar.next()
@@ -80,7 +75,7 @@ def run(proti):
                 if not proti.listed[k] == 'P':
                     score = child[1] + score_func(child[0], proti)
                     
-                    possible_score = possible_score_func(proti.listed[k+1:], score, min_score)
+                    possible_score = possible_score_func(proti.listed[k+1:], score, proti.min_score)
 
                     if score + possible_score > lowest_score:
                         continue

@@ -15,12 +15,8 @@ import queue
 from helpers import *
 
 def run(proti):
-    # set theoretical lower bound on score
+    # start timer
     start = timeit.default_timer()
-    even = proti.listed[::2]
-    odd = proti.listed[1::2]
-
-    min_score = 4 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
 
     # specifications for depth first tree building
     depth = proti.length - 2
@@ -74,7 +70,7 @@ def run(proti):
                     score = xyz_score_func(child, proti)
 
                     # min score to get from remaining aminos
-                    possible_score = possible_score_func(proti.listed[k+1:], score, min_score)
+                    possible_score = possible_score_func(proti.listed[k+1:], score, proti.min_score)
 
                     if score + possible_score > lowest_score:
                         continue

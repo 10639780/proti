@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
+from anytree import Node, RenderTree, Walker, PreOrderIter
 
 def possible_score_func(nodes_to_visit, partial_score, min_score):
     """Calculates the best score the remaining bit of the protein can acquire."""
