@@ -29,8 +29,8 @@ if __name__ == "__main__":
     length = len(protein_list)
     """
     allow_chars = ['P','C','H']
-
-    protein_list = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
+    protein_list = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
+    #protein_list = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
