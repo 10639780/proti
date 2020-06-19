@@ -6,13 +6,10 @@ Team Proti
 
 Folds protein into the (probably) most stable state using a Monte Carlo algorithm. 
 """
-import numpy as np
 from helpers import *
-import matplotlib.pyplot as plt 
 import random
 import math
 import copy
-from mpl_toolkits import mplot3d
 
 def run(proti):
 
