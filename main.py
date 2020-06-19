@@ -3,6 +3,16 @@ From this main landing, multiple routes can be chosen. One at a time.
 """
 
 from algorithms import BFBAB as BF
+from algorithms import BFBAB3D as BF3D
+from algorithms import DEE
+from algorithms import FF
+from algorithms import HC
+from algorithms import MONTE
+from algorithms import MONTE3D as M3D
+from algorithms import SIMANN as SA
+from algorithms import SIMANNPLUS as SAPLUS
+from algorithms import TREE as TREE
+from classes.protein import Protein
 import re
 import sys
 
@@ -14,6 +24,7 @@ if __name__ == "__main__":
     usage = re.split('_+', usage)
     algo = usage[0]
     protein_list = list(usage[1])
+    length = len(protein_list)
     allow_chars = ['P','C','H']
 
     for i in protein_list:
@@ -23,7 +34,41 @@ if __name__ == "__main__":
     if algo not in algos:
         sys.exit("Algorithm not found. Please try again")
 
+    proti = Protein(protein_list, length)
+
     if algo == 'BFBAB':
-        choice = BF.run(protein_list)
+        BF.run(proti)
+
+    if algo == 'BFBAB3D':
+        BF3D.run(proti)
+
+    if algo == 'DEE':
+        DEE.run(proti)
+
+    if algo =='FF':
+        FF.run(proti)
+
+    if algo =='HC':
+        HC.run(proti)
+
+    if algo =='MONTE':
+        MONTE.run(proti)
+
+    if algo =='MONTE3D':
+        M3D.run(proti)
+
+    if algo =='SIMANN':
+        SA.run(proti)
+
+    if algo =='SIMANN+':
+        SAPLUS.run(proti)
+
+    if algo =='TREE':
+        TREE.run(proti)
+
+
+
+
+
 
 
