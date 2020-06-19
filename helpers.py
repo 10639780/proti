@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import random
+from classes import protein
 from mpl_toolkits import mplot3d
 from anytree import Node, RenderTree, Walker, PreOrderIter
 
@@ -125,6 +127,47 @@ def plot(string, score, runtime, proti):
 
     plt.show()
 
+
+def plot_m(list_x, list_y, score, scores, proti):
+    """Makes a graph of two lists list_x, list_y."""
+    # list_x = [0, 1, 1, 0, 0, 0, 1, 1, 0, -1, -2, -2]
+    # list_y = [0, 0, 1, 1, 0, -1, -1, 0, 0, 0, 0, 1]
+    # differentiate between types of atom
+    red_dots_x = []
+    red_dots_y = []
+    blue_dots_x = []
+    blue_dots_y = []
+    yellow_dots_x = []
+    yellow_dots_y = []
+
+    # search through protein and place each atom in the appropiate list
+    for x, y, p in zip(list_x, list_y, proti.listed):
+
+        if p == 'H':
+            red_dots_x.append(x)
+            red_dots_y.append(y)
+        if p == 'P':
+            blue_dots_x.append(x)
+            blue_dots_y.append(y)
+        if p == 'C':
+            yellow_dots_x.append(x)
+            yellow_dots_y.append(y)
+
+    # create graphs with colors
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
+
+    ax1.plot(list_x, list_y, '--', color='darkgrey')
+    ax1.plot(red_dots_x, red_dots_y, 'or')
+    ax1.plot(blue_dots_x, blue_dots_y, 'ob')
+    ax1.plot(yellow_dots_x, yellow_dots_y, 'oy')
+    ax1.axis('equal')
+    ax1.set_title(f'Folded protein, score: {score}')
+
+    ax2.plot(scores)
+    ax2.set_title('Scores of the configurations after each rotation')
+    ax2.set(xlabel='Rotation', ylabel='Score')
+    plt.savefig("monte2D.png")
+    plt.show()
 
 def score_func(string, proti):
     """Given the coordinates of a protein string, calculate the score of the shape."""
@@ -295,6 +338,19 @@ def double(string):
         return False
     return True
 
+
+def double_m(list_x, list_y):
+    """Checks whether two atoms occupy the same point."""
+    coordinates = []
+    # see if a coordinate is already in the list, then add that coordinate to the list
+    for x, y in zip(list_x, list_y):
+        if [x, y] in coordinates:
+            return True
+        coordinates.append([x, y])
+
+    return False
+
+
 def xyz_double(string):
     """Checks whether two atoms occupy the same point."""
 
@@ -309,3 +365,100 @@ def xyz_double(string):
         coordinates.append([x, y, z])
 
     return False
+
+
+def output(list_x, list_y, score, proti):
+    """Prints the folded string to a csv file in the Bas Terwijn style."""
+
+    numbers = []
+
+    for i in range(proti.length - 1):
+
+        # new position is compared to the old
+        delta_x = list_x[i + 1] - list_x[i]
+        delta_y = list_y[i + 1] - list_y[i]
+
+        # conversion between coordinates  and bas terwijn numbers
+        if delta_x == 1:
+            number = -2
+        elif delta_x == -1:
+            number = 2
+        elif delta_y == 1:
+            number = 1
+        elif delta_y == -1:
+            number = -1
+        numbers.append(number)
+
+    # add 0 to signal end of protein
+    numbers.append(0)
+
+    # write the list to a file
+    f = open('output.csv', 'w')
+    f.write('amino,fold\n')
+    for p, n in zip(proti.listed, numbers):
+        f.write(f'{p}, {n}\n')
+    f.write(f'score,{score}')
+    f.close()
+
+
+def score(list_x, list_y, proti):
+    """Given the coordinates of a protein string, calculate the score of the shape."""
+
+    # list to place the 'already scored' atoms into
+    coordinates = []
+    directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+    score = 0
+
+    for i in range(proti.length):
+
+        # P's dont interact so can skip those cases
+        if not proti.listed[i] == 'P':
+
+            # for every atom look around in all 4 directions
+            for d in directions:
+
+                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
+                for j in range(len(coordinates)):
+
+                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not (
+                            list_x[i] + d[0] == list_x[i - 1] and list_y[i] + d[1] == list_y[i - 1]):
+
+                        if proti.listed[i] == 'H':
+                            if proti.listed[j] == 'H' or proti.listed[j] == 'C':
+                                score += -1
+
+                        if proti.listed[i] == 'C':
+                            if proti.listed[j] == 'C':
+                                score += -5
+                            if proti.listed[j] == 'H':
+                                score += -1
+
+                                # place in the list with coordinates
+        coordinates.append([list_x[i], list_y[i]])
+
+    return score
+
+
+def random_rotation(list_x, list_y, n, proti):
+    """Rotates the string 90 degrees to the left or right from the nth atom onwards."""
+
+    rotation_point_x = list_x[n]
+    rotation_point_y = list_y[n]
+
+    # left or right rotation are randomly chosen
+    p = random.random()
+
+    # calculates the new positions for the remainder of the string using the equations from a 2D rotation matrix
+    for i in range(n + 1, proti.length):
+
+        relative_x = list_x[i] - rotation_point_x
+        relative_y = list_y[i] - rotation_point_y
+
+        if p > 0.5:
+            # rotate left
+            list_x[i] = rotation_point_x - relative_y
+            list_y[i] = rotation_point_y + relative_x
+        else:
+            # rotate right
+            list_x[i] = rotation_point_x + relative_y
+            list_y[i] = rotation_point_y - relative_x

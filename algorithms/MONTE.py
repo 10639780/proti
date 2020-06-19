@@ -7,70 +7,20 @@ Team Proti
 Folds protein into the (probably) most stable state using a Monte Carlo algorithm. 
 Insprired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment. 
 """
-import numpy as np 
-import matplotlib.pyplot as plt 
+
+from helpers import *
 import random
 import math
 import copy
 import timeit
 from progress.bar import Bar
 
-# string and length are used by most functions so declare as global variable
-# protein = ['H','H','P','H','H','H','P','H']
 
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H','H','H','P','H']
-# protein = ['P', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H']
-# # protein = ['H', 'H', 'H', 'C', 'C', 'C', 'H', 'C', 'H']
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
-# # protein = protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-# # protein = ['H', 'H', 'H', 'P', 'C', 'C', 'H', 'P', 'C', 'C', 'P', 'H']
-# protein = ['H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P']
-protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -6
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'C', 'C'] #  mc -3
-# protein = ['P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke short 
-# protein = ['H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke long
-# protein = ['H', 'H', 'P', 'H','H', "H", 'P']
-# protein = ['H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H'] # op -9
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # opt -21
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # opt -23
-# protein = ['H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P']
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 
-#   'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#   'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
-# rotein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'P',
-#      'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 
-#         'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 
-#             'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'] # 64, opti -42
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
-
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
-# protein = ['H','H', 'P','H','H','H','P','H']
-# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 
-#   'P', 'H', 'P', 'H'] # 20, opt -9, bench 0.21, -8
-protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-  'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
-#   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
-protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, opt 0
-
-length = len(protein)
-# print(length)
-def main():
-
-    
-
+def run(proti):
+    start = timeit.default_timer()
     # create the initial straight string
-    pos_x = [i for i in range(length)]
-    pos_y = [0] * length
+    pos_x = [i for i in range(proti.length)]
+    pos_y = [0] * proti.length
 
     # number of iterations, higher N is better result
     N = 50000
@@ -103,18 +53,18 @@ def main():
         log_pos_y = copy.deepcopy(pos_y)
 
         # protein is folded randomly
-        random_rotation(pos_x, pos_y, random.randint(0, length - 1))
+        random_rotation(pos_x, pos_y, random.randint(0, proti.length - 1), proti)
 
         # check whether the protein has not folded onto itself
-        if double(pos_x, pos_y):
+        if double_m(pos_x, pos_y):
             # if it is folded wrongly, restore to the previous configuration
             pos_x = log_pos_x
             pos_y = log_pos_y
             continue
         
         # calculate the scores of the old and new structure
-        old_score = score(log_pos_x, log_pos_y)
-        new_score = score(pos_x, pos_y)
+        old_score = score(log_pos_x, log_pos_y, proti)
+        new_score = score(pos_x, pos_y, proti)
 
         # keep track of each score
         scores.append(old_score)
@@ -149,160 +99,8 @@ def main():
     print('Runtime:', stop - start,'seconds') 
 
     # the best structure is copied to a csv file and shown in a graph
-    output(best_x, best_y, lowest_score)
-    plot(best_x, best_y, lowest_score, scores)
-
-def output(list_x, list_y, score):
-    """Prints the folded string to a csv file in the Bas Terwijn style."""
-
-    numbers = []
-   
-    for i in range(len(protein)-1):
-        
-        # new position is compared to the old
-        delta_x = list_x[i+1] - list_x[i]
-        delta_y = list_y[i+1] - list_y[i]
-
-        # conversion between coordinates  and bas terwijn numbers
-        if delta_x == 1:
-            number = -2
-        elif delta_x == -1:
-            number = 2
-        elif delta_y == 1:
-            number = 1
-        elif delta_y == -1:
-            number = -1
-        numbers.append(number)
-
-    # add 0 to signal end of protein
-    numbers.append(0)
-
-    # write the list to a file
-    f = open('output.csv', 'w')
-    f.write('amino,fold\n')
-    for p, n in zip(protein, numbers):
-        f.write(f'{p}, {n}\n')
-    f.write(f'score,{score}') 
-    f.close()
-
-def score(list_x, list_y):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
-
-    # list to place the 'already scored' atoms into
-    coordinates = []
-    directions = [[-1,0],[0,1],[1,0],[0,-1]]
-    score = 0
-
-    for i in range(length):
-
-        # P's dont interact so can skip those cases
-        if not protein[i] == 'P':
-
-            # for every atom look around in all 4 directions
-            for d in directions:
-
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
-                for j in range(len(coordinates)):
-
-                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not(list_x[i] + d[0] == list_x[i-1] and list_y[i] + d[1] == list_y[i-1]):
-                        
-                        if protein[i] == 'H':
-                            if protein[j] == 'H' or protein[j] == 'C':
-                                score += -1
-
-                        if protein[i] == 'C':
-                            if protein[j] == 'C':
-                                score += -5
-                            if protein[j] == 'H':
-                                score += -1 
-
-        # place in the list with coordinates
-        coordinates.append([list_x[i], list_y[i]])
-    
-    return score
-
-
-def double(list_x, list_y):
-    """Checks whether two atoms occupy the same point."""
-
-    coordinates = []
-
-    # see if a coordinate is already in the list, then add that coordinate to the list
-    for x, y in zip(list_x, list_y):
-        if [x,y] in coordinates:
-            return True
-        coordinates.append([x,y])
-    
-    return False
-
-
-def plot(list_x, list_y, score, scores):
-    """Makes a graph of two lists list_x, list_y."""
-    # list_x = [0, 1, 1, 0, 0, 0, 1, 1, 0, -1, -2, -2]
-    # list_y = [0, 0, 1, 1, 0, -1, -1, 0, 0, 0, 0, 1]
-    # differentiate between types of atom
-    red_dots_x = []
-    red_dots_y = []
-    blue_dots_x = []
-    blue_dots_y = []
-    yellow_dots_x = []
-    yellow_dots_y = []
-
-    # search through protein and place each atom in the appropiate list
-    for x, y, p in zip(list_x, list_y, protein):
-
-        if p == 'H':
-            red_dots_x.append(x)
-            red_dots_y.append(y)
-        if p == 'P':
-            blue_dots_x.append(x)
-            blue_dots_y.append(y)       
-        if p == 'C':
-            yellow_dots_x.append(x)
-            yellow_dots_y.append(y)
-
-    # create graphs with colors
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
-
-    ax1.plot(list_x, list_y, '--', color='darkgrey')
-    ax1.plot(red_dots_x, red_dots_y, 'or')
-    ax1.plot(blue_dots_x, blue_dots_y, 'ob')
-    ax1.plot(yellow_dots_x, yellow_dots_y, 'oy')
-    ax1.axis('equal')
-    ax1.set_title(f'Folded protein, score: {score}')
-
-    ax2.plot(scores)
-    ax2.set_title('Scores of the configurations after each rotatation')
-    ax2.set(xlabel='Rotation', ylabel='Score')
-    plt.savefig("monte2D.png")
-    plt.show()
-
-
-def random_rotation(list_x, list_y, n):
-    """Rotates the string 90 degrees to the left or right from the nth atom onwards."""
-
-    rotation_point_x = list_x[n]
-    rotation_point_y = list_y[n]
-
-    # left or right rotation are randomly chosen
-    p = random.random()
-
-    # calculates the new positions for the remainder of the string using the equations from a 2D rotation matrix
-    for i in range(n + 1, length):
-       
-        relative_x = list_x[i] - rotation_point_x
-        relative_y = list_y[i] - rotation_point_y
-
-        if p > 0.5:
-            # rotate left
-            list_x[i] = rotation_point_x - relative_y
-            list_y[i] = rotation_point_y + relative_x
-        else:
-            # rotate right
-            list_x[i] = rotation_point_x + relative_y
-            list_y[i] = rotation_point_y - relative_x
- 
+    output(best_x, best_y, lowest_score, proti)
+    plot_m(best_x, best_y, lowest_score, scores, proti)
 
 if __name__ == "__main__":
-    start = timeit.default_timer()
     main()
