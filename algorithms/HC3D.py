@@ -8,6 +8,7 @@ Tries to find the most stable configuration of the protein in 3D
 as per the Hill climber method
 """
 
+# import modules
 from helpers import *
 import random
 import copy
@@ -65,7 +66,7 @@ def run(proti):
         # get the score of the current configuration
         new_score = score_xyz(x, y, z, proti)
 
-        # if the new score is worse set configuration back (hillclimber method)
+        # if the new score is worse set configuration back 
         if new_score > old_score:
             x = backup_x
             y = backup_y
@@ -94,5 +95,4 @@ def run(proti):
     output_xyz(best_x, best_y, best_z, lowest_score, proti)
     plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
 
-if __name__ == "__main__":
-    main()
+

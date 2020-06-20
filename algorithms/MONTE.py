@@ -8,6 +8,7 @@ Folds protein into the (probably) most stable state using a Monte Carlo algorith
 Insprired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment. 
 """
 
+# import modules
 from helpers import *
 import random
 import math
@@ -17,7 +18,10 @@ from progress.bar import Bar
 
 
 def run(proti):
+
+    # start timing code
     start = timeit.default_timer()
+
     # create the initial straight string
     pos_x = [i for i in range(proti.length)]
     pos_y = [0] * proti.length
@@ -25,15 +29,18 @@ def run(proti):
     rotation_counter = 0
     N = 100
 
+    # initialize progress bar
     bar = Bar('Progress', max=N/1000)
 
-    # lists to keep track of the scores of each rotation and remember the one with the best score
+    # lists to keep track of the scores of each rotation and remember the one
+    # with the best score
     lowest_score = 0
     best_x = []
     best_y = []
     scores = []
 
-    # probability functions depens on temperature and the boltzmann constant, can be set to their actual values if you want to be physically responsible
+    # probability functions depens on temperature and the boltzmann constant, 
+    # can be set to their actual values if you want to be physically responsible
     temperature = 1
     boltzmann = 1
     prob = []
@@ -44,8 +51,8 @@ def run(proti):
         _max = 10
         scale = N/20
         center = 9 * N / 40
-        temperature = _max / (1 + math.exp((rotation_counter - center )/ scale)) + 0.5
-
+        temperature = _max / (1 + math.exp((rotation_counter - center )/ \
+                              scale)) + 0.5
 
         # a copy is made in case the fold is invalid or unfavourable
         log_pos_x = copy.deepcopy(pos_x)
@@ -74,8 +81,7 @@ def run(proti):
             best_y = copy.deepcopy(pos_y)
             lowest_score = copy.deepcopy(new_score)
 
-        # probability function to determine whether a fold will be 'accepted' or not, 
-        # a lower score relative to the previous configuration increases the changes of adoption
+        # probability function to determine whether a fold will be 'accepted'
         p = math.exp(-(new_score - old_score)/(temperature * boltzmann))
 
         # the treshhold for acceptance varies and is randomly determined
@@ -85,13 +91,12 @@ def run(proti):
             pos_y = log_pos_y
 
         rotation_counter += 1
-        # bar.next()
-
+        
         # print statement for time indication in long calculations
         if rotation_counter % 1000 == 0:
             bar.next()
             prob.append(p)
-            # print(f'{rotation_counter / N * 100}%')
+            
 
     bar.finish()
     stop = timeit.default_timer()
@@ -101,5 +106,3 @@ def run(proti):
     output(best_x, best_y, lowest_score, proti)
     plot_m(best_x, best_y, lowest_score, scores, proti)
 
-if __name__ == "__main__":
-    main()

@@ -4,10 +4,13 @@ BFBAB3D.py
 Minor Programmeren
 Team Proti
 
-Attempt to implement a branch and bound protein folding algorithm as described by Mao Chen and Wen-Qi Huang 
-in 'Branch and Bound Algorithm for the Protein Folding Problem in the HP Lattice Model'.
+Attempt to implement a branch and bound protein folding algorithm as described
+by Mao Chen and Wen-Qi Huang in 'Branch and Bound Algorithm for the Protein 
+Folding Problem in the HP Lattice Model'.
 Basis for breadth first structure from Bas Terwijn's lecture.
 """
+
+# import modules
 import copy
 import timeit
 import random
@@ -15,6 +18,7 @@ import queue
 from helpers import *
 
 def run(proti):
+
     # start timer
     start = timeit.default_timer()
 
@@ -70,7 +74,8 @@ def run(proti):
                     score = xyz_score_func(child, proti)
 
                     # min score to get from remaining aminos
-                    possible_score = possible_score_func(proti.listed[k+1:], score, proti.min_score)
+                    possible_score = possible_score_func(proti.listed[k+1:],\
+                                                         score, proti.min_score)
 
                     if score + possible_score > lowest_score:
                         continue
@@ -84,7 +89,8 @@ def run(proti):
                     # conditions for pruning
                     if score > average_score_k and r < p1:
                         continue
-                    elif (average_score_k >= score and score > lowest_score_k[k]) and r < p2:
+                    elif (average_score_k >= score and score > lowest_score_k[k])\
+                         and r < p2:
                         continue
                     
                     # add to tree
@@ -116,7 +122,3 @@ def run(proti):
     print(f'Score: {lowest_score}')
     print(f'Runtime: {stop - start}')
     xyz_plot(best_config, lowest_score, proti)
-
-
-if __name__ == "__main__":
-    main()

@@ -9,6 +9,7 @@ with a simulated annealing algorithm in 3D that we modified to start
 re-annealing when the lowest score has not changed for a while
 """
 
+# import modules
 from helpers import *
 import random
 import copy
@@ -16,6 +17,7 @@ import timeit
 from progress.bar import Bar
 
 def run(proti):
+
      # start timing the run of the code
     start = timeit.default_timer()
 
@@ -111,6 +113,3 @@ def run(proti):
     # render the output and plot the figure
     output_xyz(best_x, best_y, best_z, lowest_score, proti)
     plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
-
-if __name__ == "__main__":
-    main()
