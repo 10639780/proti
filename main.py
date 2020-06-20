@@ -22,49 +22,37 @@ import re
 import sys
 
 if __name__ == "__main__":
-    # Input for protein variable
+    
+    # read available proteins from text file
+    proteins = {}
+    filename = "proteins.txt"
 
+    with open(filename, "r") as file:
+        lines = file.readlines()
+
+        print("Available proteins: ")
+        # save protein string in a dictionary to choose from
+        for i in range(len(lines)):
+            protein = lines[i].strip("\n")             
+            proteins[i] = protein
+            print(f"ID: {i}, Protein: {protein}")
+    
+    # available algorithms
     algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
             'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
             'SIMANN3D':SA3D,'SIMANN+':SAPLUS, 'SIMANN3D+':SAPLUS3D, \
-            'TREE':TREE, 'GENETIC':GENETIC}
+            'TREE':TREE, 'GENETIC':GENETIC}   
 
-    """
-    print(f'algorithms available: {algos}')
-    usage = input("please input algorithm name followed by an underscore and a single protein string\n")
-    usage = re.split('_+', usage)
-    algo = usage[0]
-    protein_list = list(usage[1])
-    length = len(protein_list)
-    """
-    allow_chars = ['P','C','H']
+    # get algorithm for folding
+    algo = input("\n" + "Enter algorithm to run: ")
 
-    # protein_list = 'HHPHHHPHPHHHPH' # 14, opt -6
+    # get protein to fold
+    choose_protein = input("Which protein would you like to fold? Enter ID: ")
 
-    # protein_list = 'HPHPPHHPHPPHPHHPPHPH' # 20, otp -9
-
-    # protein_list = 'PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP' # 36, opt -14
-
-    # protein_list = 'HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH' # 50, opt -21
-
-    # protein_list = 'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP' #36
-
-    protein_list = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36
-
-    # protein_list = 'HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH' # 50
-
-    # protein_list = 'HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH' # 50
-
-    length = len(protein_list)
-    proti = Protein(protein_list, length)
-
-    # get user input
-    algo = input("Enter algorithm to run: ")
-
-    # check if protein string correct
-    for i in protein_list:
-        if i not in allow_chars:
-            sys.exit("Usage parameters not met. Please try again")
+    # protein information
+    fold_protein = proteins[int(choose_protein)]
+    length = len(fold_protein)
+    proti = Protein(fold_protein, length)
 
     # check if algorithm name exists
     if algo not in algos:
