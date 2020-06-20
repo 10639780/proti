@@ -1,5 +1,13 @@
 """
-From this main landing, multiple routes can be chosen. One at a time.
+Minor Programmeren
+
+Team Proti
+
+All the algorithms can be accessed.
+In the user interface the user can enter an algorithm to run 
+and they can choose a protein to fold by entering the ID of the protein.
+The available proteins and their respective ID's are printed to the terminal 
+for the user to see
 """
 
 from algorithms import BFBAB as BF
@@ -13,7 +21,6 @@ from algorithms import SIMANN as SA
 from algorithms import SIMANN3D as SA3D
 from algorithms import SIMANNPLUS as SAPLUS
 from algorithms import SIMANNPLUS3D as SAPLUS3D
-
 from algorithms import TREE 
 from algorithms import GENETIC
 from algorithms import HC3D
