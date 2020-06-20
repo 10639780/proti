@@ -16,14 +16,12 @@ import timeit
 from progress.bar import Bar
 
 
-def run(proti):
+def run(proti, N):
     start = timeit.default_timer()
     # create the initial straight string
     pos_x = [i for i in range(proti.length)]
     pos_y = [0] * proti.length
 
-    # number of iterations, higher N is better result
-    N = 5000
     rotation_counter = 0
 
     bar = Bar('Progress', max=N/1000)
@@ -56,7 +54,7 @@ def run(proti):
         random_rotation(pos_x, pos_y, random.randint(0, proti.length - 1), proti)
 
         # check whether the protein has not folded onto itself
-        if double_m(pos_x, pos_y):
+        if double_xy(pos_x, pos_y):
             # if it is folded wrongly, restore to the previous configuration
             pos_x = log_pos_x
             pos_y = log_pos_y

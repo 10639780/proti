@@ -5,6 +5,9 @@ from mpl_toolkits import mplot3d
 from anytree import Node, RenderTree, Walker, PreOrderIter
 import operator
 import copy
+import math
+
+
 
 def possible_score_func(nodes_to_visit, partial_score, min_score):
     """Calculates the best score the remaining bit of the protein can acquire."""
@@ -430,7 +433,7 @@ def double(string):
     return True
 
 
-def double_m(list_x, list_y):
+def double_xy(list_x, list_y):
     """Checks whether two atoms occupy the same point."""
     coordinates = []
     # see if a coordinate is already in the list, then add that coordinate to the list
@@ -550,8 +553,9 @@ def score(list_x, list_y, proti):
     coordinates = []
     directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     score = 0
+    length = len(list_x)
 
-    for i in range(proti.length):
+    for i in range(length):
 
         # P's dont interact so can skip those cases
         if not proti.listed[i] == 'P':
@@ -710,10 +714,16 @@ def mutate(child1, child2, p, proti):
 def make_child(conformations_list, sample_size):
     """Produces offspring using two parents."""
     child_not_made = True
+
     while child_not_made:
+        # choose two parent from a pool of potential parents
         parent1, parent2 = choose_parents(conformations_list, sample_size)
+
+        # use crossover between the parents to make children
         child1 = crossover(parent1, parent2)
         child2 = crossover(parent1, parent2)
+
+        # make sure that the children have valid conformations
         if not (child1[0] == 'impossible' or child2[0] == 'impossible'):
             child_not_made = False
     
@@ -721,25 +731,37 @@ def make_child(conformations_list, sample_size):
 
 
 def crossover(parent1, parent2):
+    """Uses crossover to producre a child from two parents."""
+
+    # select point of adjoinment at random
     n = random.randint(0, len(parent1[0]) - 1)
 
+    # get the part of one parent up to the nth element
     partial_parent1 = parent1[0][:n]
+    # get the part of the other parent from the n+1th elment onwards
     partial_parent2 = parent2[0][n+1:]
 
+    # try different adjoinment directions
     for d in random.sample(['L', 'R', 'S'],3):
-    
+        
         child_string = partial_parent1 + d + partial_parent2
+
+        # return is the conformation is valid
         if not double(child_string):
             return child_string
 
+    # indicate that the conformation is invalid
     return ('impossible', 1)
 
 
 def choose_parents(conformations_list, sample_size):
+    """Takes two random samples from the population, chooses the best of each sample to be a parent."""
 
+    # make pools
     pool1 = random.sample(conformations_list, sample_size)
     pool2 = random.sample(conformations_list, sample_size)
 
+    # choose the best
     parent1 = min(pool1, key=operator.itemgetter(1))
     parent2 = min(pool2, key=operator.itemgetter(1))
 
@@ -863,5 +885,184 @@ def genetic_plot(string, score, best_yet, proti):
 
     ax2.plot(best_yet)
     ax2.set_title('Lowest score per iteration')
+
+    plt.show()
+
+def dee_plot(list_x, list_y, score, loop_time, total_time, proti):
+    """Makes a graph of two lists list_x, list_y."""
+
+    # differentiate between types of atom
+    red_dots_x = []
+    red_dots_y = []
+    blue_dots_x = []
+    blue_dots_y = []
+    yellow_dots_x = []
+    yellow_dots_y = []
+
+    # search through protein and place each atom in the appropiate list
+    for x, y, p in zip(list_x, list_y, proti.listed):
+
+        if p == 'H':
+            red_dots_x.append(x)
+            red_dots_y.append(y)
+        if p == 'P':
+            blue_dots_x.append(x)
+            blue_dots_y.append(y)
+        if p == 'C':
+            yellow_dots_x.append(x)
+            yellow_dots_y.append(y)
+
+    # create graphs with colors
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
+
+    ax1.plot(list_x, list_y, '--', color='darkgrey')
+    ax1.plot(red_dots_x, red_dots_y, 'or', markersize=15)
+    ax1.plot(blue_dots_x, blue_dots_y, 'ob', markersize=15)
+    ax1.plot(yellow_dots_x, yellow_dots_y, 'oy', markersize=15)
+    ax1.axis('equal')
+    ax1.set_title(f'Folded protein of length {proti.length}, score: {score}')
+
+    ax2.plot(loop_time)
+    ax2.set_title(f'Time per atom, {round(total_time, 2)} seconds total')
+    ax2.set(xlabel='Atom', ylabel='Time')
+
+    plt.show()
+
+def nodes_to_xy(nodes_visited):
+    """Converts a series of string with directions like ['left', 'right'] to lists with xy positions."""
+
+    pos_x = [0, 1]
+    pos_y = [0, 0]
+
+    # go over every node
+    for i, n in enumerate(nodes_visited):
+
+        # first two nodes are already placed to confine solutions to one quadrant
+        if i == 0 or i == 1:
+            continue
+
+        # previous direction is determined
+        delta_x = pos_x[-1] - pos_x[-2]
+        delta_y = pos_y[-1] - pos_y[-2]
+
+        # rotation matrices used to turn into the desired direction
+        if n == 'S':
+            pos_x.append(pos_x[-1] + delta_x)
+            pos_y.append(pos_y[-1] + delta_y)
+        elif n == 'L':
+            pos_x.append(pos_x[-1] - delta_y)
+            pos_y.append(pos_y[-1] + delta_x)
+        elif n == 'R':
+            pos_x.append(pos_x[-1] + delta_y)
+            pos_y.append(pos_y[-1] - delta_x)
+
+    return pos_x, pos_y
+
+def partial_score_func(nodes_visited, proti):
+    """Calculates the socre obtained by the nodes visit so far."""
+
+    pos_x, pos_y = nodes_to_xy(nodes_visited)
+
+    # weed out the proteins folded into itself
+    if double_xy(pos_x, pos_y):
+        return 1000
+
+    partial_score = score(pos_x, pos_y, proti)
+
+    return partial_score
+
+def possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, proti):
+    """Calculates the best score the remaining bit of the protien can acquire."""
+
+    possible_score = 0
+
+    # an H atom can get at most -2 and a C atom at best -10
+    for i, n in enumerate(nodes_to_visit):
+
+        if i == len(nodes_to_visit) - 1:
+            if n == 'H':
+                possible_score += -3
+            if n == 'C':
+                possible_score += -15
+            continue
+
+        if n == 'H':
+            possible_score += -2
+        if n == 'C':
+            possible_score += -10
+
+    if possible_score + partial_score < proti.min_score:
+        possible_score = proti.min_score - partial_score
+        if lowest_known_score == proti.min_score:
+            possible_score += -1
+
+    return possible_score
+
+def random_rotation_ff(list_x, list_y):
+    """Rotates the string 90 degrees to the left or right from the nth atom onwards."""
+
+    n = random.randint(0, length - 1)
+
+    rotation_point_x = list_x[n]
+    rotation_point_y = list_y[n]
+
+    # left or right rotation are randomly chosen
+    p = random.random()
+
+    # calculates the new positions for the remainder of the string using the equations from a 2D rotation matrix
+    for i in range(n + 1, length):
+       
+        relative_x = list_x[i] - rotation_point_x
+        relative_y = list_y[i] - rotation_point_y
+
+        if p > 0.5:
+            # rotate left
+            list_x[i] = rotation_point_x - relative_y
+            list_y[i] = rotation_point_y + relative_x
+        else:
+            # rotate right
+            list_x[i] = rotation_point_x + relative_y
+            list_y[i] = rotation_point_y - relative_x
+
+def similarities(list_x1, list_y1, list_x2, list_y2):
+    d = 0
+
+    for x1, y1, x2, y2 in zip(list_x1, list_y1, list_x2, list_y2):
+        d += math.sqrt((x2-x1)**2 +(y2-y1)**2)
+
+    return d
+
+def ff_plot(list_x, list_y, score, proti):
+    """Makes a graph of two lists list_x, list_y."""
+    
+    # differentiate between types of atom
+    red_dots_x = []
+    red_dots_y = []
+    blue_dots_x = []
+    blue_dots_y = []
+    yellow_dots_x = []
+    yellow_dots_y = []
+
+    # search through protein and place each atom in the appropiate list
+    for x, y, p in zip(list_x, list_y, proti.listed):
+
+        if p == 'H':
+            red_dots_x.append(x)
+            red_dots_y.append(y)
+        if p == 'P':
+            blue_dots_x.append(x)
+            blue_dots_y.append(y)       
+        if p == 'C':
+            yellow_dots_x.append(x)
+            yellow_dots_y.append(y)
+
+   # create graphs with colors
+    fig, ax1 = plt.subplots(1, 1, figsize=(7, 7))
+
+    ax1.plot(list_x, list_y, '--', color='darkgrey')
+    ax1.plot(red_dots_x, red_dots_y, 'or', markersize=17)
+    ax1.plot(blue_dots_x, blue_dots_y, 'ob', markersize=17)
+    ax1.plot(yellow_dots_x, yellow_dots_y, 'oy', markersize=17)
+    ax1.set_title(f'Folded protein of length {proti.length}, score: {score}')
 
     plt.show()

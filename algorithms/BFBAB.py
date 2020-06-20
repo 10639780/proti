@@ -1,5 +1,5 @@
 """ 
-BFBA.py
+BFBAB.py
 
 Minor Programmeren
 Team Proti
@@ -15,7 +15,7 @@ import random
 import queue
 from progress.bar import Bar
 
-def run(proti):
+def run(proti, p1, p2):
     start = timeit.default_timer()
 
     bar = Bar('Progress', max=proti.length)
@@ -33,10 +33,6 @@ def run(proti):
     lowest_score_k = {}
     all_scores_k = {}
     lowest_score = 0
-    
-    # (0,1) probabilities of pruning a path, lower is more exact but less fast
-    p1 = 0.99
-    p2 = 0.9
 
     # set inital values
     for i in range(proti.length + 1):

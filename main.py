@@ -61,22 +61,28 @@ if __name__ == "__main__":
 
 
     if algo == 'BFBAB':
-        BF.run(proti)
+        p1 = 0.99
+        p2 = 0.98
+        BF.run(proti, p1, p2)
 
     if algo == 'BFBAB3D':
         BF3D.run(proti)
 
     if algo == 'DEE':
-        DEE.run(proti)
+        lowest_known_score = 0
+        DEE.run(proti, lowest_known_score)
 
     if algo =='FF':
-        FF.run(proti)
+        population = 100
+        N = 20
+        FF.run(proti, population, N)
 
     if algo =='HC':
         HC.run(proti)
 
     if algo =='MONTE':
-        MONTE.run(proti)
+        N = 100
+        MONTE.run(proti, N)
 
     if algo =='MONTE3D':
         M3D.run(proti)
@@ -91,7 +97,9 @@ if __name__ == "__main__":
         TREE.run(proti)
 
     if algo == 'GENETIC':
-        GENETIC.run(proti)
+        population = 100
+        N = 1000
+        GENETIC.run(proti, population, N)
 
 
 

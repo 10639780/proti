@@ -20,11 +20,9 @@ import timeit
 import math
 from helpers import *
 
-def run(proti):
+def run(proti, population_size, N):
     # some constants
-    population_size = 500
     sample_size = round(population_size * 0.1)
-    N = 1000
     _max = 0.4
     _min = 0.2
     scale = N/20
@@ -33,16 +31,27 @@ def run(proti):
     start = timeit.default_timer()
     best_yet = []
 
-    # initialization
+    # initialize by creating a population of random conformations
     conformations_list = initial_population(population_size, proti)
     initial_time = timeit.default_timer()
-    # iterative part
+
     for i in range(N): 
+        # determine the chance that a mutation occurs
         mutation_chance = _max / (1 + math.exp((i - center )/ scale)) + _min
-        parent1, parent2, child1, child2  = make_child(conformations_list, sample_size)    
+
+        # choose 2 parents from the population, make 2 children
+        parent1, parent2, child1, child2  = make_child(conformations_list, sample_size)   
+
+        # mutate the children 
         mutation1, mutation2 = mutate(child1, child2, mutation_chance, proti)
+
+        # replace the weakest parent/member of population with the best child
         replace(parent1, parent2, mutation1, mutation2, conformations_list)
+
+        # keep track of lowest score
         best_yet.append(min([parent1, parent2, mutation1, mutation2], key=operator.itemgetter(1))[1])
+
+        # update the progress bar
         if i % 1000 == 0:
             bar.next()
 
