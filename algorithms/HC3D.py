@@ -1,10 +1,10 @@
 """
-HC.py
+HC3D.py
 
 Minor Programmeren
 Team Proti
 
-Tries to find the most stable configuration of the protein in 2D
+Tries to find the most stable configuration of the protein in 3D
 as per the Hill climber method
 """
 
@@ -21,6 +21,7 @@ def run(proti):
     # initialize the protein in a straight configuration
     x = [i for i in range(proti.length)]
     y = [0] * proti.length
+    z = [0] * proti.length
 
     # high number of iterations for optimising result
     iterarations = 50000
@@ -34,6 +35,7 @@ def run(proti):
     score = 0
     best_x = []
     best_y = []
+    best_z = []
     scores = []
 
     # fold protein for number of iterations
@@ -42,6 +44,7 @@ def run(proti):
         # remember the previous configuration
         backup_x = copy.deepcopy(x)
         backup_y = copy.deepcopy(y)
+        backup_z = copy.deepcopy(z)
 
         # remember the previous score
         old_score = copy.deepcopy(score)
@@ -49,12 +52,13 @@ def run(proti):
 
         # fold protein at a random amino
         rotating_amino = random.randint(0, proti.length - 1)
-        random_rotation(x, y, rotating_amino, proti) 
+        random_rotation_xyz(x, y, z, rotating_amino, proti) 
 
         # if protein folded into itself restore and go back
         if double_m(x, y):
             x = backup_x
             y = backup_y
+            z = backup_z
             continue
 
         # get the score of the current configuration
@@ -64,11 +68,13 @@ def run(proti):
         if score > old_score:
             x = backup_x
             y = backup_y
+            z = backup_z
 
         # check if a lower score has been found and remember
         if score < lowest_score:
             best_x = copy.deepcopy(x)
             best_y = copy.deepcopy(y)
+            best_z = copy.deepcopy(z)
             lowest_score = copy.deepcopy(score)
 
         rotations += 1 
@@ -83,8 +89,8 @@ def run(proti):
     print('Runtime:', stop - start, 'seconds')
 
     # render the output and plot the figure
-    output(best_x, best_y, lowest_score, proti)
-    plot_m(best_x, best_y, lowest_score, scores, proti)
+    output_xyz(best_x, best_y, best_z, lowest_score, proti)
+    plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
 
 if __name__ == "__main__":
     main()
