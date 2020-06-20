@@ -16,66 +16,36 @@ import timeit
 from progress.bar import Bar
 
 # string and length are used by most functions so declare as global variable
-# protein = ['H','H','P','H','H','H','P','H']
 
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H','H','H','P','H']
-# protein = ['P', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H']
-# # protein = ['H', 'H', 'H', 'C', 'C', 'C', 'H', 'C', 'H']
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
-# # protein = protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-# # protein = ['H', 'H', 'H', 'P', 'C', 'C', 'H', 'P', 'C', 'C', 'P', 'H']
-# protein = ['H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P']
-protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H'] # official 20
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # official 36
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # double 14, mc -6
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P']
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'C', 'C'] #  mc -3
-# protein = ['P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke short 
-# protein = ['H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P'] # okke long
-# protein = ['H', 'H', 'P', 'H','H', "H", 'P']
-# protein = ['H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H'] # op -9
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # opt -21
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # opt -23
-# protein = ['H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'P', 'H', 'P']
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 
-#   'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#   'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
-# rotein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'P',
-#      'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 
-#         'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 
-#             'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'] # 64, opti -42
-# protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H']
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']
+protein = 'HHPHHHPHPHHHPH' # 14, opt -6
 
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C']
-# protein = ['H','H', 'P','H','H','H','P','H']
-# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 
-#   'P', 'H', 'P', 'H'] # 20, opt -9, bench 0.21, -8
-protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-  'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
-#   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
-protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, opt 0
+protein = 'HPHPPHHPHPPHPHHPPHPH' # 20, otp -9
+
+protein = 'PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP' # 36, opt -14
+
+# protein = 'HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH' # 50, opt -21
+
+# protein = 'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP' #36 1
+
+# protein = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36 2
+
+# protein = 'HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH' # 50 1
+
+# protein = 'HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH' # 50 2
 
 length = len(protein)
-# print(length)
-def main():
 
-    
+def main():
 
     # create the initial straight string
     pos_x = [i for i in range(length)]
     pos_y = [0] * length
 
     # number of iterations, higher N is better result
-    N = 50000
+    N = 3000
     rotation_counter = 0
-
+    
+    # initiate progress bar
     bar = Bar('Progress', max=N/1000)
 
     # lists to keep track of the scores of each rotation and remember the one with the best score
@@ -92,11 +62,11 @@ def main():
     # loop that keeps folding the protein
     while rotation_counter < N:
 
+        # annealing temperature function
         _max = 10
         scale = N/20
         center = 9 * N / 40
         temperature = _max / (1 + math.exp((rotation_counter - center )/ scale)) + 0.5
-
 
         # a copy is made in case the fold is invalid or unfavourable
         log_pos_x = copy.deepcopy(pos_x)
@@ -146,19 +116,22 @@ def main():
 
     bar.finish()
     stop = timeit.default_timer()
-    print('Runtime:', stop - start,'seconds') 
+    runtime = stop - start
+    print('Runtime:', round((runtime)/60,2),'minutes') 
 
     # the best structure is copied to a csv file and shown in a graph
     output(best_x, best_y, lowest_score)
     plot(best_x, best_y, lowest_score, scores)
 
+    return 
+    
 def output(list_x, list_y, score):
     """Prints the folded string to a csv file in the Bas Terwijn style."""
 
     numbers = []
    
     for i in range(len(protein)-1):
-        
+            
         # new position is compared to the old
         delta_x = list_x[i+1] - list_x[i]
         delta_y = list_y[i+1] - list_y[i]
@@ -238,8 +211,6 @@ def double(list_x, list_y):
 
 def plot(list_x, list_y, score, scores):
     """Makes a graph of two lists list_x, list_y."""
-    # list_x = [0, 1, 1, 0, 0, 0, 1, 1, 0, -1, -2, -2]
-    # list_y = [0, 0, 1, 1, 0, -1, -1, 0, 0, 0, 0, 1]
     # differentiate between types of atom
     red_dots_x = []
     red_dots_y = []
@@ -302,7 +273,6 @@ def random_rotation(list_x, list_y, n):
             list_x[i] = rotation_point_x + relative_y
             list_y[i] = rotation_point_y - relative_x
  
-
 if __name__ == "__main__":
     start = timeit.default_timer()
     main()

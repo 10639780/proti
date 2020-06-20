@@ -17,77 +17,31 @@ from progress.bar import Bar
 
 # bunch of test stringsw
 
-# protein = ['H', 'H', 'P', 'H']
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 8, mc -3
-protein = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H'] # official 14, mc -6
-protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 
-  'P', 'H', 'P', 'H'] # 20, opt -9, bench 0.21, -8
-# protein = ['H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'P', 'P', 
-#   'H', 'P', 'P', 'H', 'P', 'P', 'H','H'] # 24,  opt -9
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 
-#   'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H'] # 25, opt -8
-protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-  'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 
-#   'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#       'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H'] # 48, opt -23
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
-#   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
-# # protein = ['H', 'H', 'P', 'H', 'C', 'H', 'P', 'C', 'P', 'C', 'H'] #  mc -3
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 
-#     'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, mc -35
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 
-#     'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 
-#       'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H']  # 50 low -28
+protein = 'HHPHHHPHPHHHPH' # 14, opt -6
 
-# protein = ['H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P',
-#      'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 
-#         'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # 50, low -19
-# protein = ['H', 'C', 'P', 'H', 'P', 'H', 'P', 'H', 'C', 'H', 'H', 'H', 'H', 'P', 'C', 'C', 'P', 'P',
-#      'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'C', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P',
-#      '    H', 'H', 'H', 'H', 'C', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50 low -27
-# protein = ['H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'P',
-#      'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 
-#         'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 
-#             'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'] # 64, opti -42
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'P', 'H', 
-#     'H', 'P', 'H', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H',
-#      'H', 'H', 'H', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
-#       'H', 'P', 'H', 'H', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H',
-#        'H', 'H', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'P',
-#         'P', 'H', 'H', 'H'] # 100, opt -50
-# protein = ['H', 'H', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H',
-#      'H', 'P', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P',
-#       'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'H', 'H',
-#        'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'H',
-#         'H', 'P', 'P', 'H', 'P', 'H'] # 85, opt -53
-# protein = ['P', 'P', 'H', 'H', 'H', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'P', 'P', 'H', 'H', 'H',
-#      'H', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 
-#         'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'P', 'H', 'H', 'P', 'H', 'P'] # 60, opt -36
-# protein = ['H','H', 'P','H','H','H','P','H']
-# protein = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 
-#   'P', 'H', 'P', 'H'] # 20, opt -9, bench 0.21, -8
-# protein = ['P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'P', 'H', 'H', 
-#   'H', 'H', 'H', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36,  opt -14, bench 4.6, -12
-# protein = ['P', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 
-#   'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 
-#       'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H']  # 50, opt -21 low -16
-# protein = ['P', 'P', 'C', 'H', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'P', 'P', 'C', 'H', 'H', 'H', 'H', 'C', 'H', 'H', 'P', 'P', 'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'P'] # 36, opt 0
-# protein = ['C', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'P', 'H', 'H', 'H', 'H', 'H', 'H', 'C', 'C', 'P', 'C', 'H', 'P', 'P', 'C', 'P', 'C', 'H', 'P', 'P', 'H', 'P', 'C'] # 36, opt 0
-# protein = ['H', 'C', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'C', 'H', 'C', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'C', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'C', 'C', 'H', 'C', 'H', 'C', 'H', 'C', 'H', 'H'] # 50, opt 0
-# protein = ['H', 'C', 'P', 'H', 'P', 'H', 'P', 'H', 'C', 'H', 'H', 'H', 'H', 'P', 'C', 'C', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'C', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'C', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # 50, opt 0
-protein = ['H', 'C', 'P', 'H', 'P', 'H', 'P', 'H', 'C', 'H', 'H', 'H', 'H', 'P', 'C', 'C', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'C', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'C', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # 50, opt 0
-# protein = ['H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'P', 'P', 'H', 'P', 'H', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'P', 'H', 'H'] # 50, opt 0
+protein = 'HPHPPHHPHPPHPHHPPHPH' # 20, otp -9
+
+protein = 'PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP' # 36, opt -14
+
+protein = 'HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH' # 50, opt -21
+
+protein = 'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP' #36 1
+
+protein = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36 2
+
+protein = 'HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH' # 50 1
+
+protein = 'HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH' # 50 2
+
+
+
+
 length = len(protein)
 
 # set theoretical lower bound on score
 even = protein[::2]
 odd = protein[1::2]
-H_count = protein.count('H')
-C_count = protein.count('C')
 min_score = 2 * max([- even.count('H') - 5 * even.count('C'), - odd.count('H') - 5 * odd.count('C')])
-
 
 
 # list of timer to see why program so slow
@@ -95,9 +49,11 @@ possible_list = []
 score_list = []
 direction_list = []
 double_list = []
+avg_list = []
 
 def main():
-    
+
+    # initiate progress bar, first two aminos are already placed
     bar = Bar('Progress', max=length)
     bar.next()
     bar.next()
@@ -107,7 +63,9 @@ def main():
     depth = length - 2
     q = queue.Queue()
     q.put(('',0))
-    final_configurations = []
+
+    # list to hold all conformations in 
+    final_conformation = []
 
     # keep track of scores per substring
     lowest_score_k = {}
@@ -116,7 +74,7 @@ def main():
     
     # (0,1) probabilities of pruning a path, lower is more exact but less fast
     p1 = 0.99
-    p2 = 0.9
+    p2 = 0.98
 
     # set inital values
     for i in range(length + 1):
@@ -130,7 +88,7 @@ def main():
 
         # if all aminos are placed, put the string in a list
         if len(state[0]) == depth and not double(state[0]):
-            final_configurations.append(state)
+            final_conformation.append(state)
       
         if len(state[0]) < depth:
             
@@ -163,7 +121,12 @@ def main():
                     # random number between 0 and 1
                     r = random.random()
                     
+                    avg_start = timeit.default_timer()
                     average_score_k = sum(all_scores_k[k]) / len(all_scores_k[k])
+
+                    avg_stop = timeit.default_timer()
+
+                    avg_list.append(avg_stop-avg_start)
 
                     # conditions for pruning
                     if score > average_score_k and r < p1:
@@ -189,22 +152,22 @@ def main():
                 else:
                     q.put(child) 
 
-    if len(final_configurations) == 0:
+    if len(final_conformation) == 0:
         bar.finish()
-        print('No conformations found.')
+        print('No conformations found')
         return
 
     lowest_score = 0
     
     # weed out the best configuration from the remaining strings
-    for c in final_configurations:
+    for c in final_conformation:
         if c[1] < lowest_score:
             best_config = copy.deepcopy(c[0])
             lowest_score = copy.deepcopy(c[1])
 
     # plot the result
     stop = timeit.default_timer()
-    # print(f'Strings made: {len(final_configurations)}')
+    # print(f'Strings made: {len(final_conformation)}')
     total_time = stop - start
     bar.finish()
     print(f'Length: {length}')
@@ -214,8 +177,10 @@ def main():
     print(f'Score function time: {round(sum(score_list) / total_time * 100,1)}%')
     print(f'Direction function time: {round(sum(direction_list) / total_time * 100,1)}%')
     print(f'Double function time: {round(sum(double_list) / total_time * 100,1)}%')
+    print(f'Average time: {round(sum(avg_list) /  total_time * 100,1)}%')
     print(f'Conformation: {best_config}')
     plot(best_config, lowest_score,total_time, possible_list, score_list, direction_list, double_list)
+
 
 def possible_score_func(nodes_to_visit, partial_score):
     """Calculates the best score the remaining bit of the protien can acquire."""
@@ -408,7 +373,6 @@ def direction_to_xy(string):
     direction_list.append(direction_stop-direction_start)
     return pos_x, pos_y
 
-
 def double(string):
 
     """Checks whether two atoms occupy the same point."""
@@ -431,3 +395,5 @@ def double(string):
 if __name__ == "__main__":
     start = timeit.default_timer()
     main()
+
+
