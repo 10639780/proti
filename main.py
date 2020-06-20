@@ -29,8 +29,7 @@ from algorithms import HC3D
 from classes.protein import Protein
 import sys
 
-if __name__ == "__main__":
-
+def main():
     # available algorithms
     algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
             'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
@@ -39,11 +38,10 @@ if __name__ == "__main__":
 
     print("Available algorithms:")
     for key in algos:
-        print(key)
-
+        print(f"{key} - ", end =" ")
 
     # get algorithm for folding
-    algo = input("\n" + "Enter algorithm to run: ")
+    algo = input("Enter algorithm to run: ")
     
     # read available proteins from text file
     proteins = {}
@@ -59,10 +57,8 @@ if __name__ == "__main__":
             proteins[i] = protein
             print(f"ID: {i}, Protein: {protein}")
     
-    
-
     # get protein to fold
-    choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
+    choose_protein = input("Which protein would you like to fold? Enter ID: ")
 
     # protein information
     fold_protein = proteins[int(choose_protein)]
@@ -76,6 +72,9 @@ if __name__ == "__main__":
     # run choosen algorithm
     algos[algo].run(proti)
 
+
+if __name__ == "__main__":
+    main()
 
 
 
