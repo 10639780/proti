@@ -63,7 +63,7 @@ def run(proti, N):
         # calculate the scores of the old and new structure
         old_score = score(log_pos_x, log_pos_y, proti)
         new_score = score(pos_x, pos_y, proti)
-
+        
         # keep track of each score
         scores.append(old_score)
 

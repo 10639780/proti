@@ -1,187 +1,97 @@
 """
 SIMANN.py
-Renamed and reorganized some parts of monte.py for convenience
-Simulated annealing seems to work
-Tweaking start temperature and iterations to figure out which configuration works best
+
+Minor Programmeren 
+Team Proti 
+
+Tries to find the most stable configuration of the protein in 2D
+with a simulated annealing algorithm in 2D
 """
 
-import numpy as np 
-import matplotlib.pyplot as plt 
+from helpers import *
 import random
-import math
 import copy
+import timeit
+from progress.bar import Bar
 
-# PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
-PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
-LENGTH = len(PROTEIN)
-ITERATIONS = 10000
-DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-START_TEMP = 100
+def run(proti):
+     # start timing the run of the code
+    start = timeit.default_timer()
 
-
-def main():
-    x = [i for i in range(LENGTH)]
-    y = [0] * LENGTH
+    # initialize the protein in a straight configuration
+    x = [i for i in range(proti.length)]
+    y = [0] * proti.length
     
-
+    # high number of iterations for optimising result
+    iterations = 1000
     rotations = 0
+
+    # initialize progress bar
+    bar = Bar('Progress', max = iterations / 1000)
+
+    # list to keep track of best configuration and scores
     lowest_score = 0
     best_x = []
     best_y = []
     scores = []
 
-    while rotations < ITERATIONS:
+    # set start temperature for annealing
+    start_temp = 10
 
+    while rotations < iterations:
+
+        # remember the previous configuration
         backup_x = copy.deepcopy(x)
         backup_y = copy.deepcopy(y)
 
-        rotating_amino = random.randint(0, LENGTH - 1)
-        fold_protein(x, y, rotating_amino)
+        # remember the previous score
+        old_score = score(backup_x, backup_y, proti)
+        scores.append(old_score)
 
-        if double(x, y):
+        # fold protein at a random amino
+        rotating_amino = random.randint(0, proti.length - 1)
+        random_rotation(x, y, rotating_amino, proti)
+
+        # if protein folded into itself restore and go back
+        if double_m(x, y):
             x = backup_x
             y = backup_y
             continue
 
-        old_score = score(backup_x, backup_y)
-        new_score = score(x, y)        
+        # get the score of the current configuration
+        new_score = score(x, y, proti)
 
-        temperature = START_TEMP * (0.997 ** rotations)
-        # temperature = START_TEMP - (START_TEMP / ITERATIONS) * rotations
-        acceptance_chance = 2 ** ((old_score - new_score)/temperature)
+        # drop temperature gradually
+        temperature = start_temp * (0.997 ** rotations)
+        acceptance_chance = 2 ** (-(new_score - old_score) / temperature)
         treshhold = random.random()
 
-        if new_score > old_score and acceptance_chance < treshhold:
+        # if new score is worse and it can't be accepted restore backup
+        if new_score > old_score and acceptance_chance > treshhold:
             x = backup_x
             y = backup_y
+            new_score = old_score
 
-
-        scores.append(old_score)
-
-        if old_score < lowest_score:
+        # check if a lower score is found and remember configuration
+        if new_score < lowest_score:
             best_x = copy.deepcopy(x)
             best_y = copy.deepcopy(y)
-            lowest_score = copy.deepcopy(old_score)
+            lowest_score = copy.deepcopy(new_score)
 
         rotations += 1
 
-    visualization(best_x, best_y, lowest_score, scores)
+        # continue the progress bar every thousand configurations
+        if rotations % 1000 == 0:
+            bar.next()
 
+    # finish the progress bar and th timer and show information
+    bar.finish()
+    stop = timeit.default_timer()
+    print('Runtime', stop - start, 'seconds')
 
-def double(x, y):
-    coordinates = []
-
-    for amino_x, amino_y in zip(x, y):
-        if [amino_x, amino_y] in coordinates:
-            return True
-        coordinates.append([amino_x, amino_y])
-
-    return False
-
-
-def fold_protein(x, y, amino_pos):
-
-    rotating_amino_x = x[amino_pos]
-    rotating_amino_y = y[amino_pos]
-
-    direction = random.random()
-
-    for i in range(amino_pos + 1, LENGTH):
-        relative_x = x[i] - rotating_amino_x
-        relative_y = y[i] - rotating_amino_y
-
-        if direction > 0.5:
-            # rotate left
-            x[i] = rotating_amino_x - relative_y
-            y[i] = rotating_amino_y + relative_x
-        else:
-            # rotate right
-            x[i] = rotating_amino_x + relative_y
-            y[i] = rotating_amino_y - relative_x
-
-
-def score(x, y):
-    coordinates = []
-    score = 0
-
-    for i in range(LENGTH):
-
-        if not PROTEIN[i] == 'P':
-            
-            for direction in DIRECTIONS:
-                dir_x = direction[0]
-                dir_y = direction[1]
-                check_x = x[i] + dir_x
-                check_y = y[i] + dir_y
-
-                for j in range(len(coordinates)):
-
-                    if [check_x, check_y] == coordinates[j] and not \
-                        (check_x == x[i - 1] and check_y == y[i - 1]):
-
-                        protein = PROTEIN[i]
-                        neighbour = PROTEIN[j]
-
-                        if protein == 'H':
-                            if neighbour == 'H' or neighbour == 'C':
-                                score += -1
-
-                        if protein == 'C':
-                            if neighbour == 'C':
-                                score += -5
-                            if neighbour == 'H':
-                                score += -1
-
-        coordinates.append([x[i], y[i]])
-
-    return score
-
-def visualization(x, y, score, scores):
-
-    H_x = []
-    H_y = []
-    P_x = []
-    P_y = []
-    C_x = []
-    C_y = []
-
-    iterations = [i for i in range(ITERATIONS)]
-
-    for i in range(LENGTH):
-        amino = PROTEIN[i]
-        amino_x = x[i]
-        amino_y = y[i]
-
-        if amino == 'H':
-            H_x.append(amino_x)
-            H_y.append(amino_y)
-        if amino == 'P':
-            P_x.append(amino_x)
-            P_y.append(amino_y)
-        if amino == 'C':
-            C_x.append(amino_x)
-            C_y.append(amino_y)
-
-    plt.figure()
-
-    plt.subplot(211)
-    plt.plot(x, y, "k--")
-    plt.plot(H_x, H_y, "ro", label = "hydrofoob")
-    plt.plot(P_x, P_y, "bo", label = "polair")
-    plt.plot(C_x, C_y, "go", label = "cysteine")
-    plt.xlabel("step")
-    plt.ylabel("step")
-    plt.legend()
-    plt.title("Total score: {}".format(score))
-
-    plt.subplot(212)
-    plt.plot(iterations, scores)
-    plt.title("Statistics")
-    plt.xlabel("iterations")
-    plt.ylabel("scores")
-    plt.savefig("simannealing.png")
-    plt.show()
-
+    # render the output and plot the figure
+    output(best_x, best_y, lowest_score, proti)
+    plot_m(best_x, best_y, lowest_score, scores, proti)
 
 if __name__ == "__main__":
     main()
