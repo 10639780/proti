@@ -35,7 +35,7 @@ if __name__ == "__main__":
     """
     allow_chars = ['P','C','H']
 
-    protein_list = 'HHPHHHPHPHHHPH' # 14, opt -6
+    # protein_list = 'HHPHHHPHPHHHPH' # 14, opt -6
 
     # protein_list = 'HPHPPHHPHPPHPHHPPHPH' # 20, otp -9
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     # protein_list = 'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP' #36
 
-    # protein_list = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36
+    protein_list = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36
 
     # protein_list = 'HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH' # 50
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
-    algo = 'SIMANN'
+    algo = 'SIMANN+'
 
     for i in protein_list:
         if i not in allow_chars:

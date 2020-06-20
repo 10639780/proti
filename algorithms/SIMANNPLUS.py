@@ -24,7 +24,7 @@ def run(proti):
     y = [0] * proti.length
     
     # high number of iterations for optimising result
-    iterations = 1000
+    iterations = 10000
     rotations = 0
 
     # initialize progress bar
@@ -37,7 +37,7 @@ def run(proti):
     scores = []
 
     # set start temperature for annealing
-    start_temp = 10
+    start_temp = 100
 
     # at the start no local optimum found
     local_optimum = False
