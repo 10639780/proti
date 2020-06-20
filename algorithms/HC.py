@@ -63,6 +63,7 @@ def run(proti):
         if new_score > old_score:
             x = backup_x
             y = backup_y
+            new_score = old_score
 
         # check if a lower score has been found and remember
         if new_score < lowest_score:
