@@ -11,8 +11,9 @@ from algorithms import MONTE
 from algorithms import MONTE3D as M3D
 from algorithms import SIMANN as SA
 from algorithms import SIMANNPLUS as SAPLUS
-from algorithms import TREE as TREE
+from algorithms import TREE 
 from algorithms import GENETIC
+from algorithms import HC3D
 from classes.protein import Protein
 import re
 import sys
@@ -20,7 +21,7 @@ import sys
 if __name__ == "__main__":
     # Input for protein variable
 
-    algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN+', 'TREE', 'GENETIC'
+    algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'HC3D', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN+', 'TREE', 'GENETIC'
     """
     print(f'algorithms available: {algos}')
     usage = input("please input algorithm name followed by an underscore and a single protein string\n")
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
-    algo = 'GENETIC'
+    algo = 'HC3D'
 
     for i in protein_list:
         if i not in allow_chars:
@@ -74,6 +75,9 @@ if __name__ == "__main__":
 
     if algo =='HC':
         HC.run(proti)
+
+    if algo == 'HC3D':
+        HC3D.run(proti)
 
     if algo =='MONTE':
         MONTE.run(proti)

@@ -12,7 +12,7 @@ from helpers import *
 import random
 import copy
 import timeit
-
+from progress.bar import Bar
 
 def run(proti):
     # start timing the run of the code
@@ -23,7 +23,7 @@ def run(proti):
     y = [0] * proti.length
 
     # high number of iterations for optimising result
-    iterarations = 50000
+    iterations = 50000
     rotations = 0
 
     # initialize progress bar
@@ -31,7 +31,6 @@ def run(proti):
 
     # list to keep track of best configuration and scores
     lowest_score = 0
-    score = 0
     best_x = []
     best_y = []
     scores = []
@@ -44,7 +43,7 @@ def run(proti):
         backup_y = copy.deepcopy(y)
 
         # remember the previous score
-        old_score = copy.deepcopy(score)
+        old_score = score(backup_x, backup_y, proti)
         scores.append(old_score)
 
         # fold protein at a random amino
@@ -58,18 +57,18 @@ def run(proti):
             continue
 
         # get the score of the current configuration
-        score = score(x, y, proti)
-
+        new_score = score(x, y, proti)
+        
         # if the new score is worse set configuration back (hillclimber method)
-        if score > old_score:
+        if new_score > old_score:
             x = backup_x
             y = backup_y
 
         # check if a lower score has been found and remember
-        if score < lowest_score:
+        if new_score < lowest_score:
             best_x = copy.deepcopy(x)
             best_y = copy.deepcopy(y)
-            lowest_score = copy.deepcopy(score)
+            lowest_score = copy.deepcopy(new_score)
 
         rotations += 1 
 

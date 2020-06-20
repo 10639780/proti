@@ -1,23 +1,28 @@
 """
 SIMANN.py
-Renamed and reorganized some parts of monte.py for convenience
-Simulated annealing seems to work
-Tweaking start temperature and iterations to figure out which configuration works best
+
+Minor Programmeren 
+Team Proti 
+
+Tries to find the most stable configuration of the protein in 2D
+as per the Hill climber method
 """
 
-import numpy as np 
-import matplotlib.pyplot as plt 
+from helpers import *
 import random
-import math
 import copy
+import timeit
+from progress.bar import Bar
 
-# PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
-PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
-LENGTH = len(PROTEIN)
-ITERATIONS = 10000
-DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-START_TEMP = 100
+# # PROTEIN = 'PPHPPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHPHH'
+# PROTEIN = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC'
+# LENGTH = len(PROTEIN)
+# ITERATIONS = 10000
+# DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+# START_TEMP = 100
 
+def run(proti):
+    
 
 def main():
     x = [i for i in range(LENGTH)]
