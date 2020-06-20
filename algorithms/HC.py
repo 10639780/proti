@@ -1,5 +1,6 @@
 """
-Hiilclimber to compare simulated annealing
+HC.py
+For comparison with simulated annealing
 """
 
 import numpy as np 

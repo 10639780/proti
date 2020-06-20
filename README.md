@@ -1,6 +1,40 @@
 # proti
 Proteine folding tool
 
+HEADSUP!
+
+we hebben een hele rits functies die alleen van elkaar verschillen in de zin dat ze ofwel met een string richtingen ofwel met een list coordinaten werken. Mijn voorkeur gaat uit voor het gebruiken van alleen de string richtingen aangezien dit minder ruimte en dus tijd kost. Op deze manier gaan we de wildgroei van functies tegen.
+
+proti is de instantie van het object protein -> proti.length / proti.listed / proti.min_score zijn de karakteristieken. verder geef je dus de instantie proti mee aan een functie waarin je proti.length of proti.listed kan aanroepen. Zie BFBAB / BFBAB3D voor een voorbeeld
+
+issues: BFBAB3D gebruikt mplot3d in helpers, daar is de import grijs. Alles werkt naar behoren (hij produceert een 3d figuur). Wat is hier aan de hand?
+
+**definitieve namen van de algo's (voor/na):
+
+breadthbab.py / BFBAB.py
+
+breadthbab3d.py / BFBAB3D.py
+
+dee2.py / DEE.py
+
+firefly.py / FF.py
+
+hillclimber.py / HC.py
+
+monte.py / MONTE.py
+
+monte3d.py / MONTE3D.py
+
+simannealing.py / SIMANN.py
+
+simannealplus.py / SIMANN+.py
+
+tree.py / TREE.py
+
+
+
+
+
 Als we spiegelbeelden met een constraint wegfilteren kunnen we de berekenbaarheid van het probleem verbeteren zonder een mogelijk optimale uitkomst weg te gooien. Werken i  
 
 Wat betreft de harde constraint dat het molecuul zichzelf niet mag kruisen, kunnen we benaderen hoeveel mogelijkheden hiermee worden weggegooid? 
@@ -34,6 +68,8 @@ element = amino = H/P/C
 HP model protein folding veel papers over!
 
 atoom bestaat niet (we werken op een ander level)
+
+
 
 
 

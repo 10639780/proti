@@ -1,5 +1,5 @@
 """
-firefly.py
+FF.py
 
 Minor Programmeren
 Team Proti

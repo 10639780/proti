@@ -1,5 +1,5 @@
 """
-tree.py
+TREE.py
 Minor Programmeren
 Team Proti
 Determines the highest possible score a protein fold can get.
