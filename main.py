@@ -41,7 +41,7 @@ def main():
         print(f"{key} - ", end =" ")
 
     # get algorithm for folding
-    algo = input("Enter algorithm to run: ")
+    algo = input("\n" + "Enter algorithm to run: ")
     
     # read available proteins from text file
     proteins = {}
@@ -58,7 +58,7 @@ def main():
             print(f"ID: {i}, Protein: {protein}")
     
     # get protein to fold
-    choose_protein = input("Which protein would you like to fold? Enter ID: ")
+    choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
 
     # protein information
     fold_protein = proteins[int(choose_protein)]
