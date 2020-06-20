@@ -56,7 +56,7 @@ def run(proti):
         random_rotation_xyz(x, y, z, rotating_amino, proti) 
 
         # if protein folded into itself restore and go back
-        if double_m(x, y):
+        if double_xy(x, y):
             x = backup_x
             y = backup_y
             z = backup_z

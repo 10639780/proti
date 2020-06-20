@@ -24,7 +24,11 @@ import sys
 if __name__ == "__main__":
     # Input for protein variable
 
-    algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'HC3D', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN3D','SIMANN+', 'SIMANN3D+','TREE', 'GENETIC'
+    algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
+            'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
+            'SIMANN3D':SA3D,'SIMANN+':SAPLUS, 'SIMANN3D+':SAPLUS3D, \
+            'TREE':TREE, 'GENETIC':GENETIC}
+
     """
     print(f'algorithms available: {algos}')
     usage = input("please input algorithm name followed by an underscore and a single protein string\n")
@@ -54,65 +58,20 @@ if __name__ == "__main__":
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
-    algo = 'SIMANN+'
+    # get user input
+    algo = input("Enter algorithm to run: ")
 
+    # check if protein string correct
     for i in protein_list:
         if i not in allow_chars:
             sys.exit("Usage parameters not met. Please try again")
 
+    # check if algorithm name exists
     if algo not in algos:
         sys.exit("Algorithm not found. Please try again")
 
-
-    if algo == 'BFBAB':
-        p1 = 0.99
-        p2 = 0.98
-        BF.run(proti, p1, p2)
-
-    if algo == 'BFBAB3D':
-        BF3D.run(proti)
-
-    if algo == 'DEE':
-        lowest_known_score = 0
-        DEE.run(proti, lowest_known_score)
-
-    if algo =='FF':
-        population = 100
-        N = 20
-        FF.run(proti, population, N)
-
-    if algo =='HC':
-        HC.run(proti)
-
-    if algo == 'HC3D':
-        HC3D.run(proti)
-
-    if algo =='MONTE':
-        N = 100
-        MONTE.run(proti, N)
-
-    if algo =='MONTE3D':
-        M3D.run(proti)
-
-    if algo =='SIMANN':
-        SA.run(proti)
-
-    if algo =='SIMANN3D':
-        SA3D.run(proti)
-
-    if algo =='SIMANN+':
-        SAPLUS.run(proti)
-
-    if algo =='SIMANN3D+':
-        SAPLUS3D.run(proti)
-
-    if algo =='TREE':
-        TREE.run(proti)
-
-    if algo == 'GENETIC':
-        population = 100
-        N = 1000
-        GENETIC.run(proti, population, N)
+    # run choosen algorithm
+    algos[algo].run(proti)
 
 
 

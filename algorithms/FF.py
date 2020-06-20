@@ -21,12 +21,16 @@ import matplotlib.pyplot as plt
 from progress.bar import Bar
 from helpers import *
 
-def run(proti, population, N):
+def run(proti):
     length = proti.length
     strings_created = 0
-    routes = []
     lowest_score = 0
+    population = 100
+    N = 20
+
+    routes = []    
     best_route = []
+
     start = timeit.default_timer()
     bar = Bar('Progress', max=N/100)
 

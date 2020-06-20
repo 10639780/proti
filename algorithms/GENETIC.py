@@ -20,8 +20,10 @@ import timeit
 import math
 from helpers import *
 
-def run(proti, population_size, N):
+def run(proti):
     # some constants
+    population_size = 100
+    N = 1000
     sample_size = round(population_size * 0.1)
     _max = 0.4
     _min = 0.2

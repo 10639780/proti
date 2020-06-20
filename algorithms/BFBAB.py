@@ -15,8 +15,11 @@ import random
 import queue
 from progress.bar import Bar
 
-def run(proti, p1, p2):
+def run(proti):
     start = timeit.default_timer()
+
+    p1 = 0.99
+    p2 = 0.98
 
     bar = Bar('Progress', max=proti.length)
     bar.next()

@@ -16,13 +16,14 @@ import timeit
 from progress.bar import Bar
 
 
-def run(proti, N):
+def run(proti):
     start = timeit.default_timer()
     # create the initial straight string
     pos_x = [i for i in range(proti.length)]
     pos_y = [0] * proti.length
 
     rotation_counter = 0
+    N = 100
 
     bar = Bar('Progress', max=N/1000)
 

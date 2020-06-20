@@ -14,9 +14,11 @@ import random
 from helpers import * 
 
 
-def run(proti, lowest_known_score):
+def run(proti):
     length = proti.length
     protein = proti.listed
+
+    lowest_known_score = 0
 
     # initiate a progress bar
     bar = Bar('Progress', max=length)
