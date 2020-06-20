@@ -59,6 +59,7 @@ def main():
     
     # get protein to fold
     choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
+ 
 
     # protein information
     fold_protein = proteins[int(choose_protein)]

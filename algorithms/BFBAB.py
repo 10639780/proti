@@ -130,7 +130,6 @@ def run(proti):
 
     # plot the result
     stop = timeit.default_timer()
-    # print(f'Strings made: {len(final_configurations)}')
     total_time = stop - start
     bar.finish()
     print(f'Length: {proti.length}')

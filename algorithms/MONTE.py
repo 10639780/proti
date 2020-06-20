@@ -46,7 +46,6 @@ def run(proti):
         center = 9 * N / 40
         temperature = _max / (1 + math.exp((rotation_counter - center )/ scale)) + 0.5
 
-
         # a copy is made in case the fold is invalid or unfavourable
         log_pos_x = copy.deepcopy(pos_x)
         log_pos_y = copy.deepcopy(pos_y)
