@@ -23,7 +23,7 @@ def run(proti):
     pos_y = [0] * proti.length
 
     # number of iterations, higher N is better result
-    N = 50000
+    N = 5000
     rotation_counter = 0
 
     bar = Bar('Progress', max=N/1000)

@@ -12,6 +12,7 @@ from algorithms import MONTE3D as M3D
 from algorithms import SIMANN as SA
 from algorithms import SIMANNPLUS as SAPLUS
 from algorithms import TREE as TREE
+from algorithms import GENETIC
 from classes.protein import Protein
 import re
 import sys
@@ -19,7 +20,7 @@ import sys
 if __name__ == "__main__":
     # Input for protein variable
 
-    algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN+', 'TREE'
+    algos = 'BFBAB', 'BFBAB3D', 'DEE', 'FF', 'HC', 'MONTE', 'MONTE3D', 'SIMANN', 'SIMANN+', 'TREE', 'GENETIC'
     """
     print(f'algorithms available: {algos}')
     usage = input("please input algorithm name followed by an underscore and a single protein string\n")
@@ -29,12 +30,27 @@ if __name__ == "__main__":
     length = len(protein_list)
     """
     allow_chars = ['P','C','H']
-    protein_list = ['H', 'H', 'P', 'H', 'H', 'H', 'P', 'H', 'P', 'H', 'H', 'H', 'P', 'H']
-    #protein_list = ['H', 'P', 'H', 'P', 'P', 'H', 'H', 'P', 'H', 'P', 'P', 'H', 'P', 'H', 'H', 'P', 'P', 'H', 'P', 'H']
+
+    protein_list = 'HHPHHHPHPHHHPH' # 14, opt -6
+
+    # protein_list = 'HPHPPHHPHPPHPHHPPHPH' # 20, otp -9
+
+    # protein_list = 'PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP' # 36, opt -14
+
+    # protein_list = 'HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH' # 50, opt -21
+
+    # protein_list = 'PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP' #36
+
+    # protein_list = 'CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC' # 36
+
+    # protein_list = 'HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH' # 50
+
+    # protein_list = 'HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH' # 50
+
     length = len(protein_list)
     proti = Protein(protein_list, length)
 
-    algo = 'MONTE3D'
+    algo = 'GENETIC'
 
     for i in protein_list:
         if i not in allow_chars:
@@ -42,7 +58,6 @@ if __name__ == "__main__":
 
     if algo not in algos:
         sys.exit("Algorithm not found. Please try again")
-
 
 
     if algo == 'BFBAB':
@@ -74,6 +89,9 @@ if __name__ == "__main__":
 
     if algo =='TREE':
         TREE.run(proti)
+
+    if algo == 'GENETIC':
+        GENETIC.run(proti)
 
 
 
