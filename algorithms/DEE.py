@@ -1,12 +1,16 @@
 """
 DEE.py
+
 Minor Programmeren
 Team Proti
-Uses a Dead End Elimination like algorithm described by Okke to create a tree of all routes that are possibly lower than a preset score.
+
+Uses a Dead End Elimination like algorithm described by Okke to create a tree
+of all routes that are possibly lower than a preset score.
 """
+
+# import modules
 from anytree import Node, RenderTree, Walker, PreOrderIter
 import copy
-import matplotlib.pyplot as plt
 import timeit
 from progress.bar import Bar
 from statistics import mean
@@ -26,14 +30,6 @@ def run(proti):
 
     # direction of atom relative to the previous ones
     directions = ['L', 'R', 'S']
-
-    # """
-    # Setting this variable right allows the program to run well. 
-    # It makes sure no branches are explored that couldn't possibly get a score lower than this lowest known score.
-    # Setting it too high means the program is slow as it will start constructing 3^(n-1) branches.
-    # Setting it too low results in finding no solutions.
-    # You can find the lowest known score by running one of the other faster but less certain programs first.
-    # """
 
     # variables to keep track of the optimal configuration
     best_score = 0
@@ -57,14 +53,16 @@ def run(proti):
 
             # place the first atom
             # intermezzo: the loop relies heavily on the globals()[...] function
-            # it creates a transforms a stirng into an actual variable and allows for dynamic naming and referencing of the nodes
+            # it creates a transforms a stirng into an actual variable and allows
+            # for dynamic naming and referencing of the nodes
             if i == 0:
                 name = f'{p}{i}{i}'
                 globals()[name] = Node('start')
                 bar.next()
                 continue
 
-            # second atom is placed in one direction only, others would merely be a rotaion around the axis with no score advantage
+            # second atom is placed in one direction only, others would merely
+            # be a rotaion around the axis with no score advantage
             if i == 1:
                 name = f'{p}{i}{i}'
                 globals()[name] = Node('R', parent=globals()[f'{protein[0]}00'])
@@ -72,7 +70,8 @@ def run(proti):
                 continue
 
             # determines how many nodes there are in in the previous tree layer
-            parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'], filter_=lambda node: node.is_leaf)))
+            parent_counter = len(list(PreOrderIter(globals()[f'{protein[0]}00'],\
+                                 filter_=lambda node: node.is_leaf)))
 
             # for each node, create a new one in every direction
             for j in range(len(directions) * parent_counter):
@@ -80,7 +79,8 @@ def run(proti):
                 # get the name of the parent node
                 parent = f'{protein[i - 1]}{i - 1}{j}'
 
-                # see if that parent exists, if not its score was too high and no further node along that branch has to be made
+                # see if that parent exists, if not its score was too high and
+                # no further node along that branch has to be made
                 try:
                     globals()[parent]
                 except:
@@ -104,13 +104,18 @@ def run(proti):
                     partial_score = partial_score_func(nodes_visited, proti)
 
                     # lowest score possible given the remaining atoms
-                    possible_score = possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, proti)
+                    possible_score = possible_score_func_dee(nodes_to_visit,\
+                                                             partial_score,\
+                                                             lowest_known_score,\
+                                                             proti)
 
                     if partial_score < lowest_known_score:
                         lowest_known_score = copy.deepcopy(partial_score)
 
-                    # new node is only made if it is possible to get a score lower than the lowest known score
-                    if partial_score + possible_score >= lowest_known_score and possible_score != 0:
+                    # new node is only made if it is possible to get a score
+                    # lower than the lowest known score
+                    if partial_score + possible_score >= lowest_known_score \
+                        and possible_score != 0:
                         breadth_counter += 1
                         continue
 
@@ -124,7 +129,8 @@ def run(proti):
                     if potential_score < lowest_score_k:
                         lowest_score_k = copy.deepcopy(potential_score)
 
-                    # this part only runs when the last atom is placed or the remaining atoms can't add to the score
+                    # this part only runs when the last atom is placed or the 
+                    # remaining atoms can't add to the score
                     if i == length - 1 or possible_score == 0:
                         # determine the path of the string
                         nodes_visited = [node.name for node in globals()[name].path]
@@ -165,14 +171,9 @@ def run(proti):
     print(f'Time: {runtime}')
     print(f'Conformation: \nx:{best_x}\ny:{best_y}')
     if len(nodes_to_visit) > 1:
-        print(f'{nodes_to_visit[1:]} are not placed since they would not add to the score')
+        print(f'{nodes_to_visit[1:]} are not placed since they would not \
+            add to the score')
     if len(best_x) == 0:
         print('No stable solution')
     else:
         dee_plot(best_x, best_y, best_score, loop_time, runtime, proti)
-
-
-
-
-if __name__ == "__main__":
-    main()

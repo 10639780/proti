@@ -1,4 +1,3 @@
-
 """ 
 genetic.py
 
@@ -42,7 +41,8 @@ def run(proti):
         mutation_chance = _max / (1 + math.exp((i - center )/ scale)) + _min
 
         # choose 2 parents from the population, make 2 children
-        parent1, parent2, child1, child2  = make_child(conformations_list, sample_size)   
+        parent1, parent2, child1, child2  = make_child(conformations_list,\
+                                                       sample_size)   
 
         # mutate the children 
         mutation1, mutation2 = mutate(child1, child2, mutation_chance, proti)
@@ -51,7 +51,8 @@ def run(proti):
         replace(parent1, parent2, mutation1, mutation2, conformations_list)
 
         # keep track of lowest score
-        best_yet.append(min([parent1, parent2, mutation1, mutation2], key=operator.itemgetter(1))[1])
+        best_yet.append(min([parent1, parent2, mutation1, mutation2], \
+                        key=operator.itemgetter(1))[1])
 
         # update the progress bar
         if i % 1000 == 0:

@@ -8,6 +8,7 @@ Tries to find the most stable configuration of the protein in 2D
 with a simulated annealing algorithm in 2D
 """
 
+# import modules
 from helpers import *
 import random
 import copy
@@ -15,6 +16,7 @@ import timeit
 from progress.bar import Bar
 
 def run(proti):
+
      # start timing the run of the code
     start = timeit.default_timer()
 
@@ -93,5 +95,4 @@ def run(proti):
     output(best_x, best_y, lowest_score, proti)
     plot_m(best_x, best_y, lowest_score, scores, proti)
 
-if __name__ == "__main__":
-    main()
+

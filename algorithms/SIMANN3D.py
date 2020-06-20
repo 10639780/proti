@@ -8,6 +8,7 @@ Tries to find the most stable configuration of the protein in 2D
 with a simulated annealing algorithm in 3D
 """
 
+# import modules
 from helpers import *
 import random
 import copy
@@ -15,6 +16,7 @@ import timeit
 from progress.bar import Bar
 
 def run(proti):
+
      # start timing the run of the code
     start = timeit.default_timer()
 
@@ -56,7 +58,7 @@ def run(proti):
         random_rotation_xyz(x, y, z, rotating_amino, proti)
 
         # if protein folded into itself restore and go back
-        if double_m(x, y):
+        if double_xyz(x, y, z):
             x = backup_x
             y = backup_y
             z = backup_z
@@ -99,5 +101,4 @@ def run(proti):
     output_xyz(best_x, best_y, best_z, lowest_score, proti)
     plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
 
-if __name__ == "__main__":
-    main()
+

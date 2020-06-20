@@ -9,6 +9,8 @@ in 'Solving Two-Dimensional HP Model by Firefly Algorithm and Simplified Energy 
 and Neal Lesh, Michael Mitzenmacher and Sue Whitesides 
 in 'A Complete and Effective Move Set for Simplified Protein Folding'.
 """
+
+# import modules
 import pandas as pd 
 from scipy.spatial import distance_matrix
 from scipy.spatial.distance import squareform
@@ -22,6 +24,7 @@ from progress.bar import Bar
 from helpers import *
 
 def run(proti):
+
     length = proti.length
     strings_created = 0
     lowest_score = 0
@@ -77,7 +80,8 @@ def run(proti):
             invalid = True
             for i in range(10):
                 while invalid:
-                    r[random.randint(0, len(r) - 1)] = ['S', 'L', 'R'][random.randint(0,2)]
+                    r[random.randint(0, len(r) - 1)] = \
+                        ['S', 'L', 'R'][random.randint(0,2)]
                     r_x, r_y = direction_to_xy(r)
                     if not double_xy(r_x, r_y):
                         invalid = False

@@ -6,6 +6,8 @@ Team Proti
 
 Folds protein into the (probably) most stable state using a Monte Carlo algorithm. 
 """
+
+# import modules
 from helpers import *
 import random
 import math
@@ -22,14 +24,15 @@ def run(proti):
     N = 100000
     rotation_counter = 0
 
-    # lists to keep track of the scores of each rotation and remember the one with the best score
+    # lists to keep track of the scores and best configuration 
     lowest_score = 0
     best_x = []
     best_y = []
     best_z = []
     scores = []
 
-    # probability functions depens on temperature and the boltzmann constant, can be set to their actual values if you want to be physically responsible
+    # probability functions depens on temperature and the boltzmann constant,
+    # can be set to their actual values if you want to be physically responsible
     temperature = 1
     boltzmann = 1
     
@@ -42,7 +45,8 @@ def run(proti):
         log_pos_z = copy.deepcopy(pos_z)
 
         # protein is folded randomly
-        random_rotation_xyz(pos_x, pos_y, pos_z, random.randint(0, proti.length - 1), proti)
+        random_rotation_xyz(pos_x, pos_y, pos_z, \
+                            random.randint(0, proti.length - 1), proti)
 
         # check whether the protein has not folded onto itself
         if double_xyz(pos_x, pos_y, pos_z):
@@ -66,7 +70,7 @@ def run(proti):
             best_z = copy.deepcopy(pos_z)
             lowest_score = copy.deepcopy(new_score)
 
-        # probability function to determine whether a fold will be 'accepted' or not, a lower score relative to the previous configuration increases the changes of adoption
+        # probability function to determine whether a fold will be 'accepted' 
         p = math.exp(-(new_score - old_score)/(temperature * boltzmann))
 
         # the treshhold for acceptance varies and is randomly determined
@@ -85,7 +89,3 @@ def run(proti):
     # the best structure is copied to a csv file and shown in a graph
     output_xyz(best_x, best_y, best_z, lowest_score, proti)
     plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
-
-
-if __name__ == "__main__":
-    main()
