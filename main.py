@@ -25,10 +25,23 @@ from algorithms import TREE
 from algorithms import GENETIC
 from algorithms import HC3D
 from classes.protein import Protein
-import re
 import sys
 
 if __name__ == "__main__":
+
+    # available algorithms
+    algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
+            'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
+            'SIMANN3D':SA3D,'SIMANN+':SAPLUS, 'SIMANN3D+':SAPLUS3D, \
+            'TREE':TREE, 'GENETIC':GENETIC} 
+
+    print("Available algorithms:")
+    for key in algos:
+        print(key)
+
+
+    # get algorithm for folding
+    algo = input("\n" + "Enter algorithm to run: ")
     
     # read available proteins from text file
     proteins = {}
@@ -44,17 +57,10 @@ if __name__ == "__main__":
             proteins[i] = protein
             print(f"ID: {i}, Protein: {protein}")
     
-    # available algorithms
-    algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
-            'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
-            'SIMANN3D':SA3D,'SIMANN+':SAPLUS, 'SIMANN3D+':SAPLUS3D, \
-            'TREE':TREE, 'GENETIC':GENETIC}   
-
-    # get algorithm for folding
-    algo = input("\n" + "Enter algorithm to run: ")
+    
 
     # get protein to fold
-    choose_protein = input("Which protein would you like to fold? Enter ID: ")
+    choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
 
     # protein information
     fold_protein = proteins[int(choose_protein)]
