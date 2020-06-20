@@ -17,6 +17,7 @@ from anytree import Node, RenderTree, Walker, PreOrderIter
 import operator
 import copy
 import math
+from classes.amino import *
 
 
 def possible_score_func(nodes_to_visit, partial_score, min_score):
@@ -1144,3 +1145,142 @@ def ff_plot(list_x, list_y, score, proti):
     ax1.set_title(f'Folded protein of length {proti.length}, score: {score}')
 
     plt.show()
+
+def output(list_x, list_y, score, proti):
+    """Prints the folded string to a csv file in the Bas Terwijn style."""
+
+    numbers = []
+   
+    for i in range(proti.length - 1):
+        
+        # new position is compared to the old
+        delta_x = list_x[i+1] - list_x[i]
+        delta_y = list_y[i+1] - list_y[i]
+
+        # conversion between coordinates  and bas terwijn numbers
+        if delta_x == 1:
+            number = -2
+        elif delta_x == -1:
+            number = 2
+        elif delta_y == 1:
+            number = 1
+        elif delta_y == -1:
+            number = -1
+        numbers.append(number)
+
+    # add 0 to signal end of protein
+    numbers.append(0)
+
+    # write the list to a file
+    f = open('output.csv', 'w')
+    f.write('amino,fold\n')
+    for p, n in zip(proti.listed, numbers):
+        f.write(f'{p}, {n}\n')
+    f.write(f'score,{score}') 
+    f.close()
+
+
+def tree_plot(list_x, list_y, score, proti):
+    """Makes a graph of two lists list_x, list_y."""
+    
+    # differentiate between types of atom
+    red_dots_x = []
+    red_dots_y = []
+    blue_dots_x = []
+    blue_dots_y = []
+    yellow_dots_x = []
+    yellow_dots_y = []
+
+    # search through protein and place each atom in the appropiate list
+    for x, y, p in zip(list_x, list_y, proti.listed):
+
+        if p == 'H':
+            red_dots_x.append(x)
+            red_dots_y.append(y)
+        if p == 'P':
+            blue_dots_x.append(x)
+            blue_dots_y.append(y)       
+        if p == 'C':
+            yellow_dots_x.append(x)
+            yellow_dots_y.append(y)
+
+    # create graphs with colors
+
+    plt.plot(list_x, list_y, '--', color='darkgrey')
+    plt.plot(red_dots_x, red_dots_y, 'or')
+    plt.plot(blue_dots_x, blue_dots_y, 'ob')
+    plt.plot(yellow_dots_x, yellow_dots_y, 'oy')
+    plt.title(f'Folded protein, score: {score}')
+
+    plt.show()
+
+
+def create_routes(root):
+    """Creates a list that hold all the possible configurations a protein could have."""
+
+    route_directions = []
+    
+    # list of all possible paths in the tree
+    paths = [list(leaf.path) for leaf in PreOrderIter(root, filter_=lambda node: node.is_leaf)] # copied from https://stackoverflow.com/questions/59917058/how-to-get-all-possible-branch-with-python-anytree
+
+    # add those paths to a list
+    for p in paths:
+        direction = []
+
+        for node in p:
+            direction.append(node.direction)
+
+        route_directions.append(direction)
+    
+    return route_directions
+
+
+def create_tree(proti):
+    """Create a tree structure, each atom can branch off into 4 directions, creating 4^n possible routes."""
+    directions = [[1,0],[-1,0],[0,1],[0,-1]]
+    node_counter = 0
+    parent_counter = 0
+    node_list = []
+    first = True
+    second = True
+    
+
+    for p, i in zip(proti.listed, [i for i in range(proti.length)]):
+
+        # first atom has no parents and is located at 0,0
+        if first:
+            root = Atom(p, [0,0])
+            node_list.append(root)
+            first = False
+            continue
+        
+        # second atom             # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0
+        if second:
+            node =  Atom(p, [1,0], parent=root)
+            node_list.append(node)
+            second = False
+            continue
+
+        for k in range((len(directions) - 1) ** (i - 2)):
+
+            # make sure the protein doesn't walk back into itself
+            previous_direction = copy.deepcopy(node_list[parent_counter + 1].direction)
+            previous_direction[0] = -previous_direction[0]
+            previous_direction[1] = -previous_direction[1]
+
+            temp_direction = copy.deepcopy(directions)
+
+            if previous_direction in temp_direction: 
+                temp_direction.remove(previous_direction)
+
+            # fill the tree and keep track of the parent child relations
+            for j in range(len(directions) - 1):
+            
+                j = Atom(p, temp_direction[j], parent=node_list[parent_counter + 1] )
+                node_list.append(j)
+
+                node_counter += 1
+                if node_counter % (len(directions) - 1) == 0:
+                    parent_counter += 1
+
+    return root
