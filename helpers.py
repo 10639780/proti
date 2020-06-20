@@ -1,3 +1,14 @@
+"""
+helpers.py
+
+Minor Programmeren 
+Team Proti
+
+Algorithms are implemented by calling the functions 
+in this script.
+"""
+
+# import modules
 import matplotlib.pyplot as plt
 import random
 from classes import protein
@@ -8,9 +19,11 @@ import copy
 import math
 
 
-
 def possible_score_func(nodes_to_visit, partial_score, min_score):
-    """Calculates the best score the remaining bit of the protein can acquire."""
+    """
+    Calculates the best score the remaining bit of the protein can acquire.
+    """
+
     #possible_start = timeit.default_timer()
     possible_score = 0
 
@@ -32,13 +45,12 @@ def possible_score_func(nodes_to_visit, partial_score, min_score):
     if possible_score + partial_score < min_score:
         possible_score = min_score - partial_score
 
-    #possible_stop = timeit.default_timer()
-    #possible_list.append(possible_stop - possible_start)
     return possible_score
 
-
 def plot_xyz(list_x, list_y, list_z, score, scores, proti):
-    """Makes a graph of two lists list_x, list_y."""
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
 
     # differentiate between types of atom
     red_dots_x = []
@@ -88,7 +100,9 @@ def plot_xyz(list_x, list_y, list_z, score, scores, proti):
     plt.show()
 
 def xyz_plot(string, score, proti):
-    # Makes a graph of three lists list_x, list_y and list_z.
+    """
+    Makes a graph of three lists list_x, list_y and list_z.
+    """
 
     list_x, list_y, list_z = direction_to_xyz(string)
 
@@ -133,7 +147,9 @@ def xyz_plot(string, score, proti):
     plt.show()
 
 def plot(string, score, runtime, proti):
-    """Makes a graph of two lists list_x, list_y."""
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
 
     list_x, list_y = direction_to_xy(string)
 
@@ -168,25 +184,13 @@ def plot(string, score, runtime, proti):
     ax1.axis('equal')
     ax1.set_title(f'Folded protein of length {proti.length}, score: {score}, total: {runtime}')
 
-    # ax2.plot(possible)
-    # ax2.set_title(f'possible score func, total: {sum(possible)}')
-
-    # ax3.plot(_score)
-    # ax3.set_title(f'score func, total: {sum(_score)}')
-
-    # ax4.plot(direction)
-    # ax4.set_title(f'direction to xy func, total: {sum(direction)}')
-
-    # ax5.plot(double)
-    # ax5.set_title(f'double func, total: {sum(double)}')
-
     plt.show()
 
-
 def plot_m(list_x, list_y, score, scores, proti):
-    """Makes a graph of two lists list_x, list_y."""
-    # list_x = [0, 1, 1, 0, 0, 0, 1, 1, 0, -1, -2, -2]
-    # list_y = [0, 0, 1, 1, 0, -1, -1, 0, 0, 0, 0, 1]
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
+    
     # differentiate between types of atom
     red_dots_x = []
     red_dots_y = []
@@ -225,8 +229,9 @@ def plot_m(list_x, list_y, score, scores, proti):
     plt.show()
 
 def score_func(string, proti):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
-    #score_start = timeit.default_timer()
+    """
+    Given the coordinates of a protein string, calculate the score of the shape.
+    """
 
     pos_x, pos_y = direction_to_xy(string)
 
@@ -258,20 +263,20 @@ def score_func(string, proti):
 
             index = coordinates.index(c)
 
-            if proti.listed[len(pos_x) - 1] == 'H' and (proti.listed[index] == 'H' or proti.listed[index] == 'C'):
+            if proti.listed[len(pos_x) - 1] == 'H' and \
+                (proti.listed[index] == 'H' or proti.listed[index] == 'C'):
                 score += -1
             elif proti.listed[len(pos_x) - 1] == 'C' and proti.listed[index] == 'H':
                 score += -1
             elif proti.listed[len(pos_x) - 1] == 'C' and proti.listed[index] == 'C':
                 score += -5
 
-    #score_stop = timeit.default_timer()
-    #score_list.append(score_stop - score_start)
     return score
 
-
 def score_xyz(list_x, list_y, list_z, proti):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
+    """
+    Given the coordinates of a protein string, calculate the score of the shape.
+    """
 
     # list to place the 'already scored' atoms into
     coordinates = []
@@ -286,7 +291,8 @@ def score_xyz(list_x, list_y, list_z, proti):
             # for every atom look around in all 6 directions
             for d in directions:
 
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
+                # check whether one of the previously placed atoms is in the vicinity 
+                # and determine the score of the interaction with it and the current atom
                 for j in range(len(coordinates)):
 
                     if [list_x[i] + d[0], list_y[i] + d[1], list_z[i] + d[2]] == coordinates[j] and not (
@@ -303,14 +309,15 @@ def score_xyz(list_x, list_y, list_z, proti):
                             if proti.listed[j] == 'H':
                                 score += -1
 
-                                # place in the list with coordinates
+        # place in the list with coordinates
         coordinates.append([list_x[i], list_y[i], list_z[i]])
 
     return score
 
-
 def xyz_score_func(string, proti):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
+    """
+    Given the coordinates of a protein string, calculate the score of the shape.
+    """
 
     # list to place the 'already scored' atoms into
     coordinates = []
@@ -327,7 +334,8 @@ def xyz_score_func(string, proti):
             # for every atom look around in all 6 directions
             for d in directions:
 
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
+                # check whether one of the previously placed atoms is in the vicinity 
+                # and determine the score of the interaction with it and the current atom
                 for j in range(len(coordinates)):
 
                     if [list_x[i] + d[0], list_y[i] + d[1], list_z[i] + d[2]] == coordinates[j] and not (
@@ -344,14 +352,16 @@ def xyz_score_func(string, proti):
                             if proti.listed[j] == 'H':
                                 score += -1
 
-                                # place in the list with coordinates
+        # place in the list with coordinates
         coordinates.append([list_x[i], list_y[i], list_z[i]])
 
     return score
 
-
 def direction_to_xy(string):
-    """Converts a series of string with directions like ['L', 'R'] to lists with xy positions."""
+    """
+    Converts a series of string with directions like ['L', 'R'] to lists with
+    xy positions.
+    """
     direction_list = []
     # first two aminos already placed
     pos_x = [0, 1]
@@ -379,13 +389,16 @@ def direction_to_xy(string):
 
     return pos_x, pos_y
 
-
 def direction_to_xyz(string):
-    """Converts a series of string with directions like ['L', 'R', 'U', 'D'] to lists with xyz positions."""
+    """
+    Converts a series of string with directions like ['L', 'R', 'U', 'D'] to
+    lists with xyz positions.
+    """
 
     pos_x = [0, 1]
     pos_y = [0, 0]
     pos_z = [0, 0]
+
     # go over every node
     for s in string:
 
@@ -423,18 +436,24 @@ def direction_to_xyz(string):
     return pos_x, pos_y, pos_z
 
 def double(string):
-    """Checks whether two atoms occupy the same point."""
+    """
+    Checks whether two atoms occupy the same point.
+    """
+
     list_x, list_y = direction_to_xy(string)
     coordinates = []
     for x, y in zip(list_x, list_y):
         coordinates.append((x, y))
     if len(coordinates) == len(set(coordinates)):
         return False
+
     return True
 
-
 def double_xy(list_x, list_y):
-    """Checks whether two atoms occupy the same point."""
+    """
+    Checks whether two atoms occupy the same point.
+    """
+    
     coordinates = []
     # see if a coordinate is already in the list, then add that coordinate to the list
     for x, y in zip(list_x, list_y):
@@ -444,9 +463,10 @@ def double_xy(list_x, list_y):
 
     return False
 
-
 def double_xyz(list_x, list_y, list_z):
-    """Checks whether two atoms occupy the same point."""
+    """
+    Checks whether two atoms occupy the same point.
+    """
 
     coordinates = []
 
@@ -454,27 +474,32 @@ def double_xyz(list_x, list_y, list_z):
     for x, y, z in zip(list_x, list_y, list_z):
         if [x, y, z] in coordinates:
             return True
+
         coordinates.append([x, y, z])
 
     return False
 
-
 def xyz_double(string):
-    """Checks whether two atoms occupy the same point."""
+    """
+    Checks whether two atoms occupy the same point.
+    """
 
     list_x, list_y, list_z = direction_to_xyz(string)
     coordinates = []
+
     # see if a coordinate is already in the list, then add that coordinate to the list
     for x, y, z in zip(list_x, list_y, list_z):
         if [x, y, z] in coordinates:
             return True
+
         coordinates.append([x, y, z])
 
     return False
 
-
 def output_xyz(list_x, list_y, list_z, score, proti):
-    """Prints the folded string to a csv file in the Bas Terwijn style."""
+    """
+    Prints the folded string to a csv file in the Bas Terwijn style.
+    """
 
     numbers = []
 
@@ -511,9 +536,10 @@ def output_xyz(list_x, list_y, list_z, score, proti):
     f.write(f'score,{score}')
     f.close()
 
-
 def output(list_x, list_y, score, proti):
-    """Prints the folded string to a csv file in the Bas Terwijn style."""
+    """
+    Prints the folded string to a csv file in the Bas Terwijn style.
+    """
 
     numbers = []
 
@@ -545,9 +571,10 @@ def output(list_x, list_y, score, proti):
     f.write(f'score,{score}')
     f.close()
 
-
 def score(list_x, list_y, proti):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
+    """
+    Given the coordinates of a protein string, calculate the score of the shape.
+    """
 
     # list to place the 'already scored' atoms into
     coordinates = []
@@ -563,7 +590,8 @@ def score(list_x, list_y, proti):
             # for every atom look around in all 4 directions
             for d in directions:
 
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
+                # check whether one of the previously placed atoms is in the 
+                # vicinity and determine the score of the interaction with it and the current atom
                 for j in range(len(coordinates)):
 
                     if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not (
@@ -579,14 +607,16 @@ def score(list_x, list_y, proti):
                             if proti.listed[j] == 'H':
                                 score += -1
 
-                                # place in the list with coordinates
+        # place in the list with coordinates
         coordinates.append([list_x[i], list_y[i]])
 
     return score
 
-
 def random_rotation_xyz(list_x, list_y, list_z, n, proti):
-    """Rotates the string 90 degrees to the left, right, up or down from the nth atom onwards."""
+    """
+    Rotates the string 90 degrees to the left, right, up or down from the nth
+    atom onwards.
+    """
 
     rotation_point_x = list_x[n]
     rotation_point_y = list_y[n]
@@ -595,7 +625,8 @@ def random_rotation_xyz(list_x, list_y, list_z, n, proti):
     # rotation direction is chosen at random
     p = random.random()
 
-    # calculates the new positions for the remainder of the string using the equations from a 3D rotation matrix
+    # calculates the new positions for the remainder of the string using the
+    #  equations from a 3D rotation matrix
     for i in range(n + 1, proti.length):
 
         relative_x = list_x[i] - rotation_point_x
@@ -623,9 +654,10 @@ def random_rotation_xyz(list_x, list_y, list_z, n, proti):
             list_y[i] = rotation_point_y + relative_y
             list_z[i] = rotation_point_z - relative_x
 
-
 def random_rotation(list_x, list_y, n, proti):
-    """Rotates the string 90 degrees to the left or right from the nth atom onwards."""
+    """
+    Rotates the string 90 degrees to the left or right from the nth atom onwards.
+    """
 
     rotation_point_x = list_x[n]
     rotation_point_y = list_y[n]
@@ -633,7 +665,8 @@ def random_rotation(list_x, list_y, n, proti):
     # left or right rotation are randomly chosen
     p = random.random()
 
-    # calculates the new positions for the remainder of the string using the equations from a 2D rotation matrix
+    # calculates the new positions for the remainder of the string using the
+    #  equations from a 2D rotation matrix
     for i in range(n + 1, proti.length):
 
         relative_x = list_x[i] - rotation_point_x
@@ -648,9 +681,11 @@ def random_rotation(list_x, list_y, n, proti):
             list_x[i] = rotation_point_x + relative_y
             list_y[i] = rotation_point_y - relative_x
 
-
 def replace(parent1, parent2, mutation1, mutation2, conformations_list):
-    """Replaces the fittest offspring with either the least fit parent or member of the population."""
+    """
+    Replaces the fittest offspring with either the least fit parent or member 
+    of the population.
+    """
 
     # determine best child, worst parent
     best_offspring = min([mutation1, mutation2], key=operator.itemgetter(1))
@@ -660,6 +695,7 @@ def replace(parent1, parent2, mutation1, mutation2, conformations_list):
     if best_offspring[1] < worst_parent[1]:
         index = conformations_list.index(worst_parent)
         conformations_list[index] = best_offspring
+
     # otherwise look for replacement option in the population
     else:
         worst_population = max(conformations_list, key=operator.itemgetter(1))
@@ -668,27 +704,33 @@ def replace(parent1, parent2, mutation1, mutation2, conformations_list):
             conformations_list[index] = best_offspring
 
 def mutate(child1, child2, p, proti):
-    """Causes random mutations of the directions in the conformations."""
+    """
+    Causes random mutations of the directions in the conformations.
+    """
 
     # convert to lists to make the tuple mutable
     child1_list = list(child1)
     child2_list = list(child2)
 
     for i in range(len(child1_list)):
+
         # random number (0,1)
         r1 = random.random()
         r2 = random.random()
 
         possible = False
         if r1 < p:
+
             # save copy
             backup = copy.deepcopy(child1_list[i])
+
             # check if mutation would be possible without making the conformation invalid
             for d in random.sample(['L', 'R', 'S'],3):
                 child1_list[i] = d
                 if not double(''.join(child1_list)):
                     possible = True 
                     break
+
             # undo the mutation if it would invalidate the conformation
             if not possible:
                 child1_list[i] = backup
@@ -708,14 +750,17 @@ def mutate(child1, child2, p, proti):
     child2_list = ''.join(child2_list)
 
     # return the mutated conformations along with their scores
-    return (child1_list,score_whole_string(child1_list, proti)), (child2_list, score_whole_string(child2_list, proti))
-
+    return (child1_list,score_whole_string(child1_list, proti)), \
+        (child2_list, score_whole_string(child2_list, proti))
 
 def make_child(conformations_list, sample_size):
-    """Produces offspring using two parents."""
+    """
+    Produces offspring using two parents.
+    """
     child_not_made = True
 
     while child_not_made:
+
         # choose two parent from a pool of potential parents
         parent1, parent2 = choose_parents(conformations_list, sample_size)
 
@@ -729,15 +774,17 @@ def make_child(conformations_list, sample_size):
     
     return parent1, parent2, child1, child2
 
-
 def crossover(parent1, parent2):
-    """Uses crossover to producre a child from two parents."""
+    """
+    Uses crossover to producre a child from two parents.
+    """
 
     # select point of adjoinment at random
     n = random.randint(0, len(parent1[0]) - 1)
 
     # get the part of one parent up to the nth element
     partial_parent1 = parent1[0][:n]
+
     # get the part of the other parent from the n+1th elment onwards
     partial_parent2 = parent2[0][n+1:]
 
@@ -753,9 +800,11 @@ def crossover(parent1, parent2):
     # indicate that the conformation is invalid
     return ('impossible', 1)
 
-
 def choose_parents(conformations_list, sample_size):
-    """Takes two random samples from the population, chooses the best of each sample to be a parent."""
+    """
+    Takes two random samples from the population, chooses the best of each 
+    sample to be a parent.
+    """
 
     # make pools
     pool1 = random.sample(conformations_list, sample_size)
@@ -767,8 +816,10 @@ def choose_parents(conformations_list, sample_size):
 
     return parent1, parent2
 
-
 def initial_population(n, proti):
+    """
+    Initialize populatin for tree.
+    """
     
     conformations_list = []
     return_list = []
@@ -800,7 +851,8 @@ def create_individual(proti):
                 available_directions.append(d)
         
         try:
-            random_direction = available_directions[random.randint(0, len(available_directions) - 1)]
+            random_direction = available_directions[random.randint(0,\
+                                                    len(available_directions) - 1)]
             conformation += random_direction
         except:
             i = 0
@@ -811,8 +863,12 @@ def create_individual(proti):
     return conformation
 
 def score_whole_string(string, proti):
-    """Given the coordinates of a protein string, calculate the score of the shape."""
+    """
+    Given the coordinates of a protein string, calculate the score of the shape.
+    """
+
     list_x, list_y = direction_to_xy(string)
+
     # list to place the 'already scored' atoms into
     coordinates = []
     directions = [[-1,0],[0,1],[1,0],[0,-1]]
@@ -826,10 +882,13 @@ def score_whole_string(string, proti):
             # for every atom look around in all 4 directions
             for d in directions:
 
-                # check whether one of the previously placed atoms is in the vicinity and determine the score of the interaction with it and the current atom
+                # check whether one of the previously placed atoms is in the vicinity 
+                # and determine the score of the interaction with it and the current atom
                 for j in range(len(coordinates)):
 
-                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] and not(list_x[i] + d[0] == list_x[i-1] and list_y[i] + d[1] == list_y[i-1]):
+                    if [list_x[i] + d[0], list_y[i] + d[1]] == coordinates[j] \
+                        and not(list_x[i] + d[0] == list_x[i-1] \
+                        and list_y[i] + d[1] == list_y[i-1]):
                         
                         if proti.listed[i] == 'H':
                             if proti.listed[j] == 'H' or proti.listed[j] == 'C':
@@ -846,9 +905,10 @@ def score_whole_string(string, proti):
     
     return score
 
-
 def genetic_plot(string, score, best_yet, proti):
-    """Makes a graph of two lists list_x, list_y."""
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
     
     list_x, list_y = direction_to_xy(string)
 
@@ -889,7 +949,9 @@ def genetic_plot(string, score, best_yet, proti):
     plt.show()
 
 def dee_plot(list_x, list_y, score, loop_time, total_time, proti):
-    """Makes a graph of two lists list_x, list_y."""
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
 
     # differentiate between types of atom
     red_dots_x = []
@@ -929,7 +991,10 @@ def dee_plot(list_x, list_y, score, loop_time, total_time, proti):
     plt.show()
 
 def nodes_to_xy(nodes_visited):
-    """Converts a series of string with directions like ['left', 'right'] to lists with xy positions."""
+    """
+    Converts a series of string with directions like ['left', 'right'] 
+    to lists with xy positions.
+    """
 
     pos_x = [0, 1]
     pos_y = [0, 0]
@@ -959,7 +1024,9 @@ def nodes_to_xy(nodes_visited):
     return pos_x, pos_y
 
 def partial_score_func(nodes_visited, proti):
-    """Calculates the socre obtained by the nodes visit so far."""
+    """
+    Calculates the socre obtained by the nodes visit so far.
+    """
 
     pos_x, pos_y = nodes_to_xy(nodes_visited)
 
@@ -972,7 +1039,9 @@ def partial_score_func(nodes_visited, proti):
     return partial_score
 
 def possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, proti):
-    """Calculates the best score the remaining bit of the protien can acquire."""
+    """
+    Calculates the best score the remaining bit of the protien can acquire.
+    """
 
     possible_score = 0
 
@@ -999,7 +1068,9 @@ def possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, p
     return possible_score
 
 def random_rotation_ff(list_x, list_y):
-    """Rotates the string 90 degrees to the left or right from the nth atom onwards."""
+    """
+    Rotates the string 90 degrees to the left or right from the nth atom onwards.
+    """
 
     n = random.randint(0, length - 1)
 
@@ -1009,7 +1080,8 @@ def random_rotation_ff(list_x, list_y):
     # left or right rotation are randomly chosen
     p = random.random()
 
-    # calculates the new positions for the remainder of the string using the equations from a 2D rotation matrix
+    # calculates the new positions for the remainder of the string using
+    # the equations from a 2D rotation matrix
     for i in range(n + 1, length):
        
         relative_x = list_x[i] - rotation_point_x
@@ -1025,6 +1097,10 @@ def random_rotation_ff(list_x, list_y):
             list_y[i] = rotation_point_y - relative_x
 
 def similarities(list_x1, list_y1, list_x2, list_y2):
+    """
+    Check similarities between lists
+    """
+
     d = 0
 
     for x1, y1, x2, y2 in zip(list_x1, list_y1, list_x2, list_y2):
@@ -1033,7 +1109,9 @@ def similarities(list_x1, list_y1, list_x2, list_y2):
     return d
 
 def ff_plot(list_x, list_y, score, proti):
-    """Makes a graph of two lists list_x, list_y."""
+    """
+    Makes a graph of two lists list_x, list_y.
+    """
     
     # differentiate between types of atom
     red_dots_x = []

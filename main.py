@@ -1,6 +1,7 @@
 """
-Minor Programmeren
+main.py 
 
+Minor Programmeren
 Team Proti
 
 All the algorithms can be accessed.
@@ -10,6 +11,7 @@ The available proteins and their respective ID's are printed to the terminal
 for the user to see
 """
 
+# import modules
 from algorithms import BFBAB as BF
 from algorithms import BFBAB3D as BF3D
 from algorithms import DEE
