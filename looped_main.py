@@ -53,7 +53,7 @@ def main():
         print(f'line: {line}')
         algo = 'BFBAB'
         for i in range(30):
-            # run choosen algorithm
+            # run selected algorithm
             try:
                 time, score, conform = algos[algo].run(proti)
             except:
@@ -67,9 +67,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
