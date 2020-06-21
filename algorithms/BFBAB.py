@@ -136,5 +136,7 @@ def run(proti):
     print(f'Score: {lowest_score}')
     print(f'Total runtime: {total_time}')
     print(f'Configuration: {best_config}')
-    plot(best_config, lowest_score, total_time, proti)
+    # plot(best_config, lowest_score, total_time, proti)
+
+    return total_time, lowest_score, best_config
 

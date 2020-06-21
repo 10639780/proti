@@ -21,7 +21,7 @@ def run(proti):
     pos_z = [0] * proti.length
 
     # number of iterations, higher N is better result
-    N = 100000
+    N = 1000
     rotation_counter = 0
 
     # lists to keep track of the scores and best configuration 

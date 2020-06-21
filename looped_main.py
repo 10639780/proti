@@ -30,47 +30,39 @@ from classes.protein import Protein
 import sys
 
 def main():
+
     # available algorithms
     algos = {'BFBAB':BF, 'BFBAB3D':BF3D, 'DEE':DEE, 'FF':FF, 'HC':HC, \
             'HC3D':HC3D, 'MONTE':MONTE, 'MONTE3D':M3D, 'SIMANN':SA, \
             'SIMANN3D':SA3D,'SIMANN+':SAPLUS, 'SIMANN3D+':SAPLUS3D, \
             'TREE':TREE, 'GENETIC':GENETIC} 
 
-    print("Available algorithms:")
-    for key in algos:
-        print(f"{key} - ", end =" ")
-
-    # get algorithm for folding
-    algo = input("\n" + "Enter algorithm to run: ")
+    proteins = ['HHPHHHPH','HHPHHHPHPHHHPH','HPHPPHHPHPPHPHHPPHPH','PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP','HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH','PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP','CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC','HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH','HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH']
     
-    # read available proteins from text file
-    proteins = {}
-    filename = "proteins.txt"
+    r = open('BFBAB_results', 'w')
 
-    with open(filename, "r") as file:
-        lines = file.readlines()
+    for line in proteins:
+        line.strip("\n")
+        time_list = []
+        score_list = []
+        conform_list = []
 
-        print("Available proteins: ")
-        # save protein string in a dictionary to choose from
-        for i in range(len(lines)):
-            protein = lines[i].strip("\n")             
-            proteins[i] = protein
-            print(f"ID: {i}, Protein: {protein}")
-    
-    # get protein to fold
-    choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
- 
-    # protein information
-    fold_protein = proteins[int(choose_protein)]
-    length = len(fold_protein)
-    proti = Protein(fold_protein, length)
-
-    # check if algorithm name exists
-    if algo not in algos:
-        sys.exit("Algorithm not found. Please try again")
-
-    # run choosen algorithm
-    algos[algo].run(proti)
+        fold_protein = line
+        length = len(fold_protein)
+        proti = Protein(fold_protein, length)
+        print(f'line: {line}')
+        algo = 'BFBAB'
+        for i in range(30):
+            # run choosen algorithm
+            try:
+                time, score, conform = algos[algo].run(proti)
+            except:
+                time, score, conform = 0, 0, 'not found'
+            time_list.append(time)
+            score_list.append(score)
+            conform_list.append(conform)
+        
+        r.write(f'sequence = {line}\ntime = {time_list}\nscore = {score_list}\nconform = {conform_list}\n')
 
 
 if __name__ == "__main__":
