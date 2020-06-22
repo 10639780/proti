@@ -28,7 +28,7 @@ def run(proti, N):
     length = proti.length
     strings_created = 0
     lowest_score = 0
-    population = 50
+    population = 100
     # N = 500
 
     routes = []    
@@ -61,7 +61,7 @@ def run(proti, N):
                     route.append(['S', 'L', 'R'][random.randint(0,2)])
                 
                 # pos_x, pos_y = direction_to_xy(route)
-                if not double(pos_x, pos_y):
+                if not double(route):
                     r = route
 
             score = score_whole_string(r, proti)
