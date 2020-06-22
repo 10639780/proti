@@ -5,7 +5,7 @@ Minor Programmeren
 Team Proti
 
 Folds protein into the (probably) most stable state using a Monte Carlo algorithm. 
-Insprired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment. 
+Inspired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment.
 """
 
 # import modules
