@@ -15,7 +15,7 @@ import copy
 import timeit
 from progress.bar import Bar
 
-def run(proti):
+def run(proti,N):
 
      # start timing the run of the code
     start = timeit.default_timer()
@@ -25,7 +25,8 @@ def run(proti):
     y = [0] * proti.length
     
     # high number of iterations for optimising result
-    iterations = 1000
+    iterations = 20000
+    iterations = N
     rotations = 0
 
     # initialize progress bar
@@ -64,7 +65,7 @@ def run(proti):
         new_score = score(x, y, proti)
 
         # drop temperature gradually
-        temperature = start_temp * (0.997 ** rotations)
+        temperature = start_temp * (0.997 ** rotations) + 0.1
         acceptance_chance = 2 ** (-(new_score - old_score) / temperature)
         treshhold = random.random()
 
@@ -91,8 +92,9 @@ def run(proti):
     stop = timeit.default_timer()
     print('Runtime', stop - start, 'seconds')
 
-    # render the output and plot the figure
-    output(best_x, best_y, lowest_score, proti)
-    plot_m(best_x, best_y, lowest_score, scores, proti)
+    # # render the output and plot the figure
+    # output(best_x, best_y, lowest_score, proti)
+    # plot_m(best_x, best_y, lowest_score, scores, proti)
 
 
+    return stop-start, lowest_score, [best_x, best_y]

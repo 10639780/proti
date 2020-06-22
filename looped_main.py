@@ -39,7 +39,7 @@ def main():
 
     proteins = ['HHPHHHPH','HHPHHHPHPHHHPH','HPHPPHHPHPPHPHHPPHPH','PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP','HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH','PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP','CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC','HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH','HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH']
     
-    r = open('HC_results.txt', 'w')
+    r = open('SIMANN+_results.txt', 'w')
 
     for line in proteins:
         line.strip("\n")
@@ -51,12 +51,12 @@ def main():
         length = len(fold_protein)
         proti = Protein(fold_protein, length)
         print(f'line: {line}')
-        algo = 'HC'
+        algo = 'SIMANN+'
         
         for i in range(30):
             # run selected algorithm
             try:
-                time, score, conform = algos[algo].run(proti, 333 * i)
+                time, score, conform = algos[algo].run(proti, 33 * i)
             except:
                 time, score, conform = 0, 0, 'not found'                                                                                                                                                                                                                                                     
             time_list.append(time)
