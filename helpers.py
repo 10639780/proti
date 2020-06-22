@@ -89,7 +89,9 @@ def plot_xyz(list_x, list_y, list_z, score, scores, proti):
     ax.plot(blue_dots_x, blue_dots_y, blue_dots_z, 'ob')
     ax.plot(yellow_dots_x, yellow_dots_y, yellow_dots_z, 'oy')
     ax.set_title(f'Folded protein, score: {score}')
-    plt.savefig("monte3dfig.png")
+    #plt.savefig("monte3dfig.png")
+    plt.savefig('images/' + 'monte3Dfig-{}.png'.format(BT_string))
+
     plt.show()
 
     # graph of scores
@@ -97,7 +99,8 @@ def plot_xyz(list_x, list_y, list_z, score, scores, proti):
     plt.title('Scores of the configurations after each rotation')
     plt.xlabel('Rotation')
     plt.ylabel('Score')
-    plt.savefig("monte3dstats.png")
+    #plt.savefig("monte3dstats.png")
+    plt.savefig('images/' + 'monte3dstats-{}.png'.format(BT_string) , bbox_inches='tight')
     plt.show()
 
 def xyz_plot(string, score, proti):
