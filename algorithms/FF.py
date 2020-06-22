@@ -23,13 +23,13 @@ import matplotlib.pyplot as plt
 from progress.bar import Bar
 from helpers import *
 
-def run(proti):
+def run(proti, N):
 
     length = proti.length
     strings_created = 0
     lowest_score = 0
-    population = 100
-    N = 20
+    population = 50
+    # N = 500
 
     routes = []    
     best_route = []
@@ -105,4 +105,6 @@ def run(proti):
     print(f'Score: {score}')
     print(f'Time: {runtime}')
     print(f'Conformation: {route_string}')
-    ff_plot(pos_x, pos_y, score, proti)
+    # ff_plot(pos_x, pos_y, score, proti)
+
+    return runtime, score, route_string

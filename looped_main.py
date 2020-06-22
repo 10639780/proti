@@ -39,7 +39,7 @@ def main():
 
     proteins = ['HHPHHHPH','HHPHHHPHPHHHPH','HPHPPHHPHPPHPHHPPHPH','PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP','HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH','PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP','CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC','HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH','HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH']
     
-    r = open('BFBAB_results', 'w')
+    r = open('GENETIC_results.txt', 'w')
 
     for line in proteins:
         line.strip("\n")
@@ -51,19 +51,21 @@ def main():
         length = len(fold_protein)
         proti = Protein(fold_protein, length)
         print(f'line: {line}')
-        algo = 'BFBAB'
+        algo = 'GENETIC'
+        
         for i in range(30):
-            # run choosen algorithm
+            # run selected algorithm
             try:
-                time, score, conform = algos[algo].run(proti)
+                time, score, conform = algos[algo].run(proti, 200 * i)
             except:
-                time, score, conform = 0, 0, 'not found'
+                time, score, conform = 0, 0, 'not found'                                                                                                                                                                                                                                                     
             time_list.append(time)
             score_list.append(score)
             conform_list.append(conform)
         
         r.write(f'sequence = {line}\ntime = {time_list}\nscore = {score_list}\nconform = {conform_list}\n')
 
+    r.close()
 
 if __name__ == "__main__":
     main()
