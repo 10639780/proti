@@ -64,7 +64,7 @@ def plot_xyz(list_x, list_y, list_z, score, scores, proti):
     yellow_dots_y = []
     yellow_dots_z = []
 
-    # search through protein and place each atom in the appropiate list
+    # search through protein and place each atom in the appropriate list
     for x, y, z, p in zip(list_x, list_y, list_z, proti.listed):
 
         if p == 'H':
@@ -226,7 +226,7 @@ def plot_m(list_x, list_y, score, scores, proti):
     ax2.plot(scores)
     ax2.set_title('Scores of the configurations after each rotation')
     ax2.set(xlabel='Rotation', ylabel='Score')
-    plt.savefig("monte2D.png")
+    fig.savefig('images/' + 'monte2D-{}.png'.format(proti.listed))
     plt.show()
 
 def score_func(string, proti):
