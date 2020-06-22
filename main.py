@@ -38,7 +38,7 @@ def main():
 
     print("Available algorithms:")
     for key in algos:
-        print(f"{key} - ", end =" ")
+        print(f"{key} - ", end ="")
 
     # get algorithm for folding
     algo = input("\n" + "Enter algorithm to run: ")
@@ -75,9 +75,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
