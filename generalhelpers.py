@@ -1,5 +1,5 @@
 """
-helpers.py
+generalhelpers.py
 
 Minor Programmeren 
 Team Proti
@@ -19,7 +19,7 @@ import copy
 import math
 from classes.amino import *
 from classes.protein import *
-from helpersrepeated import * 
+
 
 def plot(proti, score, list_x, list_y, list_z=False, scores=False):
     """
@@ -291,6 +291,76 @@ def double(list_x, list_y, list_z=False):
 
     return False
 
+
+def random_rotation_xy(list_x, list_y, n, proti):
+    """
+    Rotates the string 90 degrees to the left or right from the nth atom onwards.
+    """
+
+    rotation_point_x = list_x[n]
+    rotation_point_y = list_y[n]
+
+    # left or right rotation are randomly chosen
+    p = random.random()
+
+    # calculates the new positions for the remainder of the string using the
+    #  equations from a 2D rotation matrix
+    for i in range(n + 1, proti.length):
+
+        relative_x = list_x[i] - rotation_point_x
+        relative_y = list_y[i] - rotation_point_y
+
+        if p > 0.5:
+            # rotate left
+            list_x[i] = rotation_point_x - relative_y
+            list_y[i] = rotation_point_y + relative_x
+        else:
+            # rotate right
+            list_x[i] = rotation_point_x + relative_y
+            list_y[i] = rotation_point_y - relative_x
+
+def random_rotation_xyz(list_x, list_y, list_z, n, proti):
+    """
+    Rotates the string 90 degrees to the left, right, up or down from the nth
+    atom onwards.
+    """
+
+    rotation_point_x = list_x[n]
+    rotation_point_y = list_y[n]
+    rotation_point_z = list_z[n]
+
+    # rotation direction is chosen at random
+    p = random.random()
+
+    # calculates the new positions for the remainder of the string using the
+    #  equations from a 3D rotation matrix
+    for i in range(n + 1, proti.length):
+
+        relative_x = list_x[i] - rotation_point_x
+        relative_y = list_y[i] - rotation_point_y
+        relative_z = list_z[i] - rotation_point_z
+
+        if p < 0.25:
+            # rotate left
+            list_x[i] = rotation_point_x - relative_y
+            list_y[i] = rotation_point_y + relative_x
+            list_z[i] = rotation_point_z + relative_z
+        elif p > 0.25 and p < 0.5:
+            # rotate right
+            list_x[i] = rotation_point_x + relative_y
+            list_y[i] = rotation_point_y - relative_x
+            list_z[i] = rotation_point_z + relative_z
+        elif p > 0.5 and p < 0.75:
+            # rotate up
+            list_x[i] = rotation_point_x - relative_z
+            list_y[i] = rotation_point_y + relative_y
+            list_z[i] = rotation_point_z + relative_x
+        elif p > 0.75:
+            # rotate down
+            list_x[i] = rotation_point_x + relative_z
+            list_y[i] = rotation_point_y + relative_y
+            list_z[i] = rotation_point_z - relative_x
+
     
 def output(proti, score, list_x, list_y, list_z=False):
     """
@@ -336,168 +406,5 @@ def output(proti, score, list_x, list_y, list_z=False):
     f.write(f'score,{score}')
     f.close()
 
-
-def random_rotation_xyz(list_x, list_y, list_z, n, proti):
-    """
-    Rotates the string 90 degrees to the left, right, up or down from the nth
-    atom onwards.
-    """
-
-    rotation_point_x = list_x[n]
-    rotation_point_y = list_y[n]
-    rotation_point_z = list_z[n]
-
-    # rotation direction is chosen at random
-    p = random.random()
-
-    # calculates the new positions for the remainder of the string using the
-    #  equations from a 3D rotation matrix
-    for i in range(n + 1, proti.length):
-
-        relative_x = list_x[i] - rotation_point_x
-        relative_y = list_y[i] - rotation_point_y
-        relative_z = list_z[i] - rotation_point_z
-
-        if p < 0.25:
-            # rotate left
-            list_x[i] = rotation_point_x - relative_y
-            list_y[i] = rotation_point_y + relative_x
-            list_z[i] = rotation_point_z + relative_z
-        elif p > 0.25 and p < 0.5:
-            # rotate right
-            list_x[i] = rotation_point_x + relative_y
-            list_y[i] = rotation_point_y - relative_x
-            list_z[i] = rotation_point_z + relative_z
-        elif p > 0.5 and p < 0.75:
-            # rotate up
-            list_x[i] = rotation_point_x - relative_z
-            list_y[i] = rotation_point_y + relative_y
-            list_z[i] = rotation_point_z + relative_x
-        elif p > 0.75:
-            # rotate down
-            list_x[i] = rotation_point_x + relative_z
-            list_y[i] = rotation_point_y + relative_y
-            list_z[i] = rotation_point_z - relative_x
-
-def random_rotation_xy(list_x, list_y, n, proti):
-    """
-    Rotates the string 90 degrees to the left or right from the nth atom onwards.
-    """
-
-    rotation_point_x = list_x[n]
-    rotation_point_y = list_y[n]
-
-    # left or right rotation are randomly chosen
-    p = random.random()
-
-    # calculates the new positions for the remainder of the string using the
-    #  equations from a 2D rotation matrix
-    for i in range(n + 1, proti.length):
-
-        relative_x = list_x[i] - rotation_point_x
-        relative_y = list_y[i] - rotation_point_y
-
-        if p > 0.5:
-            # rotate left
-            list_x[i] = rotation_point_x - relative_y
-            list_y[i] = rotation_point_y + relative_x
-        else:
-            # rotate right
-            list_x[i] = rotation_point_x + relative_y
-            list_y[i] = rotation_point_y - relative_x
-
-def make_child(conformations_list, sample_size):
-    """
-    Produces offspring using two parents.
-    """
-    child_not_made = True
-
-    while child_not_made:
-
-        # choose two parent from a pool of potential parents
-        parent1, parent2 = choose_parents(conformations_list, sample_size)
-
-        # use crossover between the parents to make children
-        child1 = crossover(parent1, parent2)
-        child2 = crossover(parent1, parent2)
-
-        # make sure that the children have valid conformations
-        if not (child1[0] == 'impossible' or child2[0] == 'impossible'):
-            child_not_made = False
-    
-    return parent1, parent2, child1, child2
-
-
-def crossover(parent1, parent2):
-    """
-    Uses crossover to producre a child from two parents.
-    """
-
-    # select point of adjoinment at random
-    n = random.randint(0, len(parent1[0]) - 1)
-
-    # get the part of one parent up to the nth element
-    partial_parent1 = parent1[0][:n]
-
-    # get the part of the other parent from the n+1th elment onwards
-    partial_parent2 = parent2[0][n+1:]
-
-    # try different adjoinment directions
-    for d in random.sample(['L', 'R', 'S'],3):
-        
-        child_string = partial_parent1 + d + partial_parent2
-
-        # return is the conformation is valid
-        if not double(child_string):
-            return child_string
-
-    # indicate that the conformation is invalid
-    return ('impossible', 1)
-
-
-def initial_population(n, proti):
-    """
-    Initialize populatin for tree.
-    """
-    
-    conformations_list = []
-    return_list = []
-
-    for i in range(2 * n):
-        conformation_string = create_individual(proti)
-        score = score_whole_string(conformation_string, proti)
-        conformation = (conformation_string, score)
-        conformations_list.append(conformation)
-
-    conformations_list.sort(key=operator.itemgetter(1))
-
-    for i in range(n):
-        return_list.append(conformations_list[i])
-
-    return return_list
-
-
-        
-
-
-
-if __name__ == "__main__":
-    x = [i for i in range(20)]
-    y = [i for i in range(20)]
-    z = [i for i in range(20)]
-    scores = [0] * 20
-    bool_score = 0
-
-    proteinstring = 'HPHPPHHPHPPHPHHPPHPH'
-    length = len(proteinstring)
-    proti = Protein(proteinstring, length)
-
-    # test = plot(proti=proti, score=bool_score, list_x=x, list_y=y)
-
-    # string = 'LRSLRSLRS'
-    # test1 = plot(proti=proti, score=bool_score, scores=scores, list_x = x, list_y=y, list_z=z)
-
-    # test_score = score(proti=proti, list_x=x, list_y=y)
-    # print(test_score)
 
 
