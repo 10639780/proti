@@ -4,15 +4,11 @@ Minor Programmeren
 Team Proti
 Determines the highest possible score a protein fold can get.
 """
-from anytree import Node, RenderTree, NodeMixin, LevelOrderGroupIter, PreOrderIter
-import copy
-import matplotlib.pyplot as plt 
-from helpers import *
+from treehelpers import *
+from generalhelpers import *
 import timeit
 
-
 def run(proti):
-
     start = timeit.default_timer()
 
     # create a tree with all possible folds
@@ -38,7 +34,6 @@ def run(proti):
 
         # lists all filled with coordinates of the atoms
         for d in r:
-
             x += d[0]
             y += d[1]
 
@@ -46,14 +41,14 @@ def run(proti):
             pos_y.append(y)
 
         # discard all the structures that fold into themselves
-        if double_xy(pos_x, pos_y):
+        if double(pos_x, pos_y):
             invalid_solutions += 1
             continue
         
         # calculate te score of the current structure
-        current_score = score(pos_x, pos_y, proti)
+        current_score = score_con(pos_x, pos_y, proti)
 
-        # save the structure with the lowest score
+        # save the structure with the best score
         if current_score < lowest_score:
             best_x = copy.deepcopy(pos_x)
             best_y = copy.deepcopy(pos_y)
@@ -61,16 +56,8 @@ def run(proti):
             same_score_counter = 0
         if current_score == lowest_score:
             same_score_counter += 1
-    
-    # print(f'Invalid solutions: {invalid_solutions}')
-    # print(f'Same score solutions: {same_score_counter}')
-    # print(f'Lowest score: {lowest_score}')
 
-
-    # print(f'Length')
-    # # plot the structure with the best score
-    # tree_plot(best_x, best_y, lowest_score, proti)
-
+    # plot the structure with the best score
     stop = timeit.default_timer()
     total_time = stop - start
     print(f'Length: {proti.length}')
