@@ -12,6 +12,8 @@ and on 'Genetic Algorithm for Predicting Protein Folding in the 2D HP Model' by 
 from genetichelpers import *
 from progress.bar import Bar
 import timeit
+import math
+
 
 
 def run(proti):
