@@ -8,12 +8,10 @@ Uses a Dead End Elimination like algorithm described by Okke to create a tree
 of all routes that are possibly lower than a preset score.
 """
 # import modules
-from anytree import Node, RenderTree, Walker, PreOrderIter
+from anytree import Node, PreOrderIter
 import copy
 import timeit
 from progress.bar import Bar
-from statistics import mean
-import random
 from deehelpers import * 
 from generalhelpers import double, score_it
 
