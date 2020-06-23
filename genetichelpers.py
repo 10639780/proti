@@ -9,11 +9,11 @@ in this script.
 """
 
 # import modules
+from helpers import *
 import matplotlib.pyplot as plt
 import random
 import operator
 import copy
-
 
 
 def initial_population(n, proti):
@@ -82,7 +82,7 @@ def mutate(child1, child2, p, proti):
             backup = copy.deepcopy(child1_list[i])
 
             # check if mutation would be possible without making the conformation invalid
-            for d in random.sample(['L', 'R', 'S'],3):
+            for d in random.sample(['L', 'R', 'S'], 3):
                 child1_list[i] = d
                 if not double(''.join(child1_list)):
                     possible = True 
@@ -95,7 +95,7 @@ def mutate(child1, child2, p, proti):
         possible = False
         if r2 < p:
             backup = copy.deepcopy(child2_list[i])
-            for d in random.sample(['L', 'R', 'S'],3):
+            for d in random.sample(['L', 'R', 'S'], 3):
                 child2_list[i] = d
                 if not double(''.join(child2_list)):
                     possible = True 
@@ -107,7 +107,7 @@ def mutate(child1, child2, p, proti):
     child2_list = ''.join(child2_list)
 
     # return the mutated conformations along with their scores
-    return (child1_list,score_whole_string(child1_list, proti)), \
+    return (child1_list, score_whole_string(child1_list, proti)), \
         (child2_list, score_whole_string(child2_list, proti))
 
 
@@ -132,6 +132,7 @@ def replace(parent1, parent2, mutation1, mutation2, conformations_list):
         if best_offspring < worst_population:
             index = conformations_list.index(worst_population)
             conformations_list[index] = best_offspring
+
 
 def genetic_plot(string, score, best_yet, proti):
     """
@@ -175,4 +176,3 @@ def genetic_plot(string, score, best_yet, proti):
     ax2.set_title('Lowest score per iteration')
 
     plt.show()
-
