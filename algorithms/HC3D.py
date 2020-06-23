@@ -47,13 +47,13 @@ def run(proti):
         backup_z = copy.deepcopy(z)
 
         # remember the previous score
-        old_score = score_it(list_x=backup_x, list_y=backup_y, list_z=backup_z,\
+        old_score = score_it(list_x=backup_x, list_y=backup_y, list_z=backup_z,
                              proti=proti)
         scores.append(old_score)
 
         # fold protein at a random amino
         rotating_amino = random.randint(0, proti.length - 1)
-        random_rotation_xyz(list_x=x, list_y=y, list_z=z, n=rotating_amino,\
+        random_rotation_xyz(list_x=x, list_y=y, list_z=z, n=rotating_amino,
                             proti=proti) 
 
         # if protein folded into itself restore and go back
@@ -92,9 +92,9 @@ def run(proti):
     print('Runtime:', stop - start, 'seconds')
 
     # render the output and plot the figure
-    output(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score,\
+    output(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score,
            proti=proti)
-    plot(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score,\ 
+    plot(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score, 
          scores=scores, proti=proti)
 
 
