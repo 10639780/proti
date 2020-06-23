@@ -15,12 +15,21 @@ import copy
 import timeit
 import random
 import queue
-from helpers import *
+# from helpers import *
+from generalhelpers import directions, xyz_double, score_it, plot
+from deehelpers import possible_score_func_dee
+from progress.bar import Bar
+
 
 def run(proti):
 
     # start timer
     start = timeit.default_timer()
+
+    bar  = Bar('Progress', max=proti.length)
+    bar.next()
+    bar.next()
+    k = 0
 
     # specifications for depth first tree building
     depth = proti.length - 2
@@ -47,8 +56,8 @@ def run(proti):
 
         state = q.get()
         # if all aminos are placed, put the string in a list
-
-        if len(state) == depth and not xyz_double(state):
+        state_x, state_y, state_z = directions(state)
+        if len(state) == depth and not xyz_double(state_x, state_y, state_z):
             final_configurations.append(state)
       
         if len(state) < depth:
@@ -59,11 +68,15 @@ def run(proti):
 
                 # string after potentialy placing the next amino
                 child += i 
-
+                
+                child_x, child_y, child_z = directions(child)
                 # discard the string folding into themselves
-                if xyz_double(child):
+                if xyz_double(child_x, child_y, child_z):
                     continue
                 
+                if len(child) + 1 > k:
+                    bar.next()
+
                 # identify how for into the string it is
                 k = len(child) + 1
                 
@@ -71,11 +84,11 @@ def run(proti):
                 if not proti.listed[k] == 'P':
 
                     # score if placed 
-                    score = xyz_score_func(child, proti)
+                    score = score_it(proti, child_x, child_y, child_z)
 
                     # min score to get from remaining aminos
-                    possible_score = possible_score_func(proti.listed[k+1:],\
-                                                         score, proti.min_score)
+                    possible_score = possible_score_func_dee(proti.listed[k+1:],\
+                                                         score, proti.min_score, proti)
 
                     if score + possible_score > lowest_score:
                         continue
@@ -111,14 +124,20 @@ def run(proti):
 
     # weed out the best configuration from the remaining strings
     for c in final_configurations:
-        if xyz_score_func(c, proti) < lowest_score:
+        c_x, c_y, c_z = directions(c)
+        if score_it(proti, c_x, c_y, c_z) < lowest_score:
             best_config = copy.deepcopy(c)
-            lowest_score = copy.deepcopy(xyz_score_func(c, proti))
+            lowest_score = copy.deepcopy(score_it(proti, c_x, c_y, c_z))
 
+    best_x, best_y, best_z = directions(best_config)
+
+    bar.finish()
     # plot the result
     stop = timeit.default_timer()
-    print(f'Strings made: {len(final_configurations)}')
     print(f'Length: {proti.length}')
     print(f'Score: {lowest_score}')
-    print(f'Runtime: {stop - start}')
-    xyz_plot(best_config, lowest_score, proti)
+    print(f'Time: {stop - start}')
+    print(f'Conformation: {best_config}')
+    plot(proti, lowest_score, best_x, best_y, best_z)
+        
+        # best_config, lowest_score, proti)

@@ -10,12 +10,14 @@ Folding Problem in the HP Lattice Model' (2005).
 """
 
 # import modules
-from helpers import *
+
+from generalhelpers import direction_to_xy, double, score_con, plot
 import copy
 import timeit
 import random
 import queue
 from progress.bar import Bar
+from deehelpers import partial_score_func, possible_score_func_dee
 
 def run(proti):
 
@@ -53,7 +55,8 @@ def run(proti):
         state = q.get()
 
         # if all aminos are placed, put the string in a list
-        if len(state[0]) == depth and not double(state[0]):
+        state_x, state_y = direction_to_xy(state[0])
+        if len(state[0]) == depth and not double(state_x, state_y):
             final_configurations.append(state)
       
         if len(state[0]) < depth:
@@ -66,7 +69,8 @@ def run(proti):
                 temp_list[0] += i
                 child = tuple(temp_list)
 
-                if double(child[0]):
+                child_x, child_y = direction_to_xy(child[0])
+                if double(child_x, child_y):
                     continue
                 
                 if len(child[0]) + 1 > k:
@@ -76,10 +80,10 @@ def run(proti):
 
                 # P's are always placed, rest have some conditions
                 if not proti.listed[k] == 'P':
-                    score = child[1] + score_func(child[0], proti)
+                    score = child[1] + score_con(child_x, child_y, proti)
                     
-                    possible_score = possible_score_func(proti.listed[k+1:], \
-                                                         score, proti.min_score)
+                    possible_score = possible_score_func_dee(proti.listed[k+1:], \
+                                                         score, proti.min_score, proti)
 
                     if score + possible_score > lowest_score:
                         continue
@@ -127,15 +131,15 @@ def run(proti):
             best_config = copy.deepcopy(c[0])
             lowest_score = copy.deepcopy(c[1])
 
+    best_x, best_y = direction_to_xy(best_config)
     # plot the result
     stop = timeit.default_timer()
     total_time = stop - start
     bar.finish()
     print(f'Length: {proti.length}')
     print(f'Score: {lowest_score}')
-    print(f'Total runtime: {total_time}')
-    print(f'Configuration: {best_config}')
-    plot(best_config, lowest_score, total_time, proti)
-
+    print(f'Time: {total_time}')
+    print(f'Conformation: {best_config}')
+    plot(proti, lowest_score, best_x, best_y)
     return total_time, lowest_score, best_config
 
