@@ -378,7 +378,6 @@ def output(proti, score, list_x, list_y, list_z=False):
         # new position is compared to the old
         delta_x = list_x[i + 1] - list_x[i]
         delta_y = list_y[i + 1] - list_y[i]
-        delta_z = list_z[i + 1] - list_z[i]
 
         # conversion between coordinates  and bas terwijn numbers
         if delta_x == 1:
