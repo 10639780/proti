@@ -107,6 +107,7 @@ def score(proti, list_x, list_y, list_z=False):
 
     return score
 
+
 def double(list_x, list_y, list_z=False):
     
 
@@ -120,10 +121,53 @@ def double(list_x, list_y, list_z=False):
             return True
         
         coordinates.append([x, y, z])
+
     return False
 
     
+def output(proti, score, list_x, list_y, list_z=False):
+    """
+    Prints the folded string to a csv file in the Bas Terwijn style.
+    """
 
+    numbers = []
+
+    for i in range(proti.length - 1):
+
+        # new position is compared to the old
+        delta_x = list_x[i + 1] - list_x[i]
+        delta_y = list_y[i + 1] - list_y[i]
+        delta_z = list_z[i + 1] - list_z[i]
+
+        # conversion between coordinates  and bas terwijn numbers
+        if delta_x == 1:
+            number = -2
+        elif delta_x == -1:
+            number = 2
+        elif delta_y == 1:
+            number = 1
+        elif delta_y == -1:
+            number = -1
+
+        if list_z:
+            delta_z = list_z[i + 1] - list_z[i]
+            if delta_z == 1:
+                number = 3
+            elif delta_z == -1:
+                number = -3
+
+        numbers.append(number)
+
+    # add 0 to signal end of protein
+    numbers.append(0)
+
+    # write the list to a file
+    f = open('output.csv', 'w')
+    f.write('amino,fold\n')
+    for p, n in zip(proti.listed, numbers):
+        f.write(f'{p}, {n}\n')
+    f.write(f'score,{score}')
+    f.close()
         
 
 
