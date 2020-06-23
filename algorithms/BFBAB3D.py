@@ -13,10 +13,8 @@ Basis for breadth first structure from Bas Terwijn's lecture.
 # import modules
 import copy
 import timeit
-import random
 import queue
-# from helpers import *
-from generalhelpers import directions, xyz_double, score_it, plot
+from generalhelpers import *
 from deehelpers import possible_score_func_dee
 from progress.bar import Bar
 
@@ -57,7 +55,7 @@ def run(proti):
         state = q.get()
         # if all aminos are placed, put the string in a list
         state_x, state_y, state_z = directions(state)
-        if len(state) == depth and not xyz_double(state_x, state_y, state_z):
+        if len(state) == depth and not double(state_x, state_y, state_z):
             final_configurations.append(state)
       
         if len(state) < depth:
@@ -71,7 +69,7 @@ def run(proti):
                 
                 child_x, child_y, child_z = directions(child)
                 # discard the string folding into themselves
-                if xyz_double(child_x, child_y, child_z):
+                if double(child_x, child_y, child_z):
                     continue
                 
                 if len(child) + 1 > k:

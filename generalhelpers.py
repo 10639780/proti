@@ -441,18 +441,3 @@ def direction_to_xy(string):
             pos_y.append(pos_y[-1] - delta_x)
 
     return pos_x, pos_y
-
-def xyz_double(list_x, list_y, list_z):
-    """
-    Checks whether two atoms occupy the same point.
-    """
-    coordinates = []
-
-    # see if a coordinate is already in the list, then add that coordinate to the list
-    for x, y, z in zip(list_x, list_y, list_z):
-        if [x, y, z] in coordinates:
-            return True
-
-        coordinates.append([x, y, z])
-
-    return False
