@@ -9,7 +9,7 @@ Inspired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment
 """
 
 # import modules
-from helpers import *
+from generalhelpers import *
 import random
 import math
 import copy
@@ -41,7 +41,6 @@ def run(proti):
 
     # probability functions depens on temperature and the boltzmann constant, 
     # can be set to their actual values if you want to be physically responsible
-    temperature = 1
     boltzmann = 1
     prob = []
     
@@ -51,25 +50,25 @@ def run(proti):
         _max = 10
         scale = N/20
         center = 9 * N / 40
-        temperature = _max / (1 + math.exp((rotation_counter - center )/ scale)) + 0.5
+        temperature = _max / (1 + math.exp((rotation_counter - center) / scale)) + 0.5
 
         # a copy is made in case the fold is invalid or unfavourable
         log_pos_x = copy.deepcopy(pos_x)
         log_pos_y = copy.deepcopy(pos_y)
 
         # protein is folded randomly
-        random_rotation(pos_x, pos_y, random.randint(0, proti.length - 1), proti)
+        random_rotation_xy(pos_x, pos_y, random.randint(0, proti.length - 1), proti)
 
         # check whether the protein has not folded onto itself
-        if double_xy(pos_x, pos_y):
+        if double(pos_x, pos_y):
             # if it is folded wrongly, restore to the previous configuration
             pos_x = log_pos_x
             pos_y = log_pos_y
             continue
-        
+
         # calculate the scores of the old and new structure
-        old_score = score(log_pos_x, log_pos_y, proti)
-        new_score = score(pos_x, pos_y, proti)
+        old_score = score_it(proti, log_pos_x, log_pos_y)
+        new_score = score_it(proti, pos_x, pos_y)
         
         # keep track of each score
         scores.append(old_score)
@@ -95,13 +94,11 @@ def run(proti):
         if rotation_counter % 1000 == 0:
             bar.next()
             prob.append(p)
-            
 
     bar.finish()
     stop = timeit.default_timer()
-    print('Runtime:', stop - start,'seconds') 
+    print('Runtime:', stop - start, 'seconds')
 
     # the best structure is copied to a csv file and shown in a graph
-    output(best_x, best_y, lowest_score, proti)
-    plot_m(best_x, best_y, lowest_score, scores, proti)
-
+    output(proti, lowest_score, best_x, best_y)
+    #plot(proti, lowest_score, best_x, best_y, scores)
