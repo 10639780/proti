@@ -30,6 +30,7 @@ def run(proti):
     bar.next()
     bar.next()
     k = 0
+    amino_time = []
 
     # specifications for depth first tree building
     depth = proti.length - 2
@@ -51,6 +52,7 @@ def run(proti):
         lowest_score_k[i] = 0
         all_scores_k[i] = [0]
 
+    amino_start = timeit.default_timer()
     # create a breadth first tree
     while not q.empty():
 
@@ -75,7 +77,10 @@ def run(proti):
                     continue
                 
                 if len(child) + 1 > k:
+                    amino_stop = timeit.default_timer()
+                    amino_time.append(amino_stop-amino_start)
                     bar.next()
+                    amino_start = timeit.default_timer()
 
                 # identify how for into the string it is
                 k = len(child) + 1
@@ -138,6 +143,6 @@ def run(proti):
     print(f'Score: {lowest_score}')
     print(f'Time: {stop - start}')
     print(f'Conformation: {best_config}')
-    plot(proti, lowest_score, best_x, best_y, best_z)
+    plot(proti, lowest_score, best_x, best_y,'Time per amino placement', 'Amino', 'Time[s]', best_z, scores=amino_time)
         
         # best_config, lowest_score, proti)

@@ -24,6 +24,7 @@ def run(proti):
     # start timing script run time
     start = timeit.default_timer()
 
+    # pruning chance, higher values mean a faster program but the results may not be as good
     p1 = 0.99
     p2 = 0.98
 
@@ -32,6 +33,7 @@ def run(proti):
     bar.next()
     bar.next()
     k = 0
+    amino_time = []
 
     # specifications for breadth first tree building
     depth = proti.length - 2
@@ -49,6 +51,7 @@ def run(proti):
         lowest_score_k[i] = 0
         all_scores_k[i] = [0]
 
+    amino_start = timeit.default_timer()
     # create a breadth first tree
     while not q.empty():
 
@@ -73,9 +76,14 @@ def run(proti):
                 if double(child_x, child_y):
                     continue
                 
+                
                 if len(child[0]) + 1 > k:
+                    amino_stop = timeit.default_timer()
+                    amino_time.append(amino_stop-amino_start)
                     bar.next()
-          
+                    amino_start = timeit.default_timer()
+
+
                 k = len(child[0]) + 1
 
                 # P's are always placed, rest have some conditions
@@ -140,6 +148,6 @@ def run(proti):
     print(f'Score: {lowest_score}')
     print(f'Time: {total_time}')
     print(f'Conformation: {best_config}')
-    plot(proti, lowest_score, best_x, best_y)
+    plot(proti, lowest_score, best_x, best_y, 'Time per amino placement', 'Amino', 'Time[s]', scores=amino_time)
     return total_time, lowest_score, best_config
 

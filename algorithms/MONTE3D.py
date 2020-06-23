@@ -90,4 +90,4 @@ def run(proti):
 
     # the best structure is copied to a csv file and shown in a graph
     output(proti, lowest_score, best_x, best_y, best_z)
-    plot(proti, lowest_score, best_x, best_y, best_z, scores)
+    plot(proti, lowest_score, best_x, best_y, 'Score after rotation', 'Rotation', 'Score',best_z, scores=scores)

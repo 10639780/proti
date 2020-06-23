@@ -35,6 +35,7 @@ def run(proti):
 
     routes = []    
     best_route = []
+    best_yet = []
 
     start = timeit.default_timer()
     bar = Bar('Progress', max=N/100)
@@ -73,7 +74,7 @@ def run(proti):
             if score <= lowest_score:
                 lowest_score = copy.deepcopy(score)
                 best_route = copy.deepcopy(r)
-
+                best_yet.append(score)
         # bend the rest so as to be more like the best score
         for r in routes:
 
@@ -109,6 +110,6 @@ def run(proti):
     print(f'Score: {score}')
     print(f'Time: {runtime}')
     print(f'Conformation: {route_string}')
-    plot(proti, score, pos_x, pos_y)
+    plot(proti, score, pos_x, pos_y, 'Lowest score', 'Iteration', 'Score', scores=best_yet)
 
     return runtime, score, route_string

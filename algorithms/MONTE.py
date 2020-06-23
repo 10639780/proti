@@ -102,5 +102,5 @@ def run(proti):
 
     # the best structure is copied to a csv file and shown in a graph
     output(proti=proti, score=lowest_score, list_x=best_x, list_y=best_y)
-    plot(proti=proti, score=lowest_score, list_x=best_x, list_y=best_y,
-         scores=scores)
+    plot(proti, lowest_score, best_x, best_y, 'Score after rotation', 'Rotation',
+        'Score', scores=scores)

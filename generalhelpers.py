@@ -23,7 +23,7 @@ from classes.protein import *
 '''
 
 
-def plot(proti, score, list_x, list_y, list_z=False, scores=False):
+def plot(proti, score, list_x, list_y, title, xlabel, ylabel, list_z=False, scores=False):
     """
     Plots a 2D or 3D fold of the protein in space.
     Also displays the scores of the fold for every iteration.
@@ -45,8 +45,8 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
         ax1.axis('equal')
 
         ax2.plot(scores)
-        ax2.set_title('Scores of the configurations after each rotation')
-        ax2.set(xlabel='Rotation', ylabel='Score')
+        ax2.set_title(title)
+        ax2.set(xlabel=xlabel, ylabel=ylabel)
 
     # otherwise plot 3D
     else:
@@ -61,8 +61,8 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
         
         ax = fig.add_subplot(2, 1, 2)
         ax.plot(scores)
-        ax.set_title('Scores of the configurations after each rotation')
-        ax.set(xlabel='Rotation', ylabel='Score')
+        ax.set_title(title)
+        ax.set(xlabel=xlabel, ylabel=ylabel)
 
     plt.show()
 

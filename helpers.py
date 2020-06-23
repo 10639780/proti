@@ -483,12 +483,10 @@ def double_xyz(list_x, list_y, list_z):
 
     return False
 
-def xyz_double(string):
+def xyz_double(list_x, list_y, list_z):
     """
     Checks whether two atoms occupy the same point.
     """
-
-    list_x, list_y, list_z = direction_to_xyz(string)
     coordinates = []
 
     # see if a coordinate is already in the list, then add that coordinate to the list
