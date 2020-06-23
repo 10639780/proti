@@ -12,4 +12,7 @@ For the DEE algorithm (2D) we would like to thank Okke for getting us on the rig
 
 For the Firefly algorithm (2D) we took inspiration from: Zhang, Yudong, Lenan Wu, and Shuihua Wang. "Solving two-dimensional HP model by firefly algorithm and simplified energy function." Mathematical Problems in Engineering 2013 (2013).
 
+The Genetic algorithm was based on Bui, Thang N., and Gnanasekaran Sundarraj. "An efficient genetic algorithm for predicting protein tertiary structures in the 2D HP model." Proceedings of the 7th annual conference on Genetic and evolutionary computation. 2005, supplemented by Halm, Eyal. "Genetic Algorithm for Predicting Protein Folding in the 2D HP Model." where we found the crossover funtion.
+
+The idea to start with a full string and rotate in random directions in Monte Carlo was insprired by Ramji T. Venkatasubramanian's Computational Nanomechanics class assignment which somehow made its way to the internet. 
 
