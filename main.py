@@ -41,7 +41,7 @@ def main():
         print(f"{key} - ", end ="")
 
     # get algorithm for folding
-    algo = input("\n" + "Enter algorithm to run: ")
+    algo = input("\n" + "Enter algorithm to run: ").upper()
     
     # read available proteins from text file
     proteins = {}

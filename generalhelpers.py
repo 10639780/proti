@@ -37,6 +37,7 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
 
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
 
+        ax1.plot(list_x, list_y, '--', color='darkgrey')
         ax1.plot(H_coords[0], H_coords[1], 'or')
         ax1.plot(P_coords[0], P_coords[1], 'ob')
         ax1.plot(C_coords[0], C_coords[1], 'oy')
@@ -52,6 +53,7 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
         fig = plt.figure()
 
         ax = fig.add_subplot(2,1, 1, projection='3d')
+        ax.plot(list_x, list_y, list_z, '--', color='darkgrey')
         ax.plot(H_coords[0], H_coords[1], H_coords[2], 'or')
         ax.plot(P_coords[0], P_coords[1], P_coords[2], 'ob')
         ax.plot(C_coords[0], C_coords[1], C_coords[2], 'oy')
@@ -376,7 +378,6 @@ def output(proti, score, list_x, list_y, list_z=False):
         # new position is compared to the old
         delta_x = list_x[i + 1] - list_x[i]
         delta_y = list_y[i + 1] - list_y[i]
-        delta_z = list_z[i + 1] - list_z[i]
 
         # conversion between coordinates  and bas terwijn numbers
         if delta_x == 1:
