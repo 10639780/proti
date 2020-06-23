@@ -4,6 +4,7 @@ Minor Programmeren
 Team Proti
 Determines the highest possible score a protein fold can get.
 """
+
 from treehelpers import *
 from generalhelpers import double, score_con
 import timeit

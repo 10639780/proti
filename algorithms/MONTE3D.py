@@ -8,7 +8,7 @@ Folds protein into the (probably) most stable state using a Monte Carlo algorith
 """
 
 # import modules
-from generalhelpers import *
+from generalhelpers import score_it, random_rotation_xyz, double, output, plot
 import random
 import math
 import copy
@@ -46,9 +46,10 @@ def run(proti):
         log_pos_z = copy.deepcopy(pos_z)
 
         # protein is folded randomly
-        random_rotation_xyz(pos_x, pos_y, pos_z,
-                            random.randint(0, proti.length - 1), proti)
-
+        rotating_amino = random.randint(0, proti.length - 1)
+        random_rotation_xyz(list_x=pos_x, list_y=pos_y, list_z=pos_z, n=rotating_amino,
+                            proti=proti)
+        
         # check whether the protein has not folded onto itself
         if double(pos_x, pos_y, pos_z):
             # if it is folded wrongly, restore to the previous configuration

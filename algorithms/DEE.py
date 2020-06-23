@@ -14,7 +14,8 @@ import timeit
 from progress.bar import Bar
 from statistics import mean
 import random
-from helpers import * 
+from deehelpers import * 
+from generalhelpers import double
 
 def run(proti):
     length = proti.length
