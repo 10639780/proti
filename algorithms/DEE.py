@@ -15,7 +15,7 @@ from progress.bar import Bar
 from statistics import mean
 import random
 from deehelpers import * 
-from generalhelpers import double
+from generalhelpers import double, score_it
 
 def run(proti):
     length = proti.length
@@ -143,11 +143,12 @@ def run(proti):
                         pos_x, pos_y = nodes_to_xy(nodes_visited)
 
                         # disregard foldings onto itself
-                        if double_xy(pos_x, pos_y):
+                        if double(list_x=pos_x, list_y=pos_y):
                             continue
 
                         # get the structures score
-                        current_score = score(pos_x, pos_y, proti)
+                        current_score = score_it(list_x=pos_x, list_y=pos_y, 
+                                                 proti=proti)
 
                         # save if it is an improvemnt
                         if current_score <= best_score:
