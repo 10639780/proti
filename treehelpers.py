@@ -10,16 +10,9 @@ in this script.
 
 # import modules
 import matplotlib.pyplot as plt
-import random
-from classes import protein
-from mpl_toolkits import mplot3d
-from anytree import Node, RenderTree, Walker, PreOrderIter
-import operator
+from anytree import PreOrderIter
 import copy
-import math
 from classes.amino import *
-from classes.protein import *
-
 
 def create_tree(proti):
     """Create a tree structure, each atom can branch off into 4 directions, creating 4^n possible routes."""
