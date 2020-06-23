@@ -11,12 +11,8 @@ in this script.
 # import modules
 import matplotlib.pyplot as plt
 import random
-from classes import protein
-from mpl_toolkits import mplot3d
 from anytree import Node, RenderTree, Walker, PreOrderIter
-import operator
 import copy
-import math
 from generalhelpers import double, score_it
 
 
