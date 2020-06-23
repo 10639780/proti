@@ -42,6 +42,10 @@ def main():
 
     # get algorithm for folding
     algo = input("\n" + "Enter algorithm to run: ").upper()
+
+    # check if algorithm name exists
+    if algo not in algos:
+        sys.exit("Algorithm not found. Please try again.")
     
     # read available proteins from text file
     proteins = {}
@@ -60,14 +64,14 @@ def main():
     # get protein to fold
     choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
  
-    # protein information
-    fold_protein = proteins[int(choose_protein)]
-    length = len(fold_protein)
-    proti = Protein(fold_protein, length)
+    # check if id input valid
+    try:
+        fold_protein = proteins[int(choose_protein)]
+    except ValueError:
+        sys.exit("Invalid input. Restart program.")
 
-    # check if algorithm name exists
-    if algo not in algos:
-        sys.exit("Algorithm not found. Please try again")
+    length = len(fold_protein)
+    proti = Protein(fold_protein, length)    
 
     # run choosen algorithm
     algos[algo].run(proti)
