@@ -102,7 +102,7 @@ def tree_plot(list_x, list_y, score, proti):
     yellow_dots_x = []
     yellow_dots_y = []
 
-    # search through protein and place each atom in the appropiate list
+    # search through protein and place each atom in the appropriate list
     for x, y, p in zip(list_x, list_y, proti.listed):
 
         if p == 'H':
