@@ -9,11 +9,12 @@ in this script.
 """
 
 # import modules
-from helpers import *
 import matplotlib.pyplot as plt
 import random
 import operator
 import copy
+from generalhelpers import double, directions, score_it
+
 
 
 def initial_population(n, proti):
@@ -26,7 +27,8 @@ def initial_population(n, proti):
 
     for i in range(2 * n):
         conformation_string = create_individual(proti)
-        score = score_whole_string(conformation_string, proti)
+        x, y, z = directions(conformation_string)
+        score = score_it(proti=proti, list_x=x, list_y=y, list_z=z)
         conformation = (conformation_string, score)
         conformations_list.append(conformation)
 
@@ -84,7 +86,8 @@ def mutate(child1, child2, p, proti):
             # check if mutation would be possible without making the conformation invalid
             for d in random.sample(['L', 'R', 'S'], 3):
                 child1_list[i] = d
-                if not double(''.join(child1_list)):
+                x, y, z = directions(''.join(child1_list))
+                if not double(x, y, z):
                     possible = True 
                     break
 
@@ -97,7 +100,8 @@ def mutate(child1, child2, p, proti):
             backup = copy.deepcopy(child2_list[i])
             for d in random.sample(['L', 'R', 'S'], 3):
                 child2_list[i] = d
-                if not double(''.join(child2_list)):
+                x, y, z = directions(''.join(child2_list))
+                if not double(x, y, z):
                     possible = True 
                     break
             if not possible:
@@ -107,8 +111,37 @@ def mutate(child1, child2, p, proti):
     child2_list = ''.join(child2_list)
 
     # return the mutated conformations along with their scores
-    return (child1_list, score_whole_string(child1_list, proti)), \
-        (child2_list, score_whole_string(child2_list, proti))
+    x1, y1, z1 = directions(child1_list)
+    x2, y2, z2 = directions(child2_list)
+    return (child1_list, score_it(proti, x1, y1, z1)), \
+        (child2_list, score_it(proti, x2, y2, z2))
+
+def create_individual(proti):
+    
+    conformation = ''
+    direction = ['L', 'R', 'S']
+
+    i = 1
+    while i < proti.length - 1:
+        available_directions = []
+
+        for d in direction: 
+            x_pos, y_pos, z_pos = directions(conformation + d)     
+            if not double(x_pos, y_pos, z_pos):
+                available_directions.append(d)
+        
+        try:
+            random_direction = available_directions[random.randint(0,\
+                                                    len(available_directions) - 1)]
+            conformation += random_direction
+        except:
+            i = 0
+            conformation = ''
+    
+        i += 1
+  
+    return conformation
+
 
 
 def replace(parent1, parent2, mutation1, mutation2, conformations_list):
@@ -133,13 +166,55 @@ def replace(parent1, parent2, mutation1, mutation2, conformations_list):
             index = conformations_list.index(worst_population)
             conformations_list[index] = best_offspring
 
+def choose_parents(conformations_list, sample_size):
+    """
+    Takes two random samples from the population, chooses the best of each 
+    sample to be a parent.
+    """
+
+    # make pools
+    pool1 = random.sample(conformations_list, sample_size)
+    pool2 = random.sample(conformations_list, sample_size)
+
+    # choose the best
+    parent1 = min(pool1, key=operator.itemgetter(1))
+    parent2 = min(pool2, key=operator.itemgetter(1))
+
+    return parent1, parent2
+
+def crossover(parent1, parent2):
+    """
+    Uses crossover to producre a child from two parents.
+    """
+
+    # select point of adjoinment at random
+    n = random.randint(0, len(parent1[0]) - 1)
+
+    # get the part of one parent up to the nth element
+    partial_parent1 = parent1[0][:n]
+
+    # get the part of the other parent from the n+1th elment onwards
+    partial_parent2 = parent2[0][n+1:]
+
+    # try different adjoinment directions
+    for d in random.sample(['L', 'R', 'S'],3):
+        
+        child_string = partial_parent1 + d + partial_parent2
+        x, y, z = directions(child_string)
+        # return is the conformation is valid
+        if not double(x, y, z):
+            return child_string
+
+    # indicate that the conformation is invalid
+    return ('impossible', 1)
+
 
 def genetic_plot(string, score, best_yet, proti):
     """
     Makes a graph of two lists list_x, list_y.
     """
     
-    list_x, list_y = direction_to_xy(string)
+    list_x, list_y, list_z = directions(string)
 
     # differentiate between types of atom
     red_dots_x = []
