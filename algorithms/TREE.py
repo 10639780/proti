@@ -77,6 +77,6 @@ def run(proti):
     print(f'Score: {lowest_score}')
     print(f'Total runtime: {total_time}')
     print(f'Configuration:\nx:{best_x}\ny:{best_y}')
-    # tree_plot(best_x, best_y, lowest_score, proti)
+    tree_plot(best_x, best_y, lowest_score, proti)
 
     return total_time, lowest_score, [best_x, best_y]

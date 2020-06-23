@@ -16,7 +16,7 @@ import copy
 import timeit
 from progress.bar import Bar
 
-def run(proti, N):
+def run(proti):
 
      # start timing the run of the code
     start = timeit.default_timer()
@@ -26,8 +26,7 @@ def run(proti, N):
     y = [0] * proti.length
     
     # high number of iterations for optimising result
-    iterations = 10000
-    iterations = N
+    iterations = 1000
     rotations = 0
 
     # initialize progress bar
@@ -106,9 +105,9 @@ def run(proti, N):
     stop = timeit.default_timer()
     print('Runtime', stop - start, 'seconds')
 
-    # # render the output and plot the figure
-    # output(best_x, best_y, lowest_score, proti)
-    # plot_m(best_x, best_y, lowest_score, scores, proti)
+    # render the output and plot the figure
+    output(best_x, best_y, lowest_score, proti)
+    plot_m(best_x, best_y, lowest_score, scores, proti)
 
     return stop-start, lowest_score, [best_x, best_y]
 

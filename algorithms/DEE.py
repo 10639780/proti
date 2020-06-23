@@ -7,7 +7,6 @@ Team Proti
 Uses a Dead End Elimination like algorithm described by Okke to create a tree
 of all routes that are possibly lower than a preset score.
 """
-
 # import modules
 from anytree import Node, RenderTree, Walker, PreOrderIter
 import copy
@@ -17,20 +16,18 @@ from statistics import mean
 import random
 from helpers import * 
 
-
 def run(proti):
     length = proti.length
     protein = proti.listed
     lowest_known_score = 0
     if protein == 'HHPHHHPH':
-        lowest_known_score = -30
+        lowest_known_score = -3
     if protein == 'HHPHHHPHPHHHPH':
-        lowest_known_score = -60
+        lowest_known_score = -6
     if protein == 'HPHPPHHPHPPHPHHPPHPH':
-        lowest_known_score = -90
+        lowest_known_score = -9
     if protein == 'PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP':
         lowest_known_score = -14
-
 
     # initiate a progress bar
     bar = Bar('Progress', max=length)
@@ -183,8 +180,8 @@ def run(proti):
             add to the score')
     if len(best_x) == 0:
         print('No stable solution')
-    # else:
-    #     dee_plot(best_x, best_y, best_score, loop_time, runtime, proti)
+    else:
+        dee_plot(best_x, best_y, best_score, loop_time, runtime, proti)
 
     
     return runtime, best_score, [best_x, best_y]
