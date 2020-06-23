@@ -9,7 +9,7 @@ Inspired by Ramji T. Venkatasubramanian's Computational Nanomechanics assignment
 """
 
 # import modules
-from generalhelpers import *
+from generalhelpers import score_it, random_rotation_xy, double, output, plot
 import random
 import math
 import copy
@@ -57,8 +57,9 @@ def run(proti):
         log_pos_y = copy.deepcopy(pos_y)
 
         # protein is folded randomly
-        random_rotation_xy(pos_x, pos_y, random.randint(0, proti.length - 1), proti)
-
+        rotating_amino = random.randint(0, proti.length - 1)
+        random_rotation_xy(list_x=pos_x, list_y=pos_y, n=rotating_amino, proti=proti)
+        
         # check whether the protein has not folded onto itself
         if double(pos_x, pos_y):
             # if it is folded wrongly, restore to the previous configuration
@@ -67,8 +68,8 @@ def run(proti):
             continue
 
         # calculate the scores of the old and new structure
-        old_score = score_it(proti, log_pos_x, log_pos_y)
-        new_score = score_it(proti, pos_x, pos_y)
+        old_score = score_it(proti=proti, list_x=log_pos_x, list_y=log_pos_y)
+        new_score = score_it(proti=proti, list_x=pos_x, list_y=pos_y)
         
         # keep track of each score
         scores.append(old_score)
@@ -100,5 +101,6 @@ def run(proti):
     print('Runtime:', stop - start, 'seconds')
 
     # the best structure is copied to a csv file and shown in a graph
-    output(proti, lowest_score, best_x, best_y)
-    #plot(proti, lowest_score, best_x, best_y, scores)
+    output(proti=proti, score=lowest_score, list_x=best_x, list_y=best_y)
+    plot(proti=proti, score=lowest_score, list_x=best_x, list_y=best_y,
+         scores=scores)

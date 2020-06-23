@@ -107,7 +107,7 @@ def run(proti):
 
     # render the output and plot the figure
     output(list_x=best_x, list_y=best_y, score=lowest_score, proti=proti)
-    plot(list_x=best_x, list_y=best_y, score=lowest_score, scores=scores,\
+    plot(list_x=best_x, list_y=best_y, score=lowest_score, scores=scores,
          proti=proti)
 
     return stop-start, lowest_score, [best_x, best_y]

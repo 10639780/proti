@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 from progress.bar import Bar
 from generalhelpers import double, direction_to_xy, score_it, plot
 from ffhelpers import similarities
-# from helpers import *
 
 
 def run(proti):
