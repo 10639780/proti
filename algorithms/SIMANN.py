@@ -9,7 +9,7 @@ with a simulated annealing algorithm in 2D
 """
 
 # import modules
-from generalhelpers import *
+from generalhelpers import score_it, random_rotation_xy, double, output, plot
 import random
 import copy
 import timeit

@@ -9,7 +9,7 @@ as per the Hill climber method
 """
 
 # import modules
-from helpers import *
+from generalhelpers import score_it, random_rotation_xyz, double, output, plot
 import random
 import copy
 import timeit

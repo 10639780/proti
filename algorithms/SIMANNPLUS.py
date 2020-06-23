@@ -10,7 +10,7 @@ re-annealing when the lowest score has not changed for a while
 """
 
 # import modules
-from generalhelpers import *
+from generalhelpers import score_it, random_rotation_xy, double, output, plot
 import random
 import copy
 import timeit
