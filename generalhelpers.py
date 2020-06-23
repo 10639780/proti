@@ -11,19 +11,9 @@ in this script.
 # import modules
 import matplotlib.pyplot as plt
 import random
-'''
-from classes import Protein
-from mpl_toolkits import mplot3d
-from anytree import Node, RenderTree, Walker, PreOrderIter
-import operator
-import copy
-import math
-from classes.amino import *
-from classes.protein import *
-'''
 
-
-def plot(proti, score, list_x, list_y, title, xlabel, ylabel, list_z=False, scores=False):
+def plot(proti, score, list_x, list_y, title, xlabel, ylabel, list_z=False,
+         scores=False):
     """
     Plots a 2D or 3D fold of the protein in space.
     Also displays the scores of the fold for every iteration.
