@@ -52,7 +52,7 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
     else:
         fig = plt.figure()
 
-        ax = fig.add_subplot(2,1, 1, projection='3d')
+        ax = fig.add_subplot(2,1, 1, projection='3d')  
         ax.plot(list_x, list_y, list_z, '--', color='darkgrey')
         ax.plot(H_coords[0], H_coords[1], H_coords[2], 'or', markersize=13)
         ax.plot(P_coords[0], P_coords[1], P_coords[2], 'ob', markersize=13)
@@ -442,17 +442,3 @@ def direction_to_xy(string):
 
     return pos_x, pos_y
 
-def xyz_double(list_x, list_y, list_z):
-    """
-    Checks whether two atoms occupy the same point.
-    """
-    coordinates = []
-
-    # see if a coordinate is already in the list, then add that coordinate to the list
-    for x, y, z in zip(list_x, list_y, list_z):
-        if [x, y, z] in coordinates:
-            return True
-
-        coordinates.append([x, y, z])
-
-    return False

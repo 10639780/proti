@@ -19,7 +19,6 @@ import copy
 import math
 from classes.amino import *
 from classes.protein import *
-from generalhelpers import *
 
 def possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, proti):
     """
