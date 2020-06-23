@@ -9,6 +9,7 @@ from treehelpers import *
 from generalhelpers import double, score_con
 import timeit
 
+
 def run(proti):
     start = timeit.default_timer()
 

@@ -52,7 +52,7 @@ def run(proti):
             bar.next()
 
     # output
-    best_conformation =  min(conformations_list, key=operator.itemgetter(1))
+    best_conformation = min(conformations_list, key=operator.itemgetter(1))
     bar.finish()
     stop = timeit.default_timer()
     initialization_time = initial_time - start

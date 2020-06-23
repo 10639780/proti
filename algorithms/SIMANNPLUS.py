@@ -111,4 +111,3 @@ def run(proti):
          'Rotation', 'Score', scores=scores)
 
     return stop-start, lowest_score, [best_x, best_y]
-

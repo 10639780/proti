@@ -17,7 +17,8 @@ import timeit
 import random
 import queue
 from progress.bar import Bar
-from deehelpers import partial_score_func, possible_score_func_dee
+from deehelpers import possible_score_func_dee
+
 
 def run(proti):
 
@@ -150,4 +151,3 @@ def run(proti):
     print(f'Conformation: {best_config}')
     plot(proti, lowest_score, best_x, best_y, 'Time per amino placement', 'Amino', 'Time[s]', scores=amino_time)
     return total_time, lowest_score, best_config
-

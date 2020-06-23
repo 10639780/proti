@@ -15,14 +15,12 @@ import copy
 import timeit
 import random
 import queue
-# from helpers import *
 from generalhelpers import directions, double, score_it, plot
 from deehelpers import possible_score_func_dee
 from progress.bar import Bar
 
 
 def run(proti):
-
     # start timer
     start = timeit.default_timer()
 
@@ -124,7 +122,6 @@ def run(proti):
                 else:
                     q.put(child) 
 
-    
     lowest_score = 0
 
     # weed out the best configuration from the remaining strings
@@ -144,5 +141,3 @@ def run(proti):
     print(f'Time: {stop - start}')
     print(f'Conformation: {best_config}')
     plot(proti, lowest_score, best_x, best_y,'Time per amino placement', 'Amino', 'Time[s]', best_z, scores=amino_time)
-        
-        # best_config, lowest_score, proti)

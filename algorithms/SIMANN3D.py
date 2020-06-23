@@ -104,5 +104,3 @@ def run(proti):
            proti=proti)
     plot(proti, lowest_score, best_x, best_y, 'Score after rotation', 'Rotation', 
     'Score', best_z, scores=scores)
-
-

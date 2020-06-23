@@ -8,12 +8,11 @@ Uses a Dead End Elimination like algorithm described by Okke to create a tree
 of all routes that are possibly lower than a preset score.
 """
 # import modules
-from anytree import Node, PreOrderIter
-import copy
 import timeit
 from progress.bar import Bar
 from deehelpers import * 
 from generalhelpers import double, score_it
+
 
 def run(proti):
     length = proti.length
@@ -57,7 +56,7 @@ def run(proti):
 
             # place the first atom
             # intermezzo: the loop relies heavily on the globals()[...] function
-            # it creates a transforms a stirng into an actual variable and allows
+            # it creates a transforms a string into an actual variable and allows
             # for dynamic naming and referencing of the nodes
             if i == 0:
                 name = f'{p}{i}{i}'
@@ -66,7 +65,7 @@ def run(proti):
                 continue
 
             # second atom is placed in one direction only, others would merely
-            # be a rotaion around the axis with no score advantage
+            # be a rotation around the axis with no score advantage
             if i == 1:
                 name = f'{p}{i}{i}'
                 globals()[name] = Node('R', parent=globals()[f'{protein[0]}00'])
@@ -90,7 +89,7 @@ def run(proti):
                 except:
                     continue
 
-                # if it exist contruct a new node for each direction
+                # if it exist construct a new node for each direction
                 for d in directions:
 
                     # name of the node to be
@@ -125,7 +124,7 @@ def run(proti):
 
                     potential_score = partial_score_func(potential_nodes_visited, proti)
 
-                        # create new node
+                    # create new node
                     globals()[name] = Node(d, parent=globals()[parent])
                     breadth_counter += 1
 
@@ -140,7 +139,7 @@ def run(proti):
                         nodes_visited = [node.name for node in globals()[name].path]
                         pos_x, pos_y = nodes_to_xy(nodes_visited)
 
-                        # disregard foldings onto itself
+                        # disregard if it folds onto itself
                         if double(list_x=pos_x, list_y=pos_y):
                             continue
 
@@ -148,7 +147,7 @@ def run(proti):
                         current_score = score_it(list_x=pos_x, list_y=pos_y, 
                                                  proti=proti)
 
-                        # save if it is an improvemnt
+                        # save if it is an improvement
                         if current_score <= best_score:
                             best_x = copy.deepcopy(pos_x)
                             best_y = copy.deepcopy(pos_y)
@@ -165,7 +164,7 @@ def run(proti):
         # update the progress bar
         bar.next()
 
-    # stop the progres bar and timer
+    # stop the progress bar and timer
     bar.finish()
     stop = timeit.default_timer()
     runtime = stop - start
@@ -182,6 +181,5 @@ def run(proti):
         print('No stable solution')
     else:
         dee_plot(best_x, best_y, best_score, loop_time, runtime, proti)
-
     
     return runtime, best_score, [best_x, best_y]

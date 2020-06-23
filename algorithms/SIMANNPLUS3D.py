@@ -16,8 +16,8 @@ import copy
 import timeit
 from progress.bar import Bar
 
-def run(proti):
 
+def run(proti):
      # start timing the run of the code
     start = timeit.default_timer()
 

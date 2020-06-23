@@ -11,22 +11,15 @@ in 'A Complete and Effective Move Set for Simplified Protein Folding'.
 """
 
 # import modules
-import pandas as pd 
-from scipy.spatial import distance_matrix
-from scipy.spatial.distance import squareform
 import timeit
-import numpy as np 
-import math
 import random
 import copy
-import matplotlib.pyplot as plt 
 from progress.bar import Bar
 from generalhelpers import double, direction_to_xy, score_it, plot
 from ffhelpers import similarities
 
 
 def run(proti):
-
     length = proti.length
     strings_created = 0
     lowest_score = 0

@@ -15,6 +15,7 @@ import copy
 import timeit
 from progress.bar import Bar
 
+
 def run(proti):
     # start timing the run of the code
     start = timeit.default_timer()
@@ -28,7 +29,7 @@ def run(proti):
     rotations = 0
 
     # initialize progress bar
-    bar = Bar('Progress', max = iterations / 1000)
+    bar = Bar('Progress', max=iterations / 1000)
 
     # list to keep track of best configuration and scores
     lowest_score = 0
@@ -87,6 +88,4 @@ def run(proti):
     output(list_x=best_x, list_y=best_y, score=lowest_score, proti=proti)
     plot(proti, lowest_score, best_x, best_y, 'Score after rotation', 'Rotation', 'Score', scores=scores)
 
-    return stop-start, lowest_score, [best_x,best_y]
-
-
+    return stop-start, lowest_score, [best_x, best_y]

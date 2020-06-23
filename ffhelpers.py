@@ -10,15 +10,7 @@ in this script.
 
 # import modules
 import matplotlib.pyplot as plt
-import random
-from classes import protein
-from mpl_toolkits import mplot3d
-from anytree import Node, RenderTree, Walker, PreOrderIter
-import operator
-import copy
 import math
-from classes.amino import *
-from classes.protein import *
 
 
 def similarities(list_x1, list_y1, list_x2, list_y2):
