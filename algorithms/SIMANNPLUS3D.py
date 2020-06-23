@@ -56,7 +56,7 @@ def run(proti):
         backup_z = copy.deepcopy(z)
 
         # remember the previous score
-        old_score = score_it(list_x=backup_x, list_y=backup_y, proti=proti)
+        old_score = score_it(list_x=backup_x, list_y=backup_y, list_z=backup_z, proti=proti)
         scores.append(old_score)
 
         # fold protein at a random amino
