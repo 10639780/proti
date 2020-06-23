@@ -37,9 +37,10 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
 
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
 
-        ax1.plot(H_coords[0], H_coords[1], 'or')
-        ax1.plot(P_coords[0], P_coords[1], 'ob')
-        ax1.plot(C_coords[0], C_coords[1], 'oy')
+        ax1.plot(list_x, list_y, '--', color='darkgrey')
+        ax1.plot(H_coords[0], H_coords[1], 'or', markersize=13)
+        ax1.plot(P_coords[0], P_coords[1], 'ob', markersize=13)
+        ax1.plot(C_coords[0], C_coords[1], 'oy', markersize=13)
         ax1.set_title(f'Folded protein, score: {score}')
         ax1.axis('equal')
 
@@ -52,9 +53,10 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
         fig = plt.figure()
 
         ax = fig.add_subplot(2,1, 1, projection='3d')
-        ax.plot(H_coords[0], H_coords[1], H_coords[2], 'or')
-        ax.plot(P_coords[0], P_coords[1], P_coords[2], 'ob')
-        ax.plot(C_coords[0], C_coords[1], C_coords[2], 'oy')
+        ax.plot(list_x, list_y, list_z, '--', color='darkgrey')
+        ax.plot(H_coords[0], H_coords[1], H_coords[2], 'or', markersize=13)
+        ax.plot(P_coords[0], P_coords[1], P_coords[2], 'ob', markersize=13)
+        ax.plot(C_coords[0], C_coords[1], C_coords[2], 'oy', markersize=13)
         ax.set_title(f'Folded protein, score: {score}')
         
         ax = fig.add_subplot(2, 1, 2)
@@ -141,7 +143,7 @@ def score_it(proti, list_x, list_y, list_z=False):
     directions = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]
     score = 0 
 
-    for i in range(proti.length):
+    for i in range(len(list_x)):
         amino_type = proti.listed[i]
         # P's dont interact so can skip those cases
         if not amino_type == 'P':
@@ -409,4 +411,49 @@ def output(proti, score, list_x, list_y, list_z=False):
     f.close()
 
 
+def direction_to_xy(string):
+    """
+    Converts a series of string with directions like ['L', 'R'] to lists with
+    xy positions.
+    """
+    direction_list = []
+    # first two aminos already placed
+    pos_x = [0, 1]
+    pos_y = [0, 0]
 
+    # go over every node
+    for s in string:
+
+        # previous direction is determined
+        delta_x = pos_x[-1] - pos_x[-2]
+        delta_y = pos_y[-1] - pos_y[-2]
+
+        # rotation matrices used to turn into the desired direction
+        if s == 'S':
+            pos_x.append(pos_x[-1] + delta_x)
+            pos_y.append(pos_y[-1] + delta_y)
+
+        elif s == 'L':
+            pos_x.append(pos_x[-1] - delta_y)
+            pos_y.append(pos_y[-1] + delta_x)
+
+        elif s == 'R':
+            pos_x.append(pos_x[-1] + delta_y)
+            pos_y.append(pos_y[-1] - delta_x)
+
+    return pos_x, pos_y
+
+def xyz_double(list_x, list_y, list_z):
+    """
+    Checks whether two atoms occupy the same point.
+    """
+    coordinates = []
+
+    # see if a coordinate is already in the list, then add that coordinate to the list
+    for x, y, z in zip(list_x, list_y, list_z):
+        if [x, y, z] in coordinates:
+            return True
+
+        coordinates.append([x, y, z])
+
+    return False
