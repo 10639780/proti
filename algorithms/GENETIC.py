@@ -9,13 +9,9 @@ Protein Tertiary Structures in the 2D HP Model' by Thang N. Bui and Gnanasekaran
 and on 'Genetic Algorithm for Predicting Protein Folding in the 2D HP Model' by Eyal Halm.
 """
 
-import random
-import operator
-import copy
-import matplotlib.pyplot as plt
+from genetichelpers import *
 from progress.bar import Bar
 import timeit
-import math
 from helpers import *
 
 def run(proti):

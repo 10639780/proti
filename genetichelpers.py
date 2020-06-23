@@ -11,19 +11,14 @@ in this script.
 # import modules
 import matplotlib.pyplot as plt
 import random
-from classes import protein
-from mpl_toolkits import mplot3d
-from anytree import Node, RenderTree, Walker, PreOrderIter
 import operator
 import copy
-import math
-from classes.amino import *
-from classes.protein import *
+
 
 
 def initial_population(n, proti):
     """
-    Initialize populatin for tree.
+    Initialize population for tree.
     """
     
     conformations_list = []
@@ -166,7 +161,7 @@ def genetic_plot(string, score, best_yet, proti):
             yellow_dots_x.append(x)
             yellow_dots_y.append(y)
 
-   # create graphs with colors
+    # create graphs with colors
     fig, (ax1, ax2) = plt.subplots(2, 1)
   
     ax1.plot(list_x, list_y, '--', color='darkgrey')
