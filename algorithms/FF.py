@@ -21,7 +21,10 @@ import random
 import copy
 import matplotlib.pyplot as plt 
 from progress.bar import Bar
-from helpers import *
+from generalhelpers import double, direction_to_xy, score_it, plot
+from ffhelpers import similarities
+# from helpers import *
+
 
 def run(proti):
 
@@ -44,7 +47,8 @@ def run(proti):
         for i in range(length - 2):
             route.append(['S', 'L', 'R'][random.randint(0,2)])
         
-        if not double(route):
+        route_x, route_y = direction_to_xy(route)
+        if not double(route_x, route_y):
             routes.append(route)
             strings_created += 1
        
@@ -52,19 +56,20 @@ def run(proti):
         # determine which route has the lowest score 
         for r in routes:
 
-            # pos_x, pos_y = direction_to_xy(r)
+            r_x, r_y = direction_to_xy(r)
 
-            while double(r):
+            while double(r_x, r_y):
                 route = []
 
                 for i in range(length - 2):
                     route.append(['S', 'L', 'R'][random.randint(0,2)])
                 
-                # pos_x, pos_y = direction_to_xy(route)
-                if not double(route):
+                route_x, route_y = direction_to_xy(route)
+                if not double(route_x, route_y):
                     r = route
 
-            score = score_whole_string(r, proti)
+            r_x, r_y = direction_to_xy(r)
+            score = score_it(proti, r_x, r_y)
 
             if score <= lowest_score:
                 lowest_score = copy.deepcopy(score)
@@ -83,7 +88,7 @@ def run(proti):
                     r[random.randint(0, len(r) - 1)] = \
                         ['S', 'L', 'R'][random.randint(0,2)]
                     r_x, r_y = direction_to_xy(r)
-                    if not double_xy(r_x, r_y):
+                    if not double(r_x, r_y):
                         invalid = False
 
             r_x, r_y = direction_to_xy(r)
@@ -96,7 +101,7 @@ def run(proti):
             bar.next()
 
     pos_x, pos_y = direction_to_xy(best_route)
-    score = score_whole_string(best_route, proti)
+    score = score_it(proti, pos_x, pos_y)
     bar.finish()
     stop = timeit.default_timer()
     runtime = stop - start
@@ -105,6 +110,6 @@ def run(proti):
     print(f'Score: {score}')
     print(f'Time: {runtime}')
     print(f'Conformation: {route_string}')
-    ff_plot(pos_x, pos_y, score, proti)
+    plot(proti, score, pos_x, pos_y)
 
     return runtime, score, route_string
