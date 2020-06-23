@@ -66,7 +66,6 @@ def plot(proti, score, list_x, list_y, list_z=False, scores=False):
 
     plt.show()
 
-
 def plot_coords(proti, x_list, y_list, z_list=False):
 
     # seperate amino type coordinates in lists
@@ -130,7 +129,6 @@ def plot_coords(proti, x_list, y_list, z_list=False):
 
     return H_coords, P_coords, C_coords
 
-
 def score_it(proti, list_x, list_y, list_z=False):
     """
     Determines the score for iterative folding algorithms
@@ -185,7 +183,6 @@ def score_it(proti, list_x, list_y, list_z=False):
         coordinates.append([current_x, current_y, current_z])
 
     return score
-
 
 def score_con(pos_x, pos_y, proti):
     """
@@ -276,7 +273,6 @@ def directions(string):
 
     return pos_x, pos_y, pos_z
 
-
 def double(list_x, list_y, list_z=False):
     """
     Checks if a protein will fold in on itself
@@ -294,7 +290,6 @@ def double(list_x, list_y, list_z=False):
         coordinates.append([x, y, z])
 
     return False
-
 
 def random_rotation_xy(list_x, list_y, n, proti):
     """
@@ -364,8 +359,7 @@ def random_rotation_xyz(list_x, list_y, list_z, n, proti):
             list_x[i] = rotation_point_x + relative_z
             list_y[i] = rotation_point_y + relative_y
             list_z[i] = rotation_point_z - relative_x
-
-    
+   
 def output(proti, score, list_x, list_y, list_z=False):
     """
     Prints the folded string to a csv file in the Bas Terwijn style.
@@ -408,7 +402,6 @@ def output(proti, score, list_x, list_y, list_z=False):
         f.write(f'{p}, {n}\n')
     f.write(f'score,{score}')
     f.close()
-
 
 def direction_to_xy(string):
     """

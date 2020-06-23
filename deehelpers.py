@@ -19,6 +19,7 @@ import copy
 import math
 from classes.amino import *
 from classes.protein import *
+from generalhelpers import double, score_it
 
 def possible_score_func_dee(nodes_to_visit, partial_score, lowest_known_score, proti):
     """
@@ -57,7 +58,7 @@ def partial_score_func(nodes_visited, proti):
     pos_x, pos_y = nodes_to_xy(nodes_visited)
 
     # weed out the proteins folded into itself
-    if double_xy(pos_x, pos_y):
+    if double(list_x=pos_x, list_y=pos_y):
         return 1000
 
     partial_score = score_it(proti=proti, list_x=pos_x, list_y=pos_y)
@@ -96,56 +97,6 @@ def nodes_to_xy(nodes_visited):
             pos_y.append(pos_y[-1] - delta_x)
 
     return pos_x, pos_y
-
-def nodes_to_xyz(nodes_visited):
-    """
-    Converts a series of string with directions like ['left', 'right'] 
-    to lists with xy positions.
-    """
-
-    pos_x = [0, 1]
-    pos_y = [0, 0]
-    pos_z = [0, 0]
-
-    # go over every node
-    for i, n in enumerate(nodes_visited):
-
-        # first two nodes are already placed to confine solutions to one quadrant
-        if i == 0 or i == 1:
-            continue
-
-        # previous direction is determined
-        delta_x = pos_x[-1] - pos_x[-2]
-        delta_y = pos_y[-1] - pos_y[-2]
-        delta_z = pos_z[-1] - pos_z[-2]
-
-        # rotation matrices used to turn into the desired direction
-        if s == 'S':
-            pos_x.append(pos_x[-1] + delta_x)
-            pos_y.append(pos_y[-1] + delta_y)
-            pos_z.append(pos_z[-1] + delta_z)
-
-        elif s == 'L':
-            pos_x.append(pos_x[-1] - delta_y)
-            pos_y.append(pos_y[-1] + delta_x)
-            pos_z.append(pos_z[-1] + delta_z)
-
-        elif s == 'R':
-            pos_x.append(pos_x[-1] + delta_y)
-            pos_y.append(pos_y[-1] - delta_x)
-            pos_z.append(pos_z[-1] + delta_z)
-
-        elif s == 'U':
-            pos_x.append(pos_x[-1] - delta_z)
-            pos_y.append(pos_y[-1] + delta_y)
-            pos_z.append(pos_z[-1] + delta_x)
-
-        elif s == 'D':
-            pos_x.append(pos_x[-1] + delta_z)
-            pos_y.append(pos_y[-1] + delta_y)
-            pos_z.append(pos_z[-1] - delta_x)
-
-    return pos_x, pos_y, pos_z
 
 def dee_plot(list_x, list_y, score, loop_time, total_time, proti):
     """
