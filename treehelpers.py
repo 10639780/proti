@@ -14,28 +14,28 @@ from anytree import PreOrderIter
 import copy
 from classes.amino import *
 
+
 def create_tree(proti):
     """Create a tree structure, each atom can branch off into 4 directions, creating 4^n possible routes."""
-    directions = [[1,0],[-1,0],[0,1],[0,-1]]
+    directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
     node_counter = 0
     parent_counter = 0
     node_list = []
     first = True
     second = True
-    
 
     for p, i in zip(proti.listed, [i for i in range(proti.length)]):
 
         # first atom has no parents and is located at 0,0
         if first:
-            root = Atom(p, [0,0])
+            root = Atom(p, [0, 0])
             node_list.append(root)
             first = False
             continue
         
-        # second atom             # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0            # first atom has no parents and is located at 0,0
+        # second atom
         if second:
-            node =  Atom(p, [1,0], parent=root)
+            node = Atom(p, [1, 0], parent=root)
             node_list.append(node)
             second = False
             continue
@@ -55,7 +55,7 @@ def create_tree(proti):
             # fill the tree and keep track of the parent child relations
             for j in range(len(directions) - 1):
             
-                j = Atom(p, temp_direction[j], parent=node_list[parent_counter + 1] )
+                j = Atom(p, temp_direction[j], parent=node_list[parent_counter + 1])
                 node_list.append(j)
 
                 node_counter += 1
@@ -71,7 +71,9 @@ def create_routes(root):
     route_directions = []
     
     # list of all possible paths in the tree
-    paths = [list(leaf.path) for leaf in PreOrderIter(root, filter_=lambda node: node.is_leaf)] # copied from https://stackoverflow.com/questions/59917058/how-to-get-all-possible-branch-with-python-anytree
+    # source:
+    # https://stackoverflow.com/questions/59917058/how-to-get-all-possible-branch-with-python-anytree
+    paths = [list(leaf.path) for leaf in PreOrderIter(root, filter_=lambda no_de: no_de.is_leaf)]
 
     # add those paths to a list
     for p in paths:
@@ -83,6 +85,7 @@ def create_routes(root):
         route_directions.append(direction)
     
     return route_directions
+
 
 def tree_plot(list_x, list_y, score, proti):
     """Makes a graph of two lists list_x, list_y."""
@@ -117,4 +120,3 @@ def tree_plot(list_x, list_y, score, proti):
     plt.title(f'Folded protein, score: {score}')
 
     plt.show()
-
