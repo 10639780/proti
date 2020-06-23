@@ -21,18 +21,12 @@ from classes.amino import *
 from classes.protein import *
 from helpersrepeated import * 
 
-def plot(proti, score, scores=False, list_x=False, list_y=False, list_z=False, string=False):
-
-    if string:
-        list_x, list_y, list_z = directions(string)
-
-    if all(elem == 0 for elem in list_z):
-        print("Not 3D Folded")
-        list_z = False
+def plot(proti, score, list_x, list_y, list_z=False, scores=False):
 
     H_coords, P_coords, C_coords = plot_coords(proti, list_x, list_y, list_z)
 
     if len(H_coords[-1]) == 0:
+
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 9))
 
         ax1.plot(H_coords[0], H_coords[1], 'or')
@@ -53,7 +47,6 @@ def plot(proti, score, scores=False, list_x=False, list_y=False, list_z=False, s
         ax.plot(P_coords[0], P_coords[1], P_coords[2], 'ob')
         ax.plot(C_coords[0], C_coords[1], C_coords[2], 'oy')
         ax.set_title(f'Folded protein, score: {score}')
-
         
         ax = fig.add_subplot(2, 1, 2)
         ax.plot(scores)
@@ -62,10 +55,7 @@ def plot(proti, score, scores=False, list_x=False, list_y=False, list_z=False, s
 
     plt.show()
 
-def score(proti, list_x=False, list_y=False, list_z=False, string=False):
-
-    if string:
-        list_x, list_y, list_z = directions(string)
+def score(proti, list_x, list_y, list_z=False):
 
     if not list_z:
         list_z = [0] * proti.length
@@ -117,13 +107,22 @@ def score(proti, list_x=False, list_y=False, list_z=False, string=False):
 
     return score
 
-# def double(list_x=False, list_y=False, list_z=False, string=False):
-#     if string:
-#         list_x, list_y, list_z = directions(string)
+def double(list_x, list_y, list_z=False):
+    
 
-#     coordinates = []
+    coordinates = []
 
-#     for x, y, z in zip
+    if not list_z:
+        list_z = [0] * len(list_x)
+
+    for x, y, z in zip(list_x, list_y, list_z):
+        if [x, y, z] in coordinates:
+            return True
+        
+        coordinates.append([x, y, z])
+    return False
+
+    
 
         
 
@@ -140,10 +139,12 @@ if __name__ == "__main__":
     length = len(proteinstring)
     proti = Protein(proteinstring, length)
 
-    string = 'LRSLRSLRS'
-    test1 = plot(proti=proti, score=bool_score, scores=scores, list_x = x, list_y=y, list_z=z)
+    # test = plot(proti=proti, score=bool_score, list_x=x, list_y=y)
 
-    test_score = score(proti=proti, list_x=x, list_y=y)
-    print(test_score)
+    # string = 'LRSLRSLRS'
+    # test1 = plot(proti=proti, score=bool_score, scores=scores, list_x = x, list_y=y, list_z=z)
+
+    # test_score = score(proti=proti, list_x=x, list_y=y)
+    # print(test_score)
 
 
