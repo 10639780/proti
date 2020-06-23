@@ -11,7 +11,8 @@ in this script.
 # import modules
 import matplotlib.pyplot as plt
 import random
-from classes import protein
+'''
+from classes import Protein
 from mpl_toolkits import mplot3d
 from anytree import Node, RenderTree, Walker, PreOrderIter
 import operator
@@ -19,6 +20,7 @@ import copy
 import math
 from classes.amino import *
 from classes.protein import *
+'''
 
 
 def plot(proti, score, list_x, list_y, list_z=False, scores=False):
