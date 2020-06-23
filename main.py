@@ -61,7 +61,11 @@ def main():
     choose_protein = input("\n" + "Which protein would you like to fold? Enter ID: ")
  
     # protein information
-    fold_protein = proteins[int(choose_protein)]
+    try:
+        fold_protein = proteins[int(choose_protein)]
+    except ValueError:
+        sys.exit("Invalid input")
+        
     length = len(fold_protein)
     proti = Protein(fold_protein, length)
 
