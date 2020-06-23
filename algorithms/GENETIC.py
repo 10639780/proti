@@ -18,10 +18,10 @@ import timeit
 import math
 from helpers import *
 
-def run(proti, N):
+def run(proti):
     # some constants
     population_size = 300
-    # N = 1000
+    N = 6000
     sample_size = round(population_size * 0.1)
     _max = 0.4
     _min = 0.2
@@ -68,6 +68,6 @@ def run(proti, N):
     print(f'Runtime: {runtime}')
     print(f'Total: {total_time}')
     print(f'Conformation: {best_conformation[0]}')
-    # genetic_plot(best_conformation[0], best_conformation[1], best_yet, proti)
+    genetic_plot(best_conformation[0], best_conformation[1], best_yet, proti)
 
     return total_time, best_conformation[1], best_conformation[0]
