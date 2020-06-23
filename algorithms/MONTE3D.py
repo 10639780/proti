@@ -8,10 +8,11 @@ Folds protein into the (probably) most stable state using a Monte Carlo algorith
 """
 
 # import modules
-from helpers import *
+from generalhelpers import *
 import random
 import math
 import copy
+
 
 def run(proti):
 
@@ -45,11 +46,11 @@ def run(proti):
         log_pos_z = copy.deepcopy(pos_z)
 
         # protein is folded randomly
-        random_rotation_xyz(pos_x, pos_y, pos_z, \
+        random_rotation_xyz(pos_x, pos_y, pos_z,
                             random.randint(0, proti.length - 1), proti)
 
         # check whether the protein has not folded onto itself
-        if double_xyz(pos_x, pos_y, pos_z):
+        if double(pos_x, pos_y, pos_z):
             # if it is folded wrongly, restore to the previous configuration
             pos_x = log_pos_x
             pos_y = log_pos_y
@@ -57,8 +58,8 @@ def run(proti):
             continue
         
         # calculate the scores of the old and new structure
-        old_score = score_xyz(log_pos_x, log_pos_y, log_pos_z, proti)
-        new_score = score_xyz(pos_x, pos_y, pos_z, proti)
+        old_score = score_it(proti, log_pos_x, log_pos_y, log_pos_z)
+        new_score = score_it(proti, pos_x, pos_y, pos_z)
 
         # keep track of each score
         scores.append(old_score)
@@ -87,5 +88,5 @@ def run(proti):
             print(f'{rotation_counter / N * 100}%')
 
     # the best structure is copied to a csv file and shown in a graph
-    output_xyz(best_x, best_y, best_z, lowest_score, proti)
-    plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
+    output(proti, lowest_score, best_x, best_y, best_z)
+    plot(proti, lowest_score, best_x, best_y, best_z, scores)
