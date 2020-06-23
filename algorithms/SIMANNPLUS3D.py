@@ -10,7 +10,7 @@ re-annealing when the lowest score has not changed for a while
 """
 
 # import modules
-from helpers import *
+from generalhelpers import *
 import random
 import copy
 import timeit
@@ -56,22 +56,23 @@ def run(proti):
         backup_z = copy.deepcopy(z)
 
         # remember the previous score
-        old_score = score(backup_x, backup_y, proti)
+        old_score = score_it(list_x=backup_x, list_y=backup_y, proti=proti)
         scores.append(old_score)
 
         # fold protein at a random amino
         rotating_amino = random.randint(0, proti.length - 1)
-        random_rotation_xyz(x, y, z, rotating_amino, proti)
+        random_rotation_xyz(list_x=x, list_y=y, list_z=z, n=rotating_amino,\
+                            proti=proti)
 
         # if protein folded into itself restore and go back
-        if double_xyz(x, y, z):
+        if double(list_x=x, list_y=y, list_z=z):
             x = backup_x
             y = backup_y
             z = backup_z
             continue
 
         # get the score of the current configuration
-        new_score = score_xyz(x, y, z, proti)
+        new_score = score_it(list_x=x, list_y=y, list_z=z, proti=proti)
 
         if rotations % 1000 == 0 and new_score == old_score:               
             local_optimum = True
@@ -111,5 +112,7 @@ def run(proti):
     print('Runtime', stop - start, 'seconds')
 
     # render the output and plot the figure
-    output_xyz(best_x, best_y, best_z, lowest_score, proti)
-    plot_xyz(best_x, best_y, best_z, lowest_score, scores, proti)
+    output(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score,\
+           proti=proti)
+    plot(list_x=best_x, list_y=best_y, list_z=best_z, score=lowest_score,\
+         scores=scores, proti=proti)
