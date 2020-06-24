@@ -133,11 +133,13 @@ def score_it(proti, list_x, list_y, list_z=False):
 
     for i in range(len(list_x)):
         amino_type = proti.listed[i]
+
+        current_x = list_x[i]
+        current_y = list_y[i]
+        current_z = list_z[i]
+
         # P's dont interact so can skip those cases
-        if not amino_type == 'P':
-            current_x = list_x[i]
-            current_y = list_y[i]
-            current_z = list_z[i]
+        if not amino_type == 'P':            
 
             prev_x = list_x[i - 1]
             prev_y = list_y[i - 1]
